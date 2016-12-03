@@ -1,0 +1,18 @@
+[
+  {
+    "modid": "comandcontrol",
+    "name": "Command Control",
+    "description": "Controlling a pack with commands",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "",
+    "updateUrl": "",
+    "authorList": [
+      "wiresegal"
+    ],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
+]

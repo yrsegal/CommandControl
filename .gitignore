@@ -1,0 +1,26 @@
+# eclipse
+bin
+*.launch
+.settings
+.metadata
+.classpath
+.project
+
+# idea
+out
+*.ipr
+*.iws
+*.iml
+.idea
+run
+
+# gradle
+build
+.gradle
+/gradle
+
+# other
+eclipse
+run
+gradle-app.setting
+/hs_err_pid*.log
