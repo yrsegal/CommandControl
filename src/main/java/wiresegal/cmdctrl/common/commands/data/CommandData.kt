@@ -17,7 +17,6 @@ object CommandData : CommandBase() {
     val validCommands = arrayOf("set", "add", "list", "remove", "test", "operation")
     val operations = arrayOf("+=", "-=", "*=", "/=", "%=", "=", "<", ">", "><")
     val positionals = arrayOf("slice", "pos")
-    val validPositionals = arrayOf(*validCommands, "execute")
 
     @Throws(CommandException::class)
     override fun execute(server: MinecraftServer, sender: ICommandSender, args: Array<out String>) {
@@ -115,7 +114,7 @@ object CommandData : CommandBase() {
     }
 
     fun runSlice(server: MinecraftServer, sender: ICommandSender, originalArgs: Array<out String>) {
-        if (originalArgs.size < 3 || originalArgs[2] !in validPositionals)
+        if (originalArgs.size < 3 || originalArgs[2] !in validCommands)
             throw WrongUsageException("${getCommandUsage(sender)}.slice")
 
         val pos = sender.position
@@ -131,7 +130,7 @@ object CommandData : CommandBase() {
     }
 
     fun runPos(server: MinecraftServer, sender: ICommandSender, originalArgs: Array<out String>) {
-        if (originalArgs.size < 4 || originalArgs[3] !in validPositionals)
+        if (originalArgs.size < 4 || originalArgs[3] !in validCommands)
             throw WrongUsageException("${getCommandUsage(sender)}.pos")
 
         val senderPos = sender.position
@@ -216,11 +215,6 @@ object CommandData : CommandBase() {
                     else ->
                         throw CommandException("commands.scoreboard.players.operation.invalidOperation", operation)
                 }
-            }
-            "execute" -> {
-                if (scope !in positionals)
-                    throw CommandException("commandcontrol.storedata.executenotallowed")
-                //todo execute
             }
         }
     }

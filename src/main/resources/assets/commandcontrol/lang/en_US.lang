@@ -37,22 +37,20 @@ commandcontrol.storedata.usage.world.remove=/storedata world remove <key>
 commandcontrol.storedata.usage.world.test=/storedata world test <key> [min] [max]
 commandcontrol.storedata.usage.world.operation=/storedata world operation <key1> <operator> <scope> <key> ...
 
-commandcontrol.storedata.usage.slice=/storedata slice <x> <z> <set|add|list|remove|test|operation|execute> ...
+commandcontrol.storedata.usage.slice=/storedata slice <x> <z> <set|add|list|remove|test|operation> ...
 commandcontrol.storedata.usage.slice.set=/storedata slice <x> <z> set <key> <value>
 commandcontrol.storedata.usage.slice.add=/storedata slice <x> <z> add <key> <value>
 commandcontrol.storedata.usage.slice.list=/storedata slice <x> <z> list
 commandcontrol.storedata.usage.slice.remove=/storedata slice <x> <z> remove <key>
 commandcontrol.storedata.usage.slice.test=/storedata slice <x> <z> test <key> [min] [max]
-commandcontrol.storedata.usage.slice.execute=/storedata slice <x> <z> execute <rules> <command>
 commandcontrol.storedata.usage.slice.operation=/storedata slice <x> <z> operation <key1> <operator> <scope> <key> ...
 
-commandcontrol.storedata.usage.pos=/storedata pos <x> <y> <z> <set|add|list|remove|test|operation|execute> ...
+commandcontrol.storedata.usage.pos=/storedata pos <x> <y> <z> <set|add|list|remove|test|operation> ...
 commandcontrol.storedata.usage.pos.set=/storedata pos <x> <y> <z> set <key> <value>
 commandcontrol.storedata.usage.pos.add=/storedata pos <x> <y> <z> add <key> <value>
 commandcontrol.storedata.usage.pos.list=/storedata pos <x> <y> <z> list
 commandcontrol.storedata.usage.pos.remove=/storedata pos <x> <y> <z> remove <key>
 commandcontrol.storedata.usage.pos.test=/storedata pos <x> <y> <z> test <key> [min] [max]
-commandcontrol.storedata.usage.pos.execute=/storedata slice <x> <y> <z> execute <rules> <command>
 commandcontrol.storedata.usage.pos.operation=/storedata pos <x> <y> <z> operation <key1> <scope> <key> ...
 
 commandcontrol.storedata.notfound=Not found
@@ -73,4 +71,5 @@ commandcontrol.storedata.autoget.slice=Slice scope needs an X and a Z argument
 commandcontrol.storedata.autoget.pos=Pos scope needs an X, Y, and Z argument
 commandcontrol.storedata.autoget.scope.invalid=Invalid scope
 
-commandcontrol.storedata.executenotallowed=Execute only allowed on positional scopes (slice, pos)
+
+commandcontrol.dataexecute.usage=/dataexecute <slice|pos> <rules> <command>

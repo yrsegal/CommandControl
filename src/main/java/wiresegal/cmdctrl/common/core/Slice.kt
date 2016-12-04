@@ -25,6 +25,8 @@ data class Slice(val x: Int, val z: Int) {
 
     constructor(pos: BlockPos): this(pos.x, pos.z)
 
+    override fun toString() = "[$x, $z]"
+    fun toPos() = BlockPos(x, 0, z)
     fun toLong(): Long {
         return this.x.toLong() and X_MASK shl X_SHIFT or (this.z.toLong() and Z_MASK shl Z_SHIFT)
     }
