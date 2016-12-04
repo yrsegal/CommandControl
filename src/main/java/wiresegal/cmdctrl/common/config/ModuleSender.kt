@@ -12,8 +12,8 @@ import net.minecraft.util.text.TextComponentString
  * @author WireSegal
  * Created at 5:10 PM on 12/4/16.
  */
-class ModuleSender(val module: CommandModule, private val server: MinecraftServer) : ICommandSender {
-    override fun sendCommandFeedback() = server.worldServers[0].gameRules.getBoolean("sendCommandFeedback")
+class ModuleSender(private val module: CommandModule, private val server: MinecraftServer, private val debug: Boolean = false) : ICommandSender {
+    override fun sendCommandFeedback() = debug && server.worldServers[0].gameRules.getBoolean("sendCommandFeedback")
     override fun getName() = "Scripting"
     override fun getDisplayName() = TextComponentString(name)
     override fun canCommandSenderUseCommand(permLevel: Int, commandName: String?) = true
@@ -26,6 +26,6 @@ class ModuleSender(val module: CommandModule, private val server: MinecraftServe
 
     override fun addChatMessage(component: ITextComponent) {
         val prefix = TextComponentString("[")
-        server.logInfo(prefix.appendSibling(displayName).appendText(": ").appendSibling(component).appendText("]").unformattedText)
+        server.addChatMessage(prefix.appendSibling(displayName).appendText(": ").appendSibling(component).appendText("]"))
     }
 }

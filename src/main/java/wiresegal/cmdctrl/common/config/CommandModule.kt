@@ -11,8 +11,8 @@ import net.minecraft.server.MinecraftServer
 data class CommandModule(val command: String, val stats: Map<CommandResultStats.Type, IStatsAction>, val conditionals: List<CommandModule>) {
     constructor(command: String) : this(command, mapOf(), listOf())
 
-    fun run(server: MinecraftServer) {
-        val sender = ModuleSender(this, server)
+    fun run(server: MinecraftServer, debug: Boolean = false) {
+        val sender = ModuleSender(this, server, debug)
         val result = server.commandManager.executeCommand(sender, command)
         if (result > 0) conditionals.forEach { it.run(server) }
     }

@@ -7,11 +7,11 @@ import com.google.gson.JsonObject
  * @author WireSegal
  * Created at 4:19 PM on 12/4/16.
  */
-data class ChangeWatcher(val watch: List<String>, val commands: List<CommandModule>) {
+data class ChangeWatcher(val id: String, val watch: List<String>, val commands: List<CommandModule>) {
     companion object {
         @JvmStatic
         fun fromObject(obj: JsonObject): ChangeWatcher {
-            if (!obj.has("watch") || !obj.has("execute"))
+            if (!obj.has("watch") || !obj.has("execute") || !obj.has("id"))
                 throw IllegalArgumentException("Illegal command argument: $obj")
 
             val watch = mutableListOf<String>()
@@ -22,7 +22,9 @@ data class ChangeWatcher(val watch: List<String>, val commands: List<CommandModu
 
             val commands = CommandModule.fromPossibleArray(obj.get("execute"))
 
-            return ChangeWatcher(watch, commands)
+            val id = obj.get("id").asString
+
+            return ChangeWatcher(id, watch, commands)
         }
 
         @JvmStatic
