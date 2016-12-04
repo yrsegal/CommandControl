@@ -7,6 +7,12 @@ import com.google.gson.JsonObject
  * Created at 4:19 PM on 12/4/16.
  */
 data class ScriptModule(val debug: Boolean, val onLoad: List<CommandModule>, val onTick: List<CommandModule>, val tileChanges: List<ChangeWatcher>) {
+    operator fun plus(that: ScriptModule)
+            = ScriptModule(this.debug && that.debug,
+                           this.onLoad + that.onLoad,
+                           this.onTick + that.onTick,
+                           this.tileChanges + that.tileChanges)
+
     companion object {
         @JvmStatic
         fun fromObject(obj: JsonObject): ScriptModule {

@@ -11,6 +11,7 @@ import wiresegal.cmdctrl.common.commands.biome.CommandMatchBiome
 import wiresegal.cmdctrl.common.commands.biome.CommandSetBiome
 import wiresegal.cmdctrl.common.commands.data.CommandData
 import wiresegal.cmdctrl.common.commands.data.CommandDataExecute
+import wiresegal.cmdctrl.common.config.ConfigLoader
 import wiresegal.cmdctrl.common.core.ControlSaveData
 import wiresegal.cmdctrl.common.network.PacketBiomeUpdate
 
@@ -22,6 +23,7 @@ import wiresegal.cmdctrl.common.network.PacketBiomeUpdate
 class CommandControl {
     @Mod.EventHandler
     fun preInit(e: FMLPreInitializationEvent) {
+        ConfigLoader.load(e)
         ControlSaveData
         PacketHandler.register(PacketBiomeUpdate::class.java, Side.CLIENT)
     }
