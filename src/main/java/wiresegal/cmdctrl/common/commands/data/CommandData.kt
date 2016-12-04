@@ -170,7 +170,7 @@ object CommandData : CommandBase() {
 
     fun runTile(server: MinecraftServer, sender: ICommandSender, originalArgs: Array<out String>) {
         if (originalArgs.size < 2 || originalArgs[1] !in validPositionals)
-            throw WrongUsageException("${getCommandUsage(sender)}.pos")
+            throw WrongUsageException("${getCommandUsage(sender)}.tile")
 
         val tiles = TileSelector.matchTiles(server, sender, originalArgs[0])
 
