@@ -17,7 +17,7 @@ import wiresegal.cmdctrl.common.core.Slice
  */
 object CommandDataExecute : CommandBase() {
 
-    val positionals = arrayOf("slice", "pos")
+    val positionals = arrayOf("slice", "pos", "tile")
 
     @Throws(CommandException::class)
     override fun execute(server: MinecraftServer, sender: ICommandSender, args: Array<out String>) {
@@ -45,7 +45,7 @@ object CommandDataExecute : CommandBase() {
                 }
             }
             if (toThrow != null) throw toThrow
-        } else {
+        } else if (scope == "pos") {
             val poses = ControlSaveData[sender.entityWorld].posData
             val pred = createPosPredicate(sender, rules, poses)
             for ((key, data) in poses) if (data.isNotEmpty() && pred(key)) {
@@ -57,9 +57,38 @@ object CommandDataExecute : CommandBase() {
                     toThrow = CommandException("commands.execute.failed", command, key.run { "$x, $y, $z"} )
                 }
             }
+        } else if (scope == "tile") {
+            val tiles = TileSelector.matchTiles(server, sender, rules)
+            for (tile in tiles) {
+                try {
+                    val invocations = manager.executeCommand(PositionalSender(sender, tile.pos), command)
+
+                    if (invocations < 1) toThrow = CommandException("commands.execute.allInvocationsFailed", command)
+                } catch (var24: Throwable) {
+                    toThrow = CommandException("commands.execute.failed", command, tile.pos.run { "$x, $y, $z"} )
+                }
+            }
         }
         if (toThrow != null) throw toThrow
     }
+
+    /*
+     * Valid selector rules:
+     * x - set the x value used for radial and volumetric calculations
+     * y - set the y value used for radial and volumetric calculations
+     * z - set the z value used for radial and volumetric calculations
+     * xs - shift x value
+     * ys - shift y value
+     * zs - shift z value
+     * r - maximum radius
+     * rm - minimum radius
+     * dx - x volume the target must be within
+     * dy - y volume the target must be within
+     * dz - z volume the target must be within
+     *
+     * score_name - maximum score of key "name" for the pos
+     * score_name_min - minimum score of key "name" for the pos
+     */
 
     val RULE_FORMAT = "^(?:\\[?([\\w.=,!-]*)\\]?)?$".toRegex()
     val SINGLE_RULE = "\\G(\\w+)=([-!]?[\\w.-]*)(?:$|,)".toRegex()

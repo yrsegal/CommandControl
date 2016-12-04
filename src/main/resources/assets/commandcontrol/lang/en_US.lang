@@ -19,7 +19,7 @@ commandcontrol.testforbiomes.output=%d matches found from [%d, %d] to [%d, %d] o
 commandcontrol.testforbiomes.range=[%d, %d] to [%d, %d] out of range
 
 # Data storage
-commandcontrol.storedata.usage=/storedata <global|world|slice|pos> ...
+commandcontrol.storedata.usage=/storedata <global|world|slice|pos|tile> ...
 
 commandcontrol.storedata.usage.global=/storedata global <set|add|list|remove|operation|test> ...
 commandcontrol.storedata.usage.global.set=/storedata global set <key> <value>
@@ -49,6 +49,13 @@ commandcontrol.storedata.usage.pos.remove=/storedata pos <x> <y> <z> remove <key
 commandcontrol.storedata.usage.pos.test=/storedata pos <x> <y> <z> test <key> [min] [max]
 commandcontrol.storedata.usage.pos.operation=/storedata pos <x> <y> <z> operation <key1> <scope> <key> ...
 
+commandcontrol.storedata.usage.tile=/storedata tile tile <set|add|list|remove|test|operation|listall> ...
+commandcontrol.storedata.usage.tile.set=/storedata tile <selector> set <key> <value> [tag]
+commandcontrol.storedata.usage.tile.add=/storedata tile <selector> add <key> <value> [tag]
+commandcontrol.storedata.usage.tile.remove=/storedata tile <selector> remove <key>
+commandcontrol.storedata.usage.tile.test=/storedata tile <selector> test <key> [min] [max]
+commandcontrol.storedata.usage.tile.operation=/storedata tile <selector> operation <key1> <scope> <key> ...
+
 commandcontrol.storedata.notfound=Not found
 commandcontrol.storedata.toosmall=Too small
 commandcontrol.storedata.toolarge=Too large
@@ -57,6 +64,7 @@ commandcontrol.storedata.list.global=Global entries:
 commandcontrol.storedata.list.world=Entries for dimension %4$d (%5$s):
 commandcontrol.storedata.list.slice=Entries for chunk slice [%1$d, %3$d] in dimension %4$d (%5$s):
 commandcontrol.storedata.list.pos=Entries for pos %d, %d, %d in dimension %d (%s):
+commandcontrol.storedata.list.tile=Entries for tile at %d, %d, %d in dimension %d (%s):
 commandcontrol.storedata.list.entry= %s: %d
 
 commandcontrol.storedata.set=Set %s to %d
@@ -65,8 +73,13 @@ commandcontrol.storedata.exists=Successfully matched %s
 
 commandcontrol.storedata.autoget.slice=Slice scope needs an X and a Z argument
 commandcontrol.storedata.autoget.pos=Pos scope needs an X, Y, and Z argument
+commandcontrol.storedata.autoget.tile=Tile scope needs a selector argument
+commandcontrol.storedata.autoget.nottile=Tile selector didn't match exactly one
 commandcontrol.storedata.autoget.scope.invalid=Invalid scope
 
+commandcontrol.storedata.nomatch=NBT tag doesn't match
 
 commandcontrol.dataexecute.invalidrule=Invalid rule format
 commandcontrol.dataexecute.usage=/dataexecute <slice|pos> <rules> <command>
+
+commandcontrol.tselector.invalidrule=Invalid tile selector

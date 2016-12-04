@@ -5,18 +5,22 @@ import com.teamwizardry.librarianlib.common.util.builders.nbt
 import com.teamwizardry.librarianlib.common.util.indices
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.nbt.NBTTagList
+import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import net.minecraft.world.WorldSavedData
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.world.WorldEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
+import wiresegal.cmdctrl.common.commands.data.TileSelector
 
 /**
  * @author WireSegal
  * Created at 4:24 PM on 12/3/16.
  */
 class ControlSaveData(name: String = key) : WorldSavedData(name) {
+
+    private var world: World? = null
 
     companion object {
         const val id = "commandcontrol"
@@ -34,6 +38,7 @@ class ControlSaveData(name: String = key) : WorldSavedData(name) {
                 data = ControlSaveData()
                 world.setItemData(key, data)
             }
+            data.world = world
             return data
         }
 
@@ -54,7 +59,7 @@ class ControlSaveData(name: String = key) : WorldSavedData(name) {
     val worldData = ScoreStorage()
     val sliceData = ScoreMap<Slice>()
     val posData = ScoreMap<BlockPos>()
-    val tileData = ScoreMap<TileReference>()
+    val tileData = WeakScoreMap<TileEntity>()
 
     override fun readFromNBT(tag: NBTTagCompound) {
         globalData.clear()
@@ -100,7 +105,15 @@ class ControlSaveData(name: String = key) : WorldSavedData(name) {
             list.indices
                     .map { list[it] }
                     .filterIsInstance<NBTTagCompound>()
-                    .forEach { tileData[TileReference(it.getString("id"), it.getLong("pos"))].put(it.getString("key"), it.getInteger("value")) }
+                    .forEach {
+                        world?.let { w ->
+                            val id = it.getString("id")
+                            val pos = BlockPos.fromLong(it.getLong("pos"))
+                            val te = w.getTileEntity(pos)
+                            if (te != null && TileSelector.classToNameMap[te.javaClass] == id)
+                                tileData[te].put(it.getString("key"), it.getInteger("value"))
+                        }
+                    }
         }
     }
 
@@ -169,7 +182,7 @@ class ControlSaveData(name: String = key) : WorldSavedData(name) {
                 storage.forEach { s, i ->
                     l.appendTag(nbt {
                         comp(
-                                "id" to tile.id,
+                                "id" to TileSelector.classToNameMap[tile.javaClass],
                                 "pos" to tile.pos.toLong(),
                                 "key" to s,
                                 "value" to i
