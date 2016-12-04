@@ -67,4 +67,6 @@ commandcontrol.storedata.autoget.slice=Slice scope needs an X and a Z argument
 commandcontrol.storedata.autoget.pos=Pos scope needs an X, Y, and Z argument
 commandcontrol.storedata.autoget.scope.invalid=Invalid scope
 
+
+commandcontrol.dataexecute.invalidrule=Invalid rule format
 commandcontrol.dataexecute.usage=/dataexecute <slice|pos> <rules> <command>
