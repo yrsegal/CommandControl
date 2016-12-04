@@ -1,0 +1,18 @@
+commandcontrol.setbiome.usage=/setbiome <x> <z> <biome>
+commandcontrol.setbiome.success=Set the biome at [%d, %d] to %d (%s)
+commandcontrol.setbiome.invalid=Biome %s doesn't exist
+commandcontrol.setbiome.range=[%d, %d] out of range
+
+commandcontrol.fillbiomes.usage=/fillbiomes <x1> <z1> <x2> <z2> <biome>
+commandcontrol.fillbiomes.success=Set the biome from [%d, %d] to [%d, %d] to %d (%s)
+commandcontrol.fillbiomes.range=[%d, %d] to [%d, %d] out of range
+
+commandcontrol.testforbiome.usage=/testforbiome <x> <z> [biome]
+commandcontrol.testforbiome.match=Biome at [%d, %d] is %d (%s)
+commandcontrol.testforbiome.nomatch=Biome at [%d, %d] is %d (%s), expected %d (%s)
+commandcontrol.testforbiome.success=Biome at [%d, %d] is %d (%s)
+commandcontrol.testforbiome.range=[%d, %d] out of range
+
+commandcontrol.testforbiomes.usage=/testforbiomes <x1> <z1> <x2> <z2> <biome>
+commandcontrol.testforbiomes.output=%d matches found from [%d, %d] to [%d, %d] of biome %d (%s)
+commandcontrol.testforbiomes.range=[%d, %d] to [%d, %d] out of range

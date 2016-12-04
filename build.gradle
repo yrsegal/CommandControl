@@ -45,21 +45,6 @@ minecraft {
 
 repositories {
     mavenCentral()
-    maven { url "https://jitpack.io" }
-    maven { url "http://dvs1.progwml6.com/files/maven" }
-    maven { url "http://mobiusstrip.eu/maven" }
-    maven {
-        name 'tterag maven'
-        url "http://maven.tterrag.com/"
-    }
-    maven {
-	name 'jared maven'
-	url "http://maven.blamejared.com"
-    }
-}
-
-dependencies {
-    compile 'com.github.TeamWizardry:LibrarianLib:-SNAPSHOT'
 }
 
 processResources {
