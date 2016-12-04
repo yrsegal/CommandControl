@@ -1,3 +1,4 @@
+# Biome Control
 commandcontrol.setbiome.usage=/setbiome <x> <z> <biome>
 commandcontrol.setbiome.success=Set the biome at [%d, %d] to %d (%s)
 commandcontrol.setbiome.invalid=Biome %s doesn't exist
@@ -16,3 +17,60 @@ commandcontrol.testforbiome.range=[%d, %d] out of range
 commandcontrol.testforbiomes.usage=/testforbiomes <x1> <z1> <x2> <z2> <biome>
 commandcontrol.testforbiomes.output=%d matches found from [%d, %d] to [%d, %d] of biome %d (%s)
 commandcontrol.testforbiomes.range=[%d, %d] to [%d, %d] out of range
+
+# Data storage
+commandcontrol.storedata.usage=/storedata <global|world|slice|pos> ...
+
+commandcontrol.storedata.usage.global=/storedata global <set|add|list|remove|operation|test> ...
+commandcontrol.storedata.usage.global.set=/storedata global set <key> <value>
+commandcontrol.storedata.usage.global.add=/storedata global add <key> <value>
+commandcontrol.storedata.usage.global.list=/storedata global list
+commandcontrol.storedata.usage.global.remove=/storedata global remove <key>
+commandcontrol.storedata.usage.global.test=/storedata global test <key> [min] [max]
+commandcontrol.storedata.usage.global.operation=/storedata global operation <key1> <operator> <scope> <key> ...
+
+commandcontrol.storedata.usage.world=/storedata world <set|add|list|remove|test|operation|execute> ...
+commandcontrol.storedata.usage.world.set=/storedata world set <key> <value>
+commandcontrol.storedata.usage.world.add=/storedata world add <key> <value>
+commandcontrol.storedata.usage.world.list=/storedata world list
+commandcontrol.storedata.usage.world.remove=/storedata world remove <key>
+commandcontrol.storedata.usage.world.test=/storedata world test <key> [min] [max]
+commandcontrol.storedata.usage.world.operation=/storedata world operation <key1> <operator> <scope> <key> ...
+
+commandcontrol.storedata.usage.slice=/storedata slice <x> <z> <set|add|list|remove|test|operation|execute> ...
+commandcontrol.storedata.usage.slice.set=/storedata slice <x> <z> set <key> <value>
+commandcontrol.storedata.usage.slice.add=/storedata slice <x> <z> add <key> <value>
+commandcontrol.storedata.usage.slice.list=/storedata slice <x> <z> list
+commandcontrol.storedata.usage.slice.remove=/storedata slice <x> <z> remove <key>
+commandcontrol.storedata.usage.slice.test=/storedata slice <x> <z> test <key> [min] [max]
+commandcontrol.storedata.usage.slice.execute=/storedata slice <x> <z> execute <rules> <command>
+commandcontrol.storedata.usage.slice.operation=/storedata slice <x> <z> operation <key1> <operator> <scope> <key> ...
+
+commandcontrol.storedata.usage.pos=/storedata pos <x> <y> <z> <set|add|list|remove|test|operation|execute> ...
+commandcontrol.storedata.usage.pos.set=/storedata pos <x> <y> <z> set <key> <value>
+commandcontrol.storedata.usage.pos.add=/storedata pos <x> <y> <z> add <key> <value>
+commandcontrol.storedata.usage.pos.list=/storedata pos <x> <y> <z> list
+commandcontrol.storedata.usage.pos.remove=/storedata pos <x> <y> <z> remove <key>
+commandcontrol.storedata.usage.pos.test=/storedata pos <x> <y> <z> test <key> [min] [max]
+commandcontrol.storedata.usage.pos.execute=/storedata slice <x> <y> <z> execute <rules> <command>
+commandcontrol.storedata.usage.pos.operation=/storedata pos <x> <y> <z> operation <key1> <scope> <key> ...
+
+commandcontrol.storedata.notfound=Not found
+commandcontrol.storedata.toosmall=Too small
+commandcontrol.storedata.toolarge=Too large
+
+commandcontrol.storedata.list.global=Global entries:
+commandcontrol.storedata.list.world=Entries for dimension %4$d (%5$s):
+commandcontrol.storedata.list.slice=Entries for chunk slice [%1$d, %3$d] in dimension %4$d (%5$s):
+commandcontrol.storedata.list.pos=Entries for pos %d, %d, %d in dimension %d (%s):
+commandcontrol.storedata.list.entry= %s: %d
+
+commandcontrol.storedata.set=Set %s to %d
+commandcontrol.storedata.removed=Removed %s
+commandcontrol.storedata.exists=Successfully matched %s
+
+commandcontrol.storedata.autoget.slice=Slice scope needs an X and a Z argument
+commandcontrol.storedata.autoget.pos=Pos scope needs an X, Y, and Z argument
+commandcontrol.storedata.autoget.scope.invalid=Invalid scope
+
+commandcontrol.storedata.executenotallowed=Execute only allowed on positional scopes (slice, pos)
