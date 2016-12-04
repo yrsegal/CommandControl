@@ -174,7 +174,7 @@ object CommandData : CommandBase() {
 
         val tiles = TileSelector.matchTiles(server, sender, originalArgs[0])
 
-        val args = originalArgs.drop(2).toTypedArray()
+        val args = originalArgs.drop(1).toTypedArray()
 
         var toThrow: CommandException? = null
         for (tile in tiles) {
