@@ -80,6 +80,6 @@ commandcontrol.storedata.autoget.scope.invalid=Invalid scope
 commandcontrol.storedata.nomatch=NBT tag doesn't match
 
 commandcontrol.dataexecute.invalidrule=Invalid rule format
-commandcontrol.dataexecute.usage=/dataexecute <slice|pos> <rules> <command>
+commandcontrol.dataexecute.usage=/dataexecute <slice|pos|tile> <rules> <command>
 
 commandcontrol.tselector.invalidrule=Invalid tile selector
