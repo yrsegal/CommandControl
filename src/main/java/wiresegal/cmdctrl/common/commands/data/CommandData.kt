@@ -4,6 +4,7 @@ import net.minecraft.command.*
 import net.minecraft.server.MinecraftServer
 import net.minecraft.util.math.BlockPos
 import wiresegal.cmdctrl.common.core.ControlSaveData
+import wiresegal.cmdctrl.common.core.ScoreMap
 import wiresegal.cmdctrl.common.core.ScoreStorage
 import wiresegal.cmdctrl.common.core.Slice
 
@@ -15,6 +16,7 @@ object CommandData : CommandBase() {
 
     val validScopes = arrayOf("global", "world", "slice", "pos")
     val validCommands = arrayOf("set", "add", "list", "remove", "test", "operation")
+    val validPositionals = arrayOf(*validCommands, "listall")
     val operations = arrayOf("+=", "-=", "*=", "/=", "%=", "=", "<", ">", "><")
     val positionals = arrayOf("slice", "pos")
 
@@ -100,7 +102,7 @@ object CommandData : CommandBase() {
             throw WrongUsageException("${getCommandUsage(sender)}.global")
 
         val globalData = ControlSaveData[server.worldServerForDimension(0)]
-        runCommands("global", server, BlockPos.ORIGIN, sender, args, globalData.globalData)
+        runCommands("global", server, BlockPos.ORIGIN, sender, args, globalData.globalData, null)
         globalData.markDirty()
     }
 
@@ -109,12 +111,12 @@ object CommandData : CommandBase() {
             throw WrongUsageException("${getCommandUsage(sender)}.world")
 
         val data = ControlSaveData[sender.entityWorld]
-        runCommands("world", server, BlockPos.ORIGIN, sender, args, data.worldData)
+        runCommands("world", server, BlockPos.ORIGIN, sender, args, data.worldData, null)
         data.markDirty()
     }
 
     fun runSlice(server: MinecraftServer, sender: ICommandSender, originalArgs: Array<out String>) {
-        if (originalArgs.size < 3 || originalArgs[2] !in validCommands)
+        if (originalArgs.size < 3 || originalArgs[2] !in validPositionals)
             throw WrongUsageException("${getCommandUsage(sender)}.slice")
 
         val pos = sender.position
@@ -125,12 +127,12 @@ object CommandData : CommandBase() {
         val data = ControlSaveData[sender.entityWorld]
 
         val args = originalArgs.drop(2).toTypedArray()
-        runCommands("slice", server, pos, sender, args, data.sliceData[slice])
+        runCommands("slice", server, pos, sender, args, data.sliceData[slice], data.sliceData)
         data.markDirty()
     }
 
     fun runPos(server: MinecraftServer, sender: ICommandSender, originalArgs: Array<out String>) {
-        if (originalArgs.size < 4 || originalArgs[3] !in validCommands)
+        if (originalArgs.size < 4 || originalArgs[3] !in validPositionals)
             throw WrongUsageException("${getCommandUsage(sender)}.pos")
 
         val senderPos = sender.position
@@ -142,11 +144,11 @@ object CommandData : CommandBase() {
         val args = originalArgs.drop(3).toTypedArray()
 
         val data = ControlSaveData[sender.entityWorld]
-        runCommands("pos", server, pos, sender, args, data.posData[pos])
+        runCommands("pos", server, pos, sender, args, data.posData[pos], data.posData)
         data.markDirty()
     }
 
-    fun runCommands(scope: String, server: MinecraftServer, blockPos: BlockPos, sender: ICommandSender, originalArgs: Array<out String>, scoreStorage: ScoreStorage) {
+    fun runCommands(scope: String, server: MinecraftServer, blockPos: BlockPos, sender: ICommandSender, originalArgs: Array<out String>, scoreStorage: ScoreStorage, map: ScoreMap<*>?) {
         val command = originalArgs[0]
         val args = originalArgs.drop(1)
         when (command) {
@@ -154,7 +156,7 @@ object CommandData : CommandBase() {
                 if (args.size < 2)
                     throw WrongUsageException("${getCommandUsage(sender)}.$scope.set")
                 val setTo = parseInt(args[1])
-                scoreStorage[args[0]]
+                scoreStorage[args[0]] = setTo
                 notifyCommandListener(sender, this, "commandcontrol.storedata.set", args[0], setTo)
             }
             "add" -> {
@@ -216,6 +218,33 @@ object CommandData : CommandBase() {
                         throw CommandException("commands.scoreboard.players.operation.invalidOperation", operation)
                 }
             }
+            "listall" -> {
+                if (map != null) {
+                    if (scope == "slice") map.keys
+                            .filterIsInstance<Slice>()
+                            .filter { map[it]?.isNotEmpty() ?: false }
+                            .forEach {
+                                notifyCommandListener(sender, this, "commandcontrol.storedata.list.$scope", it.x, 0, it.z, sender.entityWorld.provider.dimension, sender.entityWorld.provider.dimensionType.getName())
+                                map[it]?.forEach { s, i ->
+                                    notifyCommandListener(sender, this, "commandcontrol.storedata.list.entry", s, i)
+                                }
+                            }
+                    else map.keys
+                            .filterIsInstance<BlockPos>()
+                            .filter { map[it]?.isNotEmpty() ?: false }
+                            .forEach {
+                                notifyCommandListener(sender, this, "commandcontrol.storedata.list.$scope", it.x, it.y, it.z, sender.entityWorld.provider.dimension, sender.entityWorld.provider.dimensionType.getName())
+                                map[it]?.forEach { s, i ->
+                                    notifyCommandListener(sender, this, "commandcontrol.storedata.list.entry", s, i)
+                                }
+                            }
+                } else {
+                    notifyCommandListener(sender, this, "commandcontrol.storedata.list.$scope", blockPos.x, blockPos.y, blockPos.z, sender.entityWorld.provider.dimension, sender.entityWorld.provider.dimensionType.getName())
+                    for ((key, value) in scoreStorage)
+                        notifyCommandListener(sender, this, "commandcontrol.storedata.list.entry", key, value)
+                }
+
+            }
         }
     }
 
@@ -244,7 +273,7 @@ object CommandData : CommandBase() {
                     else if (args.size == 3)
                         return getTabCompletionCoordinate(args, 0, pos)
                     else if (args.size == 4)
-                        return getListOfStringsMatchingLastWord(args, *validCommands)
+                        return getListOfStringsMatchingLastWord(args, *validPositionals)
                     else if (args[3] == "operation") {
                         if (args.size == 6) return getListOfStringsMatchingLastWord(args, *operations)
                         if (args.size == 7) return getListOfStringsMatchingLastWord(args, *validScopes)
@@ -262,7 +291,7 @@ object CommandData : CommandBase() {
                     if (args.size in 2..4)
                         return getTabCompletionCoordinate(args, 1, pos)
                     else if (args.size == 5)
-                        return getListOfStringsMatchingLastWord(args, *validCommands)
+                        return getListOfStringsMatchingLastWord(args, *validPositionals)
                     else if (args[4] == "operation") {
                         if (args.size == 7) return getListOfStringsMatchingLastWord(args, *operations)
                         if (args.size == 8) return getListOfStringsMatchingLastWord(args, *validScopes)

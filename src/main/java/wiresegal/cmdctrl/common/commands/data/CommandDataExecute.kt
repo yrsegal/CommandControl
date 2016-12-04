@@ -34,7 +34,7 @@ object CommandDataExecute : CommandBase() {
         if (scope == "slice") {
             val slices = ControlSaveData[sender.entityWorld].sliceData
             val pred = createSlicePredicate(rules, slices)
-            for ((key) in slices) if (pred(key)) {
+            for ((key, data) in slices) if (data.isNotEmpty() && pred(key)) {
                 try {
                     val invocations = manager.executeCommand(PositionalSender(sender, key.toPos()), command)
 
@@ -47,7 +47,7 @@ object CommandDataExecute : CommandBase() {
         } else {
             val poses = ControlSaveData[sender.entityWorld].posData
             val pred = createPosPredicate(rules, poses)
-            for ((key) in poses) if (pred(key)) {
+            for ((key, data) in poses) if (data.isNotEmpty() && pred(key)) {
                 try {
                     val invocations = manager.executeCommand(PositionalSender(sender, key), command)
 
