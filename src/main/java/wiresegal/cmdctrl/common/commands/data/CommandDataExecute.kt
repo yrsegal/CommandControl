@@ -31,45 +31,61 @@ object CommandDataExecute : CommandBase() {
 
         val manager = server.getCommandManager()
 
+        var throwCount = 0
+        var totalCount = 0
         var toThrow: CommandException? = null
         if (scope == "slice") {
             val slices = ControlSaveData[sender.entityWorld].sliceData
             val pred = createSlicePredicate(sender, rules, slices)
             for ((key, data) in slices) if (data.isNotEmpty() && pred(key)) {
                 try {
+                    totalCount++
                     val invocations = manager.executeCommand(PositionalSender(sender, key), command)
 
-                    if (invocations < 1) toThrow = CommandException("commands.execute.allInvocationsFailed", command)
+                    if (invocations < 1) {
+                        toThrow = CommandException("commands.execute.allInvocationsFailed", command)
+                        throwCount++
+                    }
                 } catch (var24: Throwable) {
                     toThrow = CommandException("commands.execute.failed", command, key.toString())
+                    throwCount++
                 }
             }
-            if (toThrow != null) throw toThrow
         } else if (scope == "pos") {
             val poses = ControlSaveData[sender.entityWorld].posData
             val pred = createPosPredicate(sender, rules, poses)
             for ((key, data) in poses) if (data.isNotEmpty() && pred(key)) {
                 try {
+                    totalCount++
                     val invocations = manager.executeCommand(PositionalSender(sender, key), command)
 
-                    if (invocations < 1) toThrow = CommandException("commands.execute.allInvocationsFailed", command)
+                    if (invocations < 1) {
+                        toThrow = CommandException("commands.execute.allInvocationsFailed", command)
+                        throwCount++
+                    }
                 } catch (var24: Throwable) {
                     toThrow = CommandException("commands.execute.failed", command, key.run { "$x, $y, $z"} )
+                    throwCount++
                 }
             }
         } else if (scope == "tile") {
             val tiles = TileSelector.matchTiles(server, sender, rules)
             for (tile in tiles) {
                 try {
+                    totalCount++
                     val invocations = manager.executeCommand(TileSender(sender, tile), command)
 
-                    if (invocations < 1) toThrow = CommandException("commands.execute.allInvocationsFailed", command)
+                    if (invocations < 1) {
+                        toThrow = CommandException("commands.execute.allInvocationsFailed", command)
+                        throwCount++
+                    }
                 } catch (var24: Throwable) {
                     toThrow = CommandException("commands.execute.failed", command, tile.pos.run { "$x, $y, $z"} )
+                    throwCount++
                 }
             }
         }
-        if (toThrow != null) throw toThrow
+        if (toThrow != null && throwCount == totalCount) throw toThrow
     }
 
     /*

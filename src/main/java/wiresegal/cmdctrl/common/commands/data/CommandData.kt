@@ -176,17 +176,21 @@ object CommandData : CommandBase() {
 
         val args = originalArgs.drop(1).toTypedArray()
 
+        var throwCount = 0
+        var totalCount = 0
         var toThrow: CommandException? = null
         for (tile in tiles) {
             try {
+                totalCount++
                 val data = ControlSaveData[tile.world]
                 runCommands("tile", tile.world, tile, server, tile.pos, sender, args, data.tileData[tile], data.tileData)
                 data.markDirty()
             } catch (e: CommandException) {
                 toThrow = e
+                throwCount++
             }
-            if (toThrow != null) throw toThrow
         }
+        if (toThrow != null && throwCount == totalCount) throw toThrow
     }
 
     fun runCommands(scope: String, world: World, input: Any, server: MinecraftServer, blockPos: BlockPos, sender: ICommandSender, originalArgs: Array<out String>, scoreStorage: ScoreStorage, map: IScoreMap<*>?) {
