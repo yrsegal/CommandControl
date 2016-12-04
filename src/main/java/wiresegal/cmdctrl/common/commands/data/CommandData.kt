@@ -396,6 +396,6 @@ object CommandData : CommandBase() {
 
     override fun getRequiredPermissionLevel() = 2
     override fun getCommandName() = "storedata"
-    override fun getCommandAliases() = listOf("savedata")
+    override fun getCommandAliases() = listOf("worlddata", "savedata", "dataworld", "datasave", "datastore")
     override fun getCommandUsage(sender: ICommandSender?) = "commandcontrol.storedata.usage"
 }

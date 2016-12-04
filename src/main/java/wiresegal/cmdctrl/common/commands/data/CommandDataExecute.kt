@@ -61,7 +61,7 @@ object CommandDataExecute : CommandBase() {
             val tiles = TileSelector.matchTiles(server, sender, rules)
             for (tile in tiles) {
                 try {
-                    val invocations = manager.executeCommand(PositionalSender(sender, tile.pos), command)
+                    val invocations = manager.executeCommand(TileSender(sender, tile), command)
 
                     if (invocations < 1) toThrow = CommandException("commands.execute.allInvocationsFailed", command)
                 } catch (var24: Throwable) {
@@ -211,5 +211,6 @@ object CommandDataExecute : CommandBase() {
 
     override fun getRequiredPermissionLevel() = 2
     override fun getCommandName() = "dataexecute"
+    override fun getCommandAliases() = mutableListOf("executedata")
     override fun getCommandUsage(sender: ICommandSender?) = "commandcontrol.dataexecute.usage"
 }
