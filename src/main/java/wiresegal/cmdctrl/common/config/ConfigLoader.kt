@@ -37,9 +37,9 @@ object ConfigLoader {
             val example = File(configDir, "example.json")
             example.writeText(json {
                 obj(
-                        "init" to array("commands run on world start go here"),
-                        "tick" to array("commands run every tick go here", obj(
-                                "execute" to "command to execute with other arguments",
+                        "init" to array("# commands run on world start go here"),
+                        "tick" to array("# commands run every tick go here", obj(
+                                "execute" to "# command to execute with other arguments",
                                 "stats" to obj(
                                         "SuccessCount" to obj(
                                                 "entity" to "an entity selector like @p or @r",
@@ -51,13 +51,13 @@ object ConfigLoader {
                                         )
                                 ),
                                 "if" to array(
-                                        "conditional commands go here"
+                                        "# conditional commands go here"
                                 )
                         )),
                         "tilechanges" to array(obj(
                                 "id" to "tile id to watch",
                                 "watch" to array("tile fields to watch"),
-                                "execute" to array("commands to run")
+                                "execute" to array("# commands to run")
                         ))
                 )
             }.serialize())
