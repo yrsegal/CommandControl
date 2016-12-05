@@ -16,7 +16,7 @@ import wiresegal.cmdctrl.common.network.PacketBiomeUpdate
  */
 object CommandSetBiome : CommandBase() {
 
-    val biomes by lazy { Biome.REGISTRY.map { Biome.REGISTRY.getNameForObject(it) } }
+    val biomes by lazy { Biome.REGISTRY.map { Biome.REGISTRY.getNameForObject(it as Biome) } }
 
     fun setBiome(chunk: Chunk, pos: BlockPos, biome: Biome) {
         val i = pos.x and 15
