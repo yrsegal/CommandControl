@@ -83,3 +83,7 @@ commandcontrol.dataexecute.invalidrule=Invalid rule format
 commandcontrol.dataexecute.usage=/dataexecute <slice|pos|tile> <rules> <command>
 
 commandcontrol.tselector.invalidrule=Invalid tile selector
+
+# Misc
+commandcontrol.dimension.usage=/dimension
+commandcontrol.dimension.id=Dimension %d (%s)

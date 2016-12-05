@@ -11,6 +11,7 @@ import wiresegal.cmdctrl.common.commands.biome.CommandMatchBiome
 import wiresegal.cmdctrl.common.commands.biome.CommandSetBiome
 import wiresegal.cmdctrl.common.commands.data.CommandData
 import wiresegal.cmdctrl.common.commands.data.CommandDataExecute
+import wiresegal.cmdctrl.common.commands.misc.CommandDimension
 import wiresegal.cmdctrl.common.config.ConfigLoader
 import wiresegal.cmdctrl.common.core.ControlSaveData
 import wiresegal.cmdctrl.common.network.PacketBiomeUpdate
@@ -39,5 +40,8 @@ class CommandControl {
         // Logic
         e.registerServerCommand(CommandData)
         e.registerServerCommand(CommandDataExecute)
+
+        // Misc
+        e.registerServerCommand(CommandDimension)
     }
 }

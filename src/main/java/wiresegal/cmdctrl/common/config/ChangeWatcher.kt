@@ -10,7 +10,7 @@ import com.google.gson.JsonObject
 data class ChangeWatcher(val id: String, val watch: List<String>, val commands: List<CommandModule>) {
     companion object {
         @JvmStatic
-        fun fromObject(obj: JsonObject): ChangeWatcher {
+        fun fromObject(obj: JsonObject, debug: Boolean = false): ChangeWatcher {
             if (!obj.has("watch") || !obj.has("execute") || !obj.has("id"))
                 throw IllegalArgumentException("Illegal command argument: $obj")
 
@@ -20,7 +20,7 @@ data class ChangeWatcher(val id: String, val watch: List<String>, val commands: 
             else if (toWatch.isJsonArray) toWatch.asJsonArray.mapTo(watch) { it.asString }
             else throw IllegalArgumentException("Illegal command argument: $obj")
 
-            val commands = CommandModule.fromPossibleArray(obj.get("execute"))
+            val commands = CommandModule.fromPossibleArray(obj.get("execute"), debug)
 
             val id = obj.get("id").asString
 
@@ -28,16 +28,16 @@ data class ChangeWatcher(val id: String, val watch: List<String>, val commands: 
         }
 
         @JvmStatic
-        fun fromPossibleArray(el: JsonElement): List<ChangeWatcher> {
+        fun fromPossibleArray(el: JsonElement, debug: Boolean = false): List<ChangeWatcher> {
             val ret = mutableListOf<ChangeWatcher>()
             if (!el.isJsonArray && !el.isJsonObject)
                 throw IllegalArgumentException("Illegal command argument: $el")
             if (el.isJsonObject)
-                ret.add(fromObject(el.asJsonObject))
+                ret.add(fromObject(el.asJsonObject, debug))
             else
                 el.asJsonArray.mapTo(ret) {
                     if (it.isJsonObject)
-                        fromObject(it.asJsonObject)
+                        fromObject(it.asJsonObject, debug)
                     else
                         throw IllegalArgumentException("Illegal command argument: $el")
                 }
