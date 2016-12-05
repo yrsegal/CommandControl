@@ -79,5 +79,6 @@ object CommandSetBiome : CommandBase() {
 
     override fun getRequiredPermissionLevel() = 2
     override fun getCommandName() = "setbiome"
+    override fun getCommandAliases() = mutableListOf("biomeset")
     override fun getCommandUsage(sender: ICommandSender?) = "commandcontrol.setbiome.usage"
 }

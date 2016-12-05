@@ -66,5 +66,6 @@ object CommandFillBiome : CommandBase() {
 
     override fun getRequiredPermissionLevel() = 2
     override fun getCommandName() = "fillbiomes"
+    override fun getCommandAliases() = mutableListOf("biomefill")
     override fun getCommandUsage(sender: ICommandSender?) = "commandcontrol.fillbiomes.usage"
 }
