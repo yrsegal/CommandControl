@@ -42,8 +42,10 @@ object TileSelector {
      * score_name_min - minimum score of key "name" for the tile
      */
 
-    val nameToClassMap by ImmutableStaticFieldDelegate<TileSelector, Map<String, Class<out TileEntity>>>(MethodHandleHelper.wrapperForStaticGetter(TileEntity::class.java, "nameToClassMap"))
-    val classToNameMap by ImmutableStaticFieldDelegate<TileSelector, Map<Class<out TileEntity>, String>>(MethodHandleHelper.wrapperForStaticGetter(TileEntity::class.java, "classToNameMap"))
+    val nameToClassMap by ImmutableStaticFieldDelegate<TileSelector, Map<String, Class<out TileEntity>>>(
+            MethodHandleHelper.wrapperForStaticGetter(TileEntity::class.java, "f", "field_145855_i", "nameToClassMap"))
+    val classToNameMap by ImmutableStaticFieldDelegate<TileSelector, Map<Class<out TileEntity>, String>>(
+            MethodHandleHelper.wrapperForStaticGetter(TileEntity::class.java, "g", "field_145853_j", "classToNameMap"))
 
     private fun hasArgument(params: Map<String, String>) = WORLD_BINDING_ARGS.any { params.containsKey(it) }
 
