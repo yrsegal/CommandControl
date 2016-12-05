@@ -6,9 +6,9 @@ import com.teamwizardry.librarianlib.common.util.builders.json
 import com.teamwizardry.librarianlib.common.util.builders.serialize
 import com.teamwizardry.librarianlib.common.util.get
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.server.MinecraftServer
 import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.common.MinecraftForge
-import net.minecraftforge.event.world.WorldEvent
 import net.minecraftforge.fml.common.FMLCommonHandler
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import net.minecraftforge.fml.common.eventhandler.EventPriority
@@ -71,29 +71,26 @@ object ConfigLoader {
 
     private val toWatch = hashMapOf<String, MutableList<String>>()
 
-    @SubscribeEvent(priority = EventPriority.LOWEST)
-    fun onWorldLoad(e: WorldEvent.Load) {
-        if (!e.world.isRemote) {
-            module = ScriptModule(listOf(), listOf(), listOf())
+    fun loadScripts(server: MinecraftServer) {
+        module = ScriptModule(listOf(), listOf(), listOf())
 
-            val files = configDir.list { dir, s ->
-                File(dir, s).isFile && s.endsWith(".json")
-            }
-            files.forEach { file ->
-                val qualified = File(configDir, file)
-                try {
-                    module += ScriptModule.fromObject(JsonParser().parse(qualified.reader()).asJsonObject)
-                } catch (e: Exception) {
-                    LibrarianLog.error("Failed to parse script $file")
-                }
-            }
-
-            tileMap.clear()
-            toWatch.clear()
-            module.tileChanges.forEach { toWatch.getOrPut(it.id) { mutableListOf() }.addAll(it.watch) }
-
-            module.onLoad.forEach { it.run(FMLCommonHandler.instance().minecraftServerInstance, e.world) }
+        val files = configDir.list { dir, s ->
+            File(dir, s).isFile && s.endsWith(".json")
         }
+        files.forEach { file ->
+            val qualified = File(configDir, file)
+            try {
+                module += ScriptModule.fromObject(JsonParser().parse(qualified.reader()).asJsonObject)
+            } catch (e: Exception) {
+                LibrarianLog.error("Failed to parse script $file")
+            }
+        }
+
+        tileMap.clear()
+        toWatch.clear()
+        module.tileChanges.forEach { toWatch.getOrPut(it.id) { mutableListOf() }.addAll(it.watch) }
+
+        module.onLoad.forEach { it.run(FMLCommonHandler.instance().minecraftServerInstance, server.worldServerForDimension(0)) }
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
