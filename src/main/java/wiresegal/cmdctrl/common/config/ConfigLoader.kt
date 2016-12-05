@@ -101,7 +101,6 @@ object ConfigLoader {
             for (tile in e.world.loadedTileEntityList) {
                 val dump = tile.writeToNBT(NBTTagCompound())
                 val id = TileSelector.classToNameMap[tile.javaClass]
-                val map = tileMap
                 if (tile in tileMap) {
                     val ranModules = mutableSetOf<ChangeWatcher>()
                     dump.keySet
