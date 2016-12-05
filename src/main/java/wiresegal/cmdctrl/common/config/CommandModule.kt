@@ -58,7 +58,11 @@ data class CommandModule(val command: String, val stats: Map<CommandResultStats.
             } catch (e: IllegalArgumentException) {
                 if (!el.isJsonArray)
                     throw IllegalArgumentException("Illegal command argument: $el")
-                el.asJsonArray.mapTo(ret) { fromElement(it, debug) }
+                el.asJsonArray.forEach {
+                    val module = fromElement(it, debug)
+                    if (!module.command.matches("^\\s+#".toRegex()))
+                        ret.add(module)
+                }
             }
             return ret
         }

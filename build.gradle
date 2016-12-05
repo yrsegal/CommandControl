@@ -17,8 +17,8 @@ configurations.all {
     resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }
 
-version = "1.1"
-group = "com.teamwizardry"
+version = "1.0"
+group = "wiresegal"
 archivesBaseName = "CommandControl"
 
 sourceCompatibility = 1.8
