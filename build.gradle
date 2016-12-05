@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.0.0'
+    ext.kotlin_version = '1.0.2'
     repositories {
         jcenter()
         maven {
@@ -32,7 +32,6 @@ group = "wiresegal.psionup"
 archivesBaseName = config.mod_name
 
 minecraft {
-    useDepAts = true
     version = "${config.mc_version}-${config.forge_version}"
     runDir = "run"
     mappings = config.mc_mappings
@@ -41,37 +40,6 @@ minecraft {
     replace 'GRADLE:VERSION', config.version
 
     replaceIn 'LibMisc.kt'
-}
-
-repositories {
-    maven {
-        url "http://dvs1.progwml6.com/files/maven"
-    }
-}
-
-configurations {
-
-    required
-    compile.extendsFrom(required)
-}
-
-dependencies {
-    deobfCompile "mezz.jei:jei_1.9.4:3.4.0.202"
-
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-}
-
-jar {
-
-    // We need to make sure we package kotlin runtimes.
-
-    archiveName "${archivesBaseName}-r${version}.jar"
-    dependsOn configurations.compile
-    from {
-        configurations.required.collect {
-            it.isDirectory() ? it : zipTree(it)
-        }
-    }
 }
 
 def parseConfig(File config) {
@@ -103,7 +71,7 @@ processResources
                 include 'mcmod.info'
 
                 // replace version and mcversion
-                expand 'version':project.version, 'mcversion':project.minecraft.version
+                expand 'version': project.version, 'mcversion': project.minecraft.version
             }
 
             // copy everything else, thats not the mcmod.info
