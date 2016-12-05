@@ -73,7 +73,7 @@ object ConfigLoader {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     fun onWorldLoad(e: WorldEvent.Load) {
-        if (FMLCommonHandler.instance().effectiveSide.isServer) {
+        if (!e.world.isRemote) {
             module = ScriptModule(listOf(), listOf(), listOf())
 
             val files = configDir.list { dir, s ->
