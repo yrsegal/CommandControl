@@ -10,13 +10,14 @@ import net.minecraft.world.World
  * @author WireSegal
  * Created at 4:19 PM on 12/4/16.
  */
-data class CommandModule(val command: String, val stats: Map<CommandResultStats.Type, IStatsAction>, val conditionals: List<CommandModule>, val debug: Boolean = false) {
-    constructor(command: String, debug: Boolean = false) : this(command, mapOf(), listOf(), debug)
+data class CommandModule(val command: String, val stats: Map<CommandResultStats.Type, IStatsAction>, val conditionals: List<CommandModule>, val invConditionals: List<CommandModule>, val debug: Boolean = false) {
+    constructor(command: String, debug: Boolean = false) : this(command, mapOf(), listOf(), listOf(), debug)
 
     fun run(server: MinecraftServer, pos: BlockPos? = null, world: World? = null) {
         val sender = ModuleSender(this, world, server, debug, pos)
         val result = server.commandManager.executeCommand(sender, command)
         if (result > 0) conditionals.forEach { it.run(server, pos, world) }
+        else invConditionals.forEach { it.run(server, pos, world) }
     }
 
     fun run(server: MinecraftServer, world: World? = null) = run(server, null, world)
@@ -44,7 +45,10 @@ data class CommandModule(val command: String, val stats: Map<CommandResultStats.
                 val conditionals = mutableListOf<CommandModule>()
                 if (obj.has("if")) conditionals.addAll(fromPossibleArray(obj.get("if"), debug))
 
-                return CommandModule(cmd, stats, conditionals, debug)
+                val invConditionals = mutableListOf<CommandModule>()
+                if (obj.has("else")) invConditionals.addAll(fromPossibleArray(obj.get("else"), debug))
+
+                return CommandModule(cmd, stats, conditionals, invConditionals, debug)
             }
 
             throw IllegalArgumentException("Illegal command argument: $el")

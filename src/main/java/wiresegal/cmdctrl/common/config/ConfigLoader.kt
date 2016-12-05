@@ -52,6 +52,9 @@ object ConfigLoader {
                                 ),
                                 "if" to array(
                                         "# conditional commands go here"
+                                ),
+                                "else" to array(
+                                        "# commands to be run if the command fails go here"
                                 )
                         )),
                         "tilechanges" to array(obj(

@@ -10,7 +10,6 @@ bin
 out
 *.ipr
 *.iws
-*.iml
 .idea
 run
 
@@ -20,6 +19,5 @@ build
 
 # other
 eclipse
-run
 gradle-app.setting
 /hs_err_pid*.log
