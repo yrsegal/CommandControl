@@ -13,22 +13,12 @@ buildscript {
 
 apply plugin: "net.minecraftforge.gradle.forge"
 
-configurations.all {
-    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
-}
-
 version = "1.0"
 group = "wiresegal"
 archivesBaseName = "CommandControl"
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
-
-repositories {
-    maven {
-        url "http://maven.amadornes.com/"
-    }
-}
 
 minecraft {
     version = "1.10.2-12.18.1.2095"
@@ -41,10 +31,6 @@ minecraft {
     // simply re-run your setup task after changing the mappings to update your workspace.
     mappings = "snapshot_20160803"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
-}
-
-repositories {
-    mavenCentral()
 }
 
 processResources {
@@ -68,7 +54,6 @@ processResources {
 
 idea{
     module{
-        inheritOutputDirs = false
         outputDir = compileJava.destinationDir
         testOutputDir = compileTestJava.destinationDir
     }
