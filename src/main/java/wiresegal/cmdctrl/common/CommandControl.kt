@@ -1,8 +1,10 @@
 package wiresegal.cmdctrl.common
 
 import com.teamwizardry.librarianlib.common.network.PacketHandler
+import net.minecraft.server.MinecraftServer
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
+import net.minecraftforge.fml.common.event.FMLServerStartedEvent
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent
 import net.minecraftforge.fml.relauncher.Side
 import wiresegal.cmdctrl.common.commands.biome.CommandFillBiome
@@ -30,6 +32,7 @@ class CommandControl {
         PacketHandler.register(PacketBiomeUpdate::class.java, Side.CLIENT)
     }
 
+
     @Mod.EventHandler
     fun serverStarting(e: FMLServerStartingEvent) {
         // Biome Control
@@ -46,6 +49,13 @@ class CommandControl {
         e.registerServerCommand(CommandDimension)
         e.registerServerCommand(CommandReloadScripts)
 
-        ConfigLoader.loadScripts(e.server)
+        server = e.server
+    }
+    
+    private lateinit var server: MinecraftServer
+
+    @Mod.EventHandler
+    fun serverStarted(e: FMLServerStartedEvent) {
+        ConfigLoader.loadScripts(server)
     }
 }
