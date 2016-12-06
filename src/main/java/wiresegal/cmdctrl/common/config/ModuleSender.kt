@@ -14,7 +14,7 @@ import net.minecraft.world.World
  * Created at 5:10 PM on 12/4/16.
  */
 class ModuleSender(private val module: CommandModule, private val world: World?, private val server: MinecraftServer, private val debug: Boolean = false, private val pos: BlockPos? = null) : ICommandSender {
-    override fun sendCommandFeedback() = debug && server.worldServers[0].gameRules.getBoolean("sendCommandFeedback")
+    override fun sendCommandFeedback() = debug
     override fun getName() = "Scripting"
     override fun getDisplayName() = TextComponentString(name)
     override fun canCommandSenderUseCommand(permLevel: Int, commandName: String?) = true
