@@ -64,7 +64,7 @@ object CommandDataExecute : CommandBase() {
                         throwCount++
                     }
                 } catch (var24: Throwable) {
-                    toThrow = CommandException("commands.execute.failed", command, key.run { "$x, $y, $z"} )
+                    toThrow = CommandException("commands.execute.failed", command, key.run { "$x, $y, $z" })
                     throwCount++
                 }
             }
@@ -80,7 +80,7 @@ object CommandDataExecute : CommandBase() {
                         throwCount++
                     }
                 } catch (var24: Throwable) {
-                    toThrow = CommandException("commands.execute.failed", command, tile.pos.run { "$x, $y, $z"} )
+                    toThrow = CommandException("commands.execute.failed", command, tile.pos.run { "$x, $y, $z" })
                     throwCount++
                 }
             }
@@ -124,11 +124,11 @@ object CommandDataExecute : CommandBase() {
             return { predicates.fold(false) { prev, pred -> prev || pred(it) } }
         else if (c < 0) return {
             var i = 0
-            predicates.foldRight(false) { pred, prev -> c < i-- && prev || pred(it)  }
+            predicates.foldRight(false) { pred, prev -> c < i-- && prev || pred(it) }
         }
         else return {
             var i = 0
-            predicates.fold(false) { prev, pred -> c > i++ && prev || pred(it)  }
+            predicates.fold(false) { prev, pred -> c > i++ && prev || pred(it) }
         }
     }
 

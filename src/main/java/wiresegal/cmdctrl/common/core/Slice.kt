@@ -8,8 +8,8 @@ import net.minecraft.util.math.BlockPos
  */
 class Slice(x: Number, z: Number) : BlockPos(x.toInt(), 0, z.toInt()) {
 
-    constructor(pos: BlockPos): this(pos.x, pos.z)
-    constructor(pos: Long): this(fromLong(pos))
+    constructor(pos: BlockPos) : this(pos.x, pos.z)
+    constructor(pos: Long) : this(fromLong(pos))
 
     override fun toString() = "[$x, $z]"
 }

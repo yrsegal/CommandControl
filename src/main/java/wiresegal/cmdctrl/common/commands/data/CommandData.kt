@@ -256,7 +256,12 @@ object CommandData : CommandBase() {
                     throw WrongUsageException("${getCommandUsage(sender)}.global.operation")
                 val key = args[0]
                 val value = scoreStorage[key] ?: 0
-                fun setValue(value: Int) { scoreStorage[key] = value }
+
+                // Alias for easy use
+                fun setValue(value: Int) {
+                    scoreStorage[key] = value
+                }
+
                 val operation = args[1]
                 val otherScope = args[2]
                 val otherKey = args[3]

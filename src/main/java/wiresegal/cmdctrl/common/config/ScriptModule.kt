@@ -9,8 +9,8 @@ import com.google.gson.JsonObject
 data class ScriptModule(val onLoad: List<CommandModule>, val onTick: List<CommandModule>, val tileChanges: List<ChangeWatcher>) {
     operator fun plus(that: ScriptModule)
             = ScriptModule(this.onLoad + that.onLoad,
-                           this.onTick + that.onTick,
-                           this.tileChanges + that.tileChanges)
+            this.onTick + that.onTick,
+            this.tileChanges + that.tileChanges)
 
     companion object {
         @JvmStatic

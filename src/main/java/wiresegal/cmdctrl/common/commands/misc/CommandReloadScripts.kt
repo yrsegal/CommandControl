@@ -20,6 +20,7 @@ object CommandReloadScripts : CommandBase() {
         } else
             throw PlayerNotFoundException("commandcontrol.reload.hahanope")
     }
+
     override fun getRequiredPermissionLevel() = 2
     override fun getCommandName() = "reloadcommandscripts"
     override fun getCommandUsage(sender: ICommandSender?) = "commandcontrol.reload.usage"

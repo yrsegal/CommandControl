@@ -22,13 +22,14 @@ interface IStatsAction {
                 val objective = obj.get("objective").asString
                 return object : IStatsAction {
                     val stats = CommandResultStats()
+
                     init {
                         stats.readStatsFromNBT(nbt {
                             comp(
-                                "CommandStats" to comp(
-                                        type.typeName + "Name" to selector,
-                                        type.typeName + "Objective" to objective
-                                )
+                                    "CommandStats" to comp(
+                                            type.typeName + "Name" to selector,
+                                            type.typeName + "Objective" to objective
+                                    )
                             )
                         } as NBTTagCompound)
                     }

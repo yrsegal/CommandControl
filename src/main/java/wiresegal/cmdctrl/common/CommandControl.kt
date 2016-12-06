@@ -51,7 +51,7 @@ class CommandControl {
 
         server = e.server
     }
-    
+
     private lateinit var server: MinecraftServer
 
     @Mod.EventHandler
