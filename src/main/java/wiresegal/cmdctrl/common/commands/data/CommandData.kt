@@ -22,7 +22,7 @@ object CommandData : CommandBase() {
     val validScopes = arrayOf("global", "world", "slice", "pos", "tile")
     val validCommands = arrayOf("set", "add", "list", "remove", "test", "operation")
     val validPositionals = arrayOf(*validCommands, "listall")
-    val operations = arrayOf("+=", "-=", "*=", "/=", "%=", "**=", "^=", "&=", "|=", "~", "=", "<", ">", "><")
+    val operations = arrayOf("+=", "-=", "*=", "/=", "%=", "**=", "^=", "&=", "|=", "<<", ">>", "~", "=", "<", ">", "><")
     val positionals = arrayOf("slice", "pos", "tile")
 
     @Throws(CommandException::class)
@@ -277,6 +277,8 @@ object CommandData : CommandBase() {
                     "^=" -> setValue(value xor other)
                     "&=" -> setValue(value and other)
                     "|=" -> setValue(value or other)
+                    "<<" -> setValue(value shl other)
+                    ">>" -> setValue(value shr other)
                     "~" -> setValue(other.inv())
                     "=" -> setValue(other)
                     "<" -> setValue(Math.min(value, other))

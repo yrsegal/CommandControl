@@ -14,6 +14,7 @@ import wiresegal.cmdctrl.common.commands.biome.CommandSetBiome
 import wiresegal.cmdctrl.common.commands.data.CommandData
 import wiresegal.cmdctrl.common.commands.data.CommandDataExecute
 import wiresegal.cmdctrl.common.commands.misc.CommandDimension
+import wiresegal.cmdctrl.common.commands.misc.CommandMan
 import wiresegal.cmdctrl.common.commands.misc.CommandReloadScripts
 import wiresegal.cmdctrl.common.config.ConfigLoader
 import wiresegal.cmdctrl.common.core.ControlSaveData
@@ -48,6 +49,7 @@ class CommandControl {
         // Misc
         e.registerServerCommand(CommandDimension)
         e.registerServerCommand(CommandReloadScripts)
+        e.registerServerCommand(CommandMan)
 
         server = e.server
     }

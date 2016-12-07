@@ -3,23 +3,35 @@ commandcontrol.setbiome.usage=/setbiome <x> <z> <biome>
 commandcontrol.setbiome.success=Set the biome at [%d, %d] to %d (%s)
 commandcontrol.setbiome.invalid=Biome %s doesn't exist
 commandcontrol.setbiome.range=[%d, %d] out of range
+commandcontrol.setbiome.usage.man=/setbiome <x> <z> <biome>
+commandcontrol.setbiome.usage.man1=Changes the biome at the position x,z to the selected biome
 
 commandcontrol.fillbiomes.usage=/fillbiomes <x1> <z1> <x2> <z2> <biome>
 commandcontrol.fillbiomes.success=Set the biome from [%d, %d] to [%d, %d] to %d (%s)
 commandcontrol.fillbiomes.range=[%d, %d] to [%d, %d] out of range
+commandcontrol.fillbiomes.usage.man=/fillbiomes <x1> <z1> <x2> <z2> <biome>
+commandcontrol.fillbiomes.usage.man1=Changes the biome in all blocks from the position x1,z1 to the position x2,z2 to the selected biome
 
 commandcontrol.testforbiome.usage=/testforbiome <x> <z> [biome]
 commandcontrol.testforbiome.match=Biome at [%d, %d] is %d (%s)
 commandcontrol.testforbiome.nomatch=Biome at [%d, %d] is %d (%s), expected %d (%s)
 commandcontrol.testforbiome.success=Biome at [%d, %d] is %d (%s)
 commandcontrol.testforbiome.range=[%d, %d] out of range
+commandcontrol.testforbiome.usage.man=/testforbiome <x> <z> [biome]
+commandcontrol.testforbiome.usage.man1=Checks if the biome at position x,z is the given biome.
+commandcontrol.testforbiome.usage.man2=If no biome is given, it will return the id of the biome there.
 
 commandcontrol.testforbiomes.usage=/testforbiomes <x1> <z1> <x2> <z2> <biome>
 commandcontrol.testforbiomes.output=%d matches found from [%d, %d] to [%d, %d] of biome %d (%s)
 commandcontrol.testforbiomes.range=[%d, %d] to [%d, %d] out of range
+commandcontrol.testforbiomes.usage.man=/testforbiomes <x1> <z1> <x2> <z2> <biome>
+commandcontrol.testforbiomes.usage.man1=Checks how many x-z pairs from the position x1,z1 to the position x2,z2 are the selected biome
 
 # Data storage
 commandcontrol.storedata.usage=/storedata <global|world|slice|pos|tile> ...
+commandcontrol.storedata.usage.man=/storedata <global|world|slice|pos|tile> ...
+commandcontrol.storedata.usage.man1=Storedata has multiple subcommands. /man one of them to find out more.
+commandcontrol.storedata.usage.man2=Subcommands: Global, World, Slice, Pos, Tile, Set, Add, Remove, List, Test, Operation, Listall
 
 commandcontrol.storedata.usage.global=/storedata global <set|add|list|remove|operation|test> ...
 commandcontrol.storedata.usage.global.set=/storedata global set <key> <value>
@@ -27,6 +39,7 @@ commandcontrol.storedata.usage.global.add=/storedata global add <key> <value>
 commandcontrol.storedata.usage.global.remove=/storedata global remove <key>
 commandcontrol.storedata.usage.global.test=/storedata global test <key> [min] [max]
 commandcontrol.storedata.usage.global.operation=/storedata global operation <key1> <operator> <scope> <key> ...
+commandcontrol.storedata.usage.sub.global.man=Global stores data in the level. It allows you to store data across dimensions and share it between scripts.
 
 commandcontrol.storedata.usage.world=/storedata world <set|add|list|remove|test|operation|execute> ...
 commandcontrol.storedata.usage.world.set=/storedata world set <key> <value>
@@ -34,6 +47,7 @@ commandcontrol.storedata.usage.world.add=/storedata world add <key> <value>
 commandcontrol.storedata.usage.world.remove=/storedata world remove <key>
 commandcontrol.storedata.usage.world.test=/storedata world test <key> [min] [max]
 commandcontrol.storedata.usage.world.operation=/storedata world operation <key1> <operator> <scope> <key> ...
+commandcontrol.storedata.usage.sub.world.man=World stores data in the current dimension. This allows you to store data that's specific to a part of a world.
 
 commandcontrol.storedata.usage.slice=/storedata slice <x> <z> <set|add|list|remove|test|operation|listall> ...
 commandcontrol.storedata.usage.slice.set=/storedata slice <x> <z> set <key> <value>
@@ -41,6 +55,7 @@ commandcontrol.storedata.usage.slice.add=/storedata slice <x> <z> add <key> <val
 commandcontrol.storedata.usage.slice.remove=/storedata slice <x> <z> remove <key>
 commandcontrol.storedata.usage.slice.test=/storedata slice <x> <z> test <key> [min] [max]
 commandcontrol.storedata.usage.slice.operation=/storedata slice <x> <z> operation <key1> <operator> <scope> <key> ...
+commandcontrol.storedata.usage.sub.slice.man=Slice stores data by an x-z pair in the current dimension. This allows you to store data that's specific to a small vertical section of the world.
 
 commandcontrol.storedata.usage.pos=/storedata pos <x> <y> <z> <set|add|list|remove|test|operation|listall> ...
 commandcontrol.storedata.usage.pos.set=/storedata pos <x> <y> <z> set <key> <value>
@@ -48,6 +63,7 @@ commandcontrol.storedata.usage.pos.add=/storedata pos <x> <y> <z> add <key> <val
 commandcontrol.storedata.usage.pos.remove=/storedata pos <x> <y> <z> remove <key>
 commandcontrol.storedata.usage.pos.test=/storedata pos <x> <y> <z> test <key> [min] [max]
 commandcontrol.storedata.usage.pos.operation=/storedata pos <x> <y> <z> operation <key1> <scope> <key> ...
+commandcontrol.storedata.usage.sub.pos.man=Pos stores data by a block position in the current dimension. This allows you to store data that's specific to a single block position.
 
 commandcontrol.storedata.usage.tile=/storedata tile <selector> <set|add|list|remove|test|operation|listall> ...
 commandcontrol.storedata.usage.tile.set=/storedata tile <selector> set <key> <value> [tag]
@@ -55,6 +71,21 @@ commandcontrol.storedata.usage.tile.add=/storedata tile <selector> add <key> <va
 commandcontrol.storedata.usage.tile.remove=/storedata tile <selector> remove <key>
 commandcontrol.storedata.usage.tile.test=/storedata tile <selector> test <key> [min] [max]
 commandcontrol.storedata.usage.tile.operation=/storedata tile <selector> operation <key1> <scope> <key> ...
+commandcontrol.storedata.usage.sub.tile.man=Tile stores data by a TileEntity. This allows you to bind extra data to any data holder block.
+commandcontrol.storedata.usage.sub.tile.man1=The rules for the selector @t are similar to @p, @r, @a, and @e. These are all valid rules:
+commandcontrol.storedata.usage.sub.tile.man2= All positional rules from regular selectors. (x, y, z, r, rm, dx, dy, dz)
+commandcontrol.storedata.usage.sub.tile.man3= Shift rules (xs, xy, xz) which add to the x/y/z value, allowing for relative offset.
+commandcontrol.storedata.usage.sub.tile.man4= The type rule (type) which matches the tile's ID.
+commandcontrol.storedata.usage.sub.tile.man5= Score rules (has, score_name, score_name_min). has checks if the tile has any data at all, and the other two work normally.
+
+commandcontrol.storedata.usage.sub.set.man=Set is a subcommand that simply sets the value of the given data key.
+commandcontrol.storedata.usage.sub.add.man=Add is a subcommand that adds a (possibly negative) value to the existing value of the given data key.
+commandcontrol.storedata.usage.sub.remove.man=Remove is a subcommand that completely removes a data value from the target. If a pos or slice has no keys, it can't be executed off of.
+commandcontrol.storedata.usage.sub.list.man=List is a subcommand that will list all data for the selected entry, if there is any.
+commandcontrol.storedata.usage.sub.test.man=Test is a subcommand with three options. The first, without any arguments, simply passes the value in that key as a QueryResult to stats. The second, with a min only, checks if the value is at least that value. The last, with a min and a max, checks if the value is within that range.
+commandcontrol.storedata.usage.sub.operation.man=Operation is a subcommand that allows you to use multiple data entries to perform math. The valid operators are:
+commandcontrol.storedata.usage.sub.operation.man1=+= (addition), -= (subtraction), *= (multiplication), /= (division), %= (modulus), **= (exponentiation), ^= (bitwise XOR), &= (bitwise AND), |= (bitwise OR), << (left shift), >> (right shift), ~ (set to inverted other), = (set to other), < (minimum), > (maximum), >< (swap)
+commandcontrol.storedata.usage.sub.listall.man=Listall is a subcommand that will list all data for all entries. For all scopes but slice, pos, and tile, it functions identically to list.
 
 commandcontrol.storedata.notfound=Not found
 commandcontrol.storedata.toosmall=Too small
@@ -81,14 +112,26 @@ commandcontrol.storedata.nomatch=NBT tag doesn't match
 
 commandcontrol.dataexecute.invalidrule=Invalid rule format
 commandcontrol.dataexecute.usage=/dataexecute <slice|pos|tile> <rules> <command>
+#todo dataexecute man
 
 commandcontrol.tselector.invalidrule=Invalid tile selector
 
 # Misc
 commandcontrol.dimension.usage=/dimension
 commandcontrol.dimension.id=Dimension %d (%s)
+commandcontrol.dimension.usage.man=Forwards the current dimension id to the QueryResult.
 
 commandcontrol.reload.usage=/reloadcommandscripts
 commandcontrol.reload.done=Successfully reloaded command scripts
 commandcontrol.reload.hahanope=Only players and the server console can reload commands
+commandcontrol.reload.usage.man=Reloads command scripts. Only players and the server console can use this, to prevent scripts causing infinite recursion.
 
+commandcontrol.man.usage=/man [command] [subcommand]
+commandcontrol.man.header=Documentation for /%s:
+commandcontrol.man.headersub=Documentation for /%s (subcommand %s):
+commandcontrol.man.wtfisthis=/%s is not a command
+commandcontrol.man.youaintking=You don't have permission to use /%s
+commandcontrol.man.nodocs=No documentation found for %s
+commandcontrol.man.handsoff=Only players and the server console can use documentation
+commandcontrol.man.usage.man=/man allows you to see info on any command with a man page laid out.
+commandcontrol.man.usage.man1=Use /man and then a command name to see info on a command. Some commands have subcommands, which are used like so: /man [command] [subcommand]
