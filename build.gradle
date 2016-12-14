@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.0.2'
+    ext.kotlin_version = '1.0.5-2'
     repositories {
         jcenter()
         maven {
@@ -42,7 +42,7 @@ minecraft {
     replaceIn 'LibMisc.kt'
 }
 
-def parseConfig(File config) {
+static def parseConfig(File config) {
     config.withReader {
         def prop = new Properties()
         prop.load(it)
@@ -50,6 +50,7 @@ def parseConfig(File config) {
     }
 }
 
+sourceSets { main.java.srcDirs += 'EvalEx/src' }
 sourceSets { main.java.srcDirs += 'src/main/kotlin' }
 idea {
     module {
