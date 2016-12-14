@@ -1,10 +1,15 @@
 package wiresegal.cmdctrl.common.config
 
 import com.google.gson.JsonElement
+import com.teamwizardry.librarianlib.common.util.MethodHandleHelper
+import com.teamwizardry.librarianlib.common.util.MutableStaticFieldDelegate
+import net.minecraft.command.CommandBase
 import net.minecraft.command.CommandResultStats
+import net.minecraft.command.ICommandListener
 import net.minecraft.server.MinecraftServer
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
+import wiresegal.cmdctrl.common.core.BlankCommandListener
 
 /**
  * @author WireSegal
@@ -15,14 +20,21 @@ data class CommandModule(val command: String, val stats: Map<CommandResultStats.
 
     fun run(server: MinecraftServer, pos: BlockPos? = null, world: World? = null) {
         val sender = ModuleSender(this, world, server, debug, pos)
+        val prevCommandListener = commandListener
+        if (!debug) commandListener = BlankCommandListener
         val result = server.commandManager.executeCommand(sender, command)
         if (result > 0) conditionals.forEach { it.run(server, pos, world) }
         else invConditionals.forEach { it.run(server, pos, world) }
+        if (!debug) commandListener = prevCommandListener
     }
 
     fun run(server: MinecraftServer, world: World? = null) = run(server, null, world)
 
     companion object {
+        var commandListener: ICommandListener by MutableStaticFieldDelegate(
+                MethodHandleHelper.wrapperForStaticGetter(CommandBase::class.java, "a", "field_71533_a", "commandListener"),
+                MethodHandleHelper.wrapperForStaticSetter(CommandBase::class.java, "a", "field_71533_a", "commandListener"))
+
         @JvmStatic
         fun fromElement(el: JsonElement, debug: Boolean = false): CommandModule {
             if (el.isJsonPrimitive)

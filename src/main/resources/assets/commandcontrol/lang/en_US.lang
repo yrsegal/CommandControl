@@ -151,3 +151,9 @@ commandcontrol.probenbt.usage.man=/probenbt <selector> <nbt hierarchy>
 commandcontrol.probenbt.usage.man1=/probenbt allows you to get an nbt tag from a tile or an entity, saving it to the query result if it's a number.
 
 commandcontrol.expander.notile=Selector didn't match exactly one tile
+
+commandcontrol.math.usage=/math <expression>
+commandcontrol.math.expr=%s
+commandcontrol.math.answer== %d
+commandcontrol.math.usage.man=/math <expression>
+commandcontrol.math.usage.man1=/math will evaluate math expressions given. For more information, see https://github.com/uklimaschewski/EvalEx

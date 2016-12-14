@@ -1,10 +1,7 @@
 package wiresegal.cmdctrl.common.commands.misc
 
 import com.teamwizardry.librarianlib.common.network.PacketHandler
-import net.minecraft.command.CommandBase
-import net.minecraft.command.ICommandSender
-import net.minecraft.command.NumberInvalidException
-import net.minecraft.command.WrongUsageException
+import net.minecraft.command.*
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.server.MinecraftServer
 import wiresegal.cmdctrl.common.network.PacketMotionUpdate
@@ -15,6 +12,7 @@ import wiresegal.cmdctrl.common.network.PacketMotionUpdate
  */
 object CommandMotion : CommandBase() {
 
+    @Throws(CommandException::class)
     override fun execute(server: MinecraftServer, sender: ICommandSender, args: Array<out String>) {
         if (args.size < 3) throw WrongUsageException(getCommandUsage(sender))
 

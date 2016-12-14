@@ -6,12 +6,12 @@ import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import net.minecraftforge.fml.common.event.FMLServerStartedEvent
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent
-import net.minecraftforge.fml.common.network.NetworkCheckHandler
 import net.minecraftforge.fml.relauncher.Side
 import wiresegal.cmdctrl.common.commands.biome.CommandFillBiome
 import wiresegal.cmdctrl.common.commands.biome.CommandGetBiome
 import wiresegal.cmdctrl.common.commands.biome.CommandMatchBiome
 import wiresegal.cmdctrl.common.commands.biome.CommandSetBiome
+import wiresegal.cmdctrl.common.commands.control.CommandMath
 import wiresegal.cmdctrl.common.commands.control.CommandProbeNBT
 import wiresegal.cmdctrl.common.commands.data.CommandData
 import wiresegal.cmdctrl.common.commands.data.CommandDataExecute
@@ -40,9 +40,6 @@ class CommandControl {
         PacketHandler.register(PacketMotionUpdate::class.java, Side.CLIENT)
     }
 
-    @NetworkCheckHandler // CommandControl doesn't care if one side's missing it
-    fun acceptNetwork(map: Map<String, String>, side: Side) = true
-
     @Mod.EventHandler
     fun serverStarting(e: FMLServerStartingEvent) {
         // Biome Control
@@ -57,6 +54,7 @@ class CommandControl {
 
         // Control
         e.registerServerCommand(CommandProbeNBT)
+        e.registerServerCommand(CommandMath)
 
         // Misc
         e.registerServerCommand(CommandDimension)

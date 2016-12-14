@@ -73,19 +73,24 @@ object TileSelector {
             if (!isTileTypeValid(map["type"])) {
                 return emptyList()
             } else {
+                val c = if (map.containsKey("c")) CommandBase.parseInt(map["c"]) else 0
                 if (hasArgument(map)) {
                     val world = sender.entityWorld
                     val data = ControlSaveData[world]
 
-                    return world.loadedTileEntityList.filter(createPredicate(sender, map, data.tileData))
+                    return world.loadedTileEntityList
+                            .filter(createPredicate(sender, map, data.tileData))
+                            .sortedBy { (if (c < 0) -1 else 1) * sender.positionVector.distanceTo(Vec3d(it.pos).addVector(0.5, 0.5, 0.5)) }
                 } else {
                     val list = mutableListOf<TileEntity>()
                     for (world in server.worldServers) {
                         val data = ControlSaveData[world]
 
-                        list.addAll(world.loadedTileEntityList.filter(createPredicate(sender, map, data.tileData)))
+                        list.addAll(world.loadedTileEntityList
+                                .filter(createPredicate(sender, map, data.tileData)))
                     }
                     return list
+                            .sortedBy { (if (c < 0) -1 else 1) * sender.positionVector.distanceTo(Vec3d(it.pos).addVector(0.5, 0.5, 0.5)) }
                 }
             }
         } else throw CommandException("commandcontrol.tselector.invalidrule")
