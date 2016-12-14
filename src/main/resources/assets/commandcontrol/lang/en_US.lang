@@ -135,3 +135,14 @@ commandcontrol.man.nodocs=No documentation found for %s
 commandcontrol.man.handsoff=Only players and the server console can use documentation
 commandcontrol.man.usage.man=/man allows you to see info on any command with a man page laid out.
 commandcontrol.man.usage.man1=Use /man and then a command name to see info on a command. Some commands have subcommands, which are used like so: /man [command] [subcommand]
+
+# Control
+commandcontrol.probenbt.usage=/probenbt <selector> <nbt hierarchy>
+commandcontrol.probenbt.notile=Selector didn't match exactly one tile
+commandcontrol.probenbt.noentity=Selector didn't match exactly one entity
+commandcontrol.probenbt.notag=Tag %s doesn't exist on the target
+commandcontrol.probenbt.success=Tag %s value is %s
+commandcontrol.probenbt.usage.man=/probenbt <selector> <nbt hierarchy>
+commandcontrol.probenbt.usage.man1=/probenbt allows you to get an nbt tag from a tile or an entity, saving it to the query result if it's a number.
+
+commandcontrol.expander.notile=Selector didn't match exactly one tile

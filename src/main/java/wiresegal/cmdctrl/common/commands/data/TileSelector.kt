@@ -61,6 +61,9 @@ object TileSelector {
     fun matchOne(server: MinecraftServer, sender: ICommandSender, token: String)
             = matchTiles(server, sender, token).singleOrNull()
 
+    fun isTileSelector(token: String) =
+        token.startsWith("@t") && TOKEN_PATTERN.matchEntire(token) != null
+
     fun matchTiles(server: MinecraftServer, sender: ICommandSender, token: String): List<TileEntity> {
         val matcher = TOKEN_PATTERN.matchEntire(token)
 
