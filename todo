@@ -1,3 +1,5 @@
 Finish documenting vanilla commands (ask for help?)
 
 /passengers (/passengers <add|remove> <ridden> <rider>)
+
+/math <expression>
