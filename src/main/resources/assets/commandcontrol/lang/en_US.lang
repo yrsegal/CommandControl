@@ -136,6 +136,11 @@ commandcontrol.man.handsoff=Only players and the server console can use document
 commandcontrol.man.usage.man=/man allows you to see info on any command with a man page laid out.
 commandcontrol.man.usage.man1=Use /man and then a command name to see info on a command. Some commands have subcommands, which are used like so: /man [command] [subcommand]
 
+commandcontrol.motion.usage=/motion <x> <y> <z> [selector]
+commandcontrol.motion.success=Set %s's motion to [%d, %d, %d]
+commandcontrol.motion.usage.man=/motion <x> <y> <z> [selector]
+commandcontrol.motion.usage.man1=/motion, simply, sets the motion of the target entity, or the sender if possible.
+
 # Control
 commandcontrol.probenbt.usage=/probenbt <selector> <nbt hierarchy>
 commandcontrol.probenbt.notile=Selector didn't match exactly one tile

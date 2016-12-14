@@ -17,11 +17,13 @@ import wiresegal.cmdctrl.common.commands.data.CommandData
 import wiresegal.cmdctrl.common.commands.data.CommandDataExecute
 import wiresegal.cmdctrl.common.commands.misc.CommandDimension
 import wiresegal.cmdctrl.common.commands.misc.CommandMan
+import wiresegal.cmdctrl.common.commands.misc.CommandMotion
 import wiresegal.cmdctrl.common.commands.misc.CommandReloadScripts
 import wiresegal.cmdctrl.common.config.ConfigLoader
 import wiresegal.cmdctrl.common.core.ControlSaveData
 import wiresegal.cmdctrl.common.core.ScoreExpander
 import wiresegal.cmdctrl.common.network.PacketBiomeUpdate
+import wiresegal.cmdctrl.common.network.PacketMotionUpdate
 
 /**
  * @author WireSegal
@@ -35,6 +37,7 @@ class CommandControl {
         ControlSaveData
         ScoreExpander
         PacketHandler.register(PacketBiomeUpdate::class.java, Side.CLIENT)
+        PacketHandler.register(PacketMotionUpdate::class.java, Side.CLIENT)
     }
 
     @NetworkCheckHandler // CommandControl doesn't care if one side's missing it
@@ -59,6 +62,7 @@ class CommandControl {
         e.registerServerCommand(CommandDimension)
         e.registerServerCommand(CommandReloadScripts)
         e.registerServerCommand(CommandMan)
+        e.registerServerCommand(CommandMotion)
 
         server = e.server
     }
