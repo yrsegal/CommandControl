@@ -1,0 +1,3 @@
+Intercept CommandEvent and replace <selector.scorename> with that score (or key, for @t)
+
+Finish documenting vanilla commands (ask for help?)
