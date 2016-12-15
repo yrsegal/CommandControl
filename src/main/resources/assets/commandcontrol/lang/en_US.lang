@@ -153,6 +153,7 @@ commandcontrol.probenbt.usage.man1=/probenbt allows you to get an nbt tag from a
 commandcontrol.expander.notile=Selector didn't match exactly one tile
 
 commandcontrol.math.usage=/math <expression>
+commandcontrol.math.invalidnumber=Invalid number found in expression
 commandcontrol.math.expr=%s
 commandcontrol.math.answer== %d
 commandcontrol.math.usage.man=/math <expression>

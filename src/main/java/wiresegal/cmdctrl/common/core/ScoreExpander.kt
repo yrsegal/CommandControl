@@ -46,7 +46,7 @@ object ScoreExpander {
                         if (scoreobjective != null) {
                             val name = if (entity is EntityPlayerMP) entity.getName() else entity.cachedUniqueIdString
                             (scoreboard.getOrCreateScore(name, scoreobjective).scorePoints).toString()
-                        } else throw CommandException("commands.scoreboard.objectiveNotFound")
+                        } else throw CommandException("commands.scoreboard.objectiveNotFound", key)
                     }
                 } catch (ex: CommandException) {
                     e.sender.addChatMessage(TextComponentTranslation(ex.message, *ex.errorObjects).setStyle(Style().setColor(TextFormatting.RED)))
