@@ -5,3 +5,5 @@ Finish documenting vanilla commands (ask for help?)
 /structure (simulate structure block)
 
 add @s (the "this" selector)
+
+add /testforpower <strong|weak> <x> <y> <z> [min] [max]
