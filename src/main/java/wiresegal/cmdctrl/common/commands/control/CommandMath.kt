@@ -3,7 +3,6 @@ package wiresegal.cmdctrl.common.commands.control
 import com.udojava.evalex.Expression.ExpressionException
 import net.minecraft.command.*
 import net.minecraft.server.MinecraftServer
-import java.math.MathContext
 
 /**
  * @author WireSegal
@@ -25,7 +24,7 @@ object CommandMath : CommandBase() {
         }
 
         notifyCommandListener(sender, this, "commandcontrol.math.expr", expression)
-        val formattedX: Number = if (x.round(MathContext.DECIMAL128) == x) x.toLong() else x.toDouble()
+        val formattedX: Number = if (x.toLong().toDouble() == x.toDouble()) x.toLong() else x.toDouble()
         notifyCommandListener(sender, this, "commandcontrol.math.answer", formattedX)
         sender.setCommandStat(CommandResultStats.Type.QUERY_RESULT, x.toInt())
     }
