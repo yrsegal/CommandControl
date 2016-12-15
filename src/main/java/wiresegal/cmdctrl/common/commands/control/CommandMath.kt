@@ -1,10 +1,7 @@
 package wiresegal.cmdctrl.common.commands.control
 
 import com.udojava.evalex.Expression.ExpressionException
-import net.minecraft.command.CommandBase
-import net.minecraft.command.CommandException
-import net.minecraft.command.CommandResultStats
-import net.minecraft.command.ICommandSender
+import net.minecraft.command.*
 import net.minecraft.server.MinecraftServer
 
 /**
@@ -15,7 +12,7 @@ object CommandMath : CommandBase() {
 
     @Throws(CommandException::class)
     override fun execute(server: MinecraftServer, sender: ICommandSender, args: Array<out String>) {
-        if (args.isEmpty()) throw CommandException(getCommandUsage(sender))
+        if (args.isEmpty()) throw WrongUsageException(getCommandUsage(sender))
         val expression = args.joinToString(" ")
         val exprObj = ExpressionCommand(expression)
         val x = try {
