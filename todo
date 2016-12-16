@@ -14,3 +14,7 @@ add /testforpower <strong|weak> <x> <y> <z> [min] [max]
 add <world.> and <global.> and <[x,z].> and <x,y,z.>
 
 <selector.nbt.hierarchy>
+
+/extractitem
+/insertitem
+similar syntax to replaceitem
