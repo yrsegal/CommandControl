@@ -19,6 +19,7 @@ data class CommandModule(val command: String, val stats: Map<CommandResultStats.
     constructor(command: String, debug: Boolean = false) : this(command, mapOf(), listOf(), listOf(), debug)
 
     fun run(server: MinecraftServer, pos: BlockPos? = null, world: World? = null) {
+        if (command.trimStart().startsWith("#")) return
         val sender = ModuleSender(this, world, server, debug, pos)
         val prevCommandListener = commandListener
         if (!debug) commandListener = BlankCommandListener

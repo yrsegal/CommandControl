@@ -7,3 +7,5 @@ Finish documenting vanilla commands (ask for help?)
 add @s (the "this" selector)
 
 add /testforpower <strong|weak> <x> <y> <z> [min] [max]
+
+add <world.> and <global.> and <[x,z].> and <x,y,z.>
