@@ -4,8 +4,13 @@ Finish documenting vanilla commands (ask for help?)
 
 /structure (simulate structure block)
 
+## ASM
 add @s (the "this" selector)
+
+<<selector.score>> -> <selector.score>, to allow for execute to make use of it
 
 add /testforpower <strong|weak> <x> <y> <z> [min] [max]
 
 add <world.> and <global.> and <[x,z].> and <x,y,z.>
+
+<selector.nbt.hierarchy>
