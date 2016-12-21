@@ -4,7 +4,9 @@ import net.minecraft.command.CommandBase
 import net.minecraft.command.CommandException
 import net.minecraft.command.EntityNotFoundException
 import net.minecraft.entity.player.EntityPlayerMP
+import net.minecraft.nbt.NBTPrimitive
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.nbt.NBTTagString
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.text.Style
 import net.minecraft.util.text.TextComponentTranslation
@@ -67,14 +69,18 @@ object ScoreExpander {
                         if (tile != null) {
                             if (key.startsWith("nbt.")) {
                                 val tag = tile.writeToNBT(NBTTagCompound()).getObject(key.removePrefix("nbt.")) ?: throw CommandException("commandcontrol.probenbt.notag", key.removePrefix("nbt."))
-                                tag.toString()
+                                if (tag is NBTPrimitive) {
+                                    if (tag.int.toDouble() == tag.double) tag.long.toString() else tag.double.toString()
+                                } else if (tag is NBTTagString) tag.string else tag.toString()
                             } else (ControlSaveData[tile.world].tileData[tile][key] ?: 0).toString()
                         } else throw EntityNotFoundException("commandcontrol.expander.notile")
                     } else {
                         val entity = CommandBase.getEntity(server, e.sender, selector)
                         if (key.startsWith("nbt.")) {
                             val tag = entity.writeToNBT(NBTTagCompound()).getObject(key.removePrefix("nbt.")) ?: throw CommandException("commandcontrol.probenbt.notag", key.removePrefix("nbt."))
-                            tag.toString()
+                            if (tag is NBTPrimitive) {
+                                if (tag.int.toDouble() == tag.double) tag.long.toString() else tag.double.toString()
+                            } else if (tag is NBTTagString) tag.string else tag.toString()
                         } else {
                             val scoreboard = server.worldServerForDimension(0).scoreboard
                             val scoreobjective = scoreboard.getObjective(key)
