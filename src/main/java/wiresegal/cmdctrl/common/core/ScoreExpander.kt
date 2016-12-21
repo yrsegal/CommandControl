@@ -4,6 +4,7 @@ import net.minecraft.command.CommandBase
 import net.minecraft.command.CommandException
 import net.minecraft.command.EntityNotFoundException
 import net.minecraft.entity.player.EntityPlayerMP
+import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.text.Style
 import net.minecraft.util.text.TextComponentTranslation
@@ -23,11 +24,11 @@ object ScoreExpander {
         MinecraftForge.EVENT_BUS.register(this)
     }
 
-    private val SELECTOR = "(?:@[praet](?:\\[?(?:[\\w.=,!-:]*)\\]?))"
-    private val NAME = "\\w+"
-    private val POSITION_PATTERN = "\\[\\d+\\.\\d+(?:\\.\\d+)?\\]"
-    private val TOKENIZER_PATTERN = "<($SELECTOR|$NAME|$POSITION_PATTERN)\\.([^>]+)>"
-    private val COMPRESSOR_PATTERN = "<(<(?:$SELECTOR|$NAME|$POSITION_PATTERN)\\.(?:[^>]+)>)>"
+    private const val SELECTOR = "(?:@[praet](?:\\[?(?:[\\w.=,!-:]*)\\]?))"
+    private const val NAME = "\\w+"
+    private const val POSITION_PATTERN = "\\[\\d+\\.\\d+(?:\\.\\d+)?\\]"
+    private const val TOKENIZER_PATTERN = "<($SELECTOR|$NAME|$POSITION_PATTERN)\\.([^>]+)>"
+    private const val COMPRESSOR_PATTERN = "<(<(?:$SELECTOR|$NAME|$POSITION_PATTERN)\\.(?:[^>]+)>)>"
 
     private val POSITION = POSITION_PATTERN.toRegex()
     private val TOKENIZER = TOKENIZER_PATTERN.toRegex()
@@ -60,16 +61,24 @@ object ScoreExpander {
                     } else if (TileSelector.isTileSelector(selector)) {
                         val tile = TileSelector.matchOne(server, e.sender, selector)
                         if (tile != null) {
-                            (ControlSaveData[tile.world].tileData[tile][key] ?: 0).toString()
+                            if (key.startsWith("nbt.")) {
+                                val tag = tile.writeToNBT(NBTTagCompound()).getObject(key.removePrefix("nbt.")) ?: throw CommandException("commandcontrol.probenbt.notag", key)
+                                tag.toString()
+                            } else (ControlSaveData[tile.world].tileData[tile][key] ?: 0).toString()
                         } else throw EntityNotFoundException("commandcontrol.expander.notile")
                     } else {
                         val entity = CommandBase.getEntity(server, e.sender, selector)
-                        val scoreboard = server.worldServerForDimension(0).scoreboard
-                        val scoreobjective = scoreboard.getObjective(key)
-                        if (scoreobjective != null) {
-                            val name = if (entity is EntityPlayerMP) entity.getName() else entity.cachedUniqueIdString
-                            (scoreboard.getOrCreateScore(name, scoreobjective).scorePoints).toString()
-                        } else throw CommandException("commands.scoreboard.objectiveNotFound", key)
+                        if (key.startsWith("nbt.")) {
+                            val tag = entity.writeToNBT(NBTTagCompound()).getObject(key.removePrefix("nbt.")) ?: throw CommandException("commandcontrol.probenbt.notag", key)
+                            tag.toString()
+                        } else {
+                            val scoreboard = server.worldServerForDimension(0).scoreboard
+                            val scoreobjective = scoreboard.getObjective(key)
+                            if (scoreobjective != null) {
+                                val name = if (entity is EntityPlayerMP) entity.getName() else entity.cachedUniqueIdString
+                                (scoreboard.getOrCreateScore(name, scoreobjective).scorePoints).toString()
+                            } else throw CommandException("commands.scoreboard.objectiveNotFound", key)
+                        }
                     }
                 } catch (ex: CommandException) {
                     e.sender.addChatMessage(TextComponentTranslation(ex.message, *ex.errorObjects).setStyle(Style().setColor(TextFormatting.RED)))

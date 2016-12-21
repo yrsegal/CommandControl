@@ -5,9 +5,7 @@ add /testforpower <strong|weak> <x> <y> <z> [min] [max]
 /extractitem
 /insertitem
 similar syntax to replaceitem
-Finish documenting vanilla commands (ask for help?)
-## ASM
-add @s (the "this" selector)
+add @s (the "this" selector) ## ASM
 
 For 1.10
-<selector.nbt.hierarchy>
+Finish documenting vanilla commands (ask for help?)
