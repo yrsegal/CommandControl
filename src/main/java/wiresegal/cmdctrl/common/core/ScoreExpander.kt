@@ -24,20 +24,24 @@ object ScoreExpander {
         MinecraftForge.EVENT_BUS.register(this)
     }
 
-    private const val SELECTOR = "(?:@[praet](?:\\[?(?:[\\w.=,!-:]*)\\]?))"
+    private const val SELECTOR = "(?:@[praet](?:\\[(?:[\\w.=,!-:]*)\\])?)"
     private const val NAME = "\\w+"
     private const val POSITION_PATTERN = "\\[\\d+\\.\\d+(?:\\.\\d+)?\\]"
     private const val TOKENIZER_PATTERN = "<($SELECTOR|$NAME|$POSITION_PATTERN)\\.([^>]+)>"
-    private const val COMPRESSOR_PATTERN = "<(<(?:$SELECTOR|$NAME|$POSITION_PATTERN)\\.(?:[^>]+)>)>"
+    private const val COMPRESSOR_PATTERN = "<<((?:$SELECTOR|$NAME|$POSITION_PATTERN)\\.(?:[^>]+))>>"
+    private const val DECOMPRESSOR_PATTERN = "  ((?:$SELECTOR|$NAME|$POSITION_PATTERN)\\.(?:[^ >]+))  "
 
     private val POSITION = POSITION_PATTERN.toRegex()
     private val TOKENIZER = TOKENIZER_PATTERN.toRegex()
     private val COMPRESSOR = COMPRESSOR_PATTERN.toRegex()
+    private val DECOMPRESSOR = DECOMPRESSOR_PATTERN.toRegex()
 
     @SubscribeEvent
     fun interceptCommand(e: CommandEvent) {
         e.parameters = e.parameters.map {
-            COMPRESSOR.replace(TOKENIZER.replace(it) {
+            DECOMPRESSOR.replace(TOKENIZER.replace(COMPRESSOR.replace(it) {
+                "  " + it.groupValues[1] + "  "
+            }) {
                 val selector = it.groupValues[1]
                 val key = it.groupValues[2]
 
@@ -62,14 +66,14 @@ object ScoreExpander {
                         val tile = TileSelector.matchOne(server, e.sender, selector)
                         if (tile != null) {
                             if (key.startsWith("nbt.")) {
-                                val tag = tile.writeToNBT(NBTTagCompound()).getObject(key.removePrefix("nbt.")) ?: throw CommandException("commandcontrol.probenbt.notag", key)
+                                val tag = tile.writeToNBT(NBTTagCompound()).getObject(key.removePrefix("nbt.")) ?: throw CommandException("commandcontrol.probenbt.notag", key.removePrefix("nbt."))
                                 tag.toString()
                             } else (ControlSaveData[tile.world].tileData[tile][key] ?: 0).toString()
                         } else throw EntityNotFoundException("commandcontrol.expander.notile")
                     } else {
                         val entity = CommandBase.getEntity(server, e.sender, selector)
                         if (key.startsWith("nbt.")) {
-                            val tag = entity.writeToNBT(NBTTagCompound()).getObject(key.removePrefix("nbt.")) ?: throw CommandException("commandcontrol.probenbt.notag", key)
+                            val tag = entity.writeToNBT(NBTTagCompound()).getObject(key.removePrefix("nbt.")) ?: throw CommandException("commandcontrol.probenbt.notag", key.removePrefix("nbt."))
                             tag.toString()
                         } else {
                             val scoreboard = server.worldServerForDimension(0).scoreboard
@@ -86,7 +90,7 @@ object ScoreExpander {
                     it.value
                 }
             }) {
-                it.groupValues[1]
+                "<" + it.groupValues[1] + ">"
             }
         }.toTypedArray()
     }

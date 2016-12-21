@@ -4,6 +4,7 @@ import net.minecraft.command.*
 import net.minecraft.nbt.NBTPrimitive
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.server.MinecraftServer
+import net.minecraft.util.text.TextComponentTranslation
 import wiresegal.cmdctrl.common.commands.data.TileSelector
 import wiresegal.cmdctrl.common.core.getObject
 
@@ -14,10 +15,11 @@ import wiresegal.cmdctrl.common.core.getObject
 object CommandProbeNBT : CommandBase() {
     @Throws(CommandException::class)
     override fun execute(server: MinecraftServer, sender: ICommandSender, args: Array<out String>) {
-        if (args.size < 2)
+        if (args.isEmpty())
             throw WrongUsageException(getCommandUsage(sender))
         val selector = args[0]
-        val key = args[1]
+        val key = if (args.size > 1) args[1] else ""
+        val displayKey = if (key.isBlank()) "commandcontrol.probenbt.blank" else key
 
         val compound: NBTTagCompound
 
@@ -29,10 +31,12 @@ object CommandProbeNBT : CommandBase() {
             compound = entityToNBT(entity)
         }
 
-        val obj = compound.getObject(key) ?: throw CommandException("commandcontrol.probenbt.notag", key)
+        val obj = if (key.isNotBlank())
+            compound.getObject(key) ?: throw CommandException("commandcontrol.probenbt.notag", key)
+        else compound
 
         if (obj is NBTPrimitive) sender.setCommandStat(CommandResultStats.Type.QUERY_RESULT, obj.int)
-        notifyCommandListener(sender, this, "commandcontrol.probenbt.success", key, obj)
+        notifyCommandListener(sender, this, "commandcontrol.probenbt.success", TextComponentTranslation(displayKey), obj)
     }
 
     override fun getRequiredPermissionLevel() = 2
