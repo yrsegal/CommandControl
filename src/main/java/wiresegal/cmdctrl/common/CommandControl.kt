@@ -21,6 +21,7 @@ import wiresegal.cmdctrl.common.commands.misc.CommandMotion
 import wiresegal.cmdctrl.common.commands.misc.CommandReloadScripts
 import wiresegal.cmdctrl.common.config.ConfigLoader
 import wiresegal.cmdctrl.common.core.ControlSaveData
+import wiresegal.cmdctrl.common.core.ExtraPlayerDataStore
 import wiresegal.cmdctrl.common.core.ScoreExpander
 import wiresegal.cmdctrl.common.network.PacketBiomeUpdate
 import wiresegal.cmdctrl.common.network.PacketMotionUpdate
@@ -36,6 +37,7 @@ class CommandControl {
         ConfigLoader.load(e)
         ControlSaveData
         ScoreExpander
+        ExtraPlayerDataStore
         PacketHandler.register(PacketBiomeUpdate::class.java, Side.CLIENT)
         PacketHandler.register(PacketMotionUpdate::class.java, Side.CLIENT)
     }

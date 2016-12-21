@@ -3,10 +3,12 @@ package wiresegal.cmdctrl.common.core
 import net.minecraft.command.CommandBase
 import net.minecraft.command.CommandException
 import net.minecraft.command.EntityNotFoundException
+import net.minecraft.command.ICommandSender
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.nbt.NBTPrimitive
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.nbt.NBTTagString
+import net.minecraft.server.MinecraftServer
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.text.Style
 import net.minecraft.util.text.TextComponentTranslation
@@ -21,7 +23,7 @@ import wiresegal.cmdctrl.common.commands.data.TileSelector
  * @author WireSegal
  * Created at 9:56 AM on 12/14/16.
  */
-object ScoreExpander {
+object ScoreExpander : CommandBase() {
     init {
         MinecraftForge.EVENT_BUS.register(this)
     }
@@ -75,9 +77,9 @@ object ScoreExpander {
                             } else (ControlSaveData[tile.world].tileData[tile][key] ?: 0).toString()
                         } else throw EntityNotFoundException("commandcontrol.expander.notile")
                     } else {
-                        val entity = CommandBase.getEntity(server, e.sender, selector)
+                        val entity = getEntity(server, e.sender, selector)
                         if (key.startsWith("nbt.")) {
-                            val tag = entity.writeToNBT(NBTTagCompound()).getObject(key.removePrefix("nbt.")) ?: throw CommandException("commandcontrol.probenbt.notag", key.removePrefix("nbt."))
+                            val tag = entityToNBT(entity).getObject(key.removePrefix("nbt.")) ?: throw CommandException("commandcontrol.probenbt.notag", key.removePrefix("nbt."))
                             if (tag is NBTPrimitive) {
                                 if (tag.int.toDouble() == tag.double) tag.long.toString() else tag.double.toString()
                             } else if (tag is NBTTagString) tag.string else tag.toString()
@@ -100,4 +102,14 @@ object ScoreExpander {
             }
         }.toTypedArray()
     }
+
+
+    // CommandBase is only extended to allow access to entityToNBT, these are safe to leave throwing errors
+
+    override fun execute(server: MinecraftServer?, sender: ICommandSender?, args: Array<out String>?)
+            = throw UnsupportedOperationException()
+    override fun getCommandName()
+            = throw UnsupportedOperationException()
+    override fun getCommandUsage(sender: ICommandSender?)
+            = throw UnsupportedOperationException()
 }
