@@ -4,6 +4,7 @@ import net.minecraft.command.CommandBase
 import net.minecraft.command.CommandException
 import net.minecraft.command.EntityNotFoundException
 import net.minecraft.entity.player.EntityPlayerMP
+import net.minecraft.util.math.BlockPos
 import net.minecraft.util.text.Style
 import net.minecraft.util.text.TextComponentTranslation
 import net.minecraft.util.text.TextFormatting
@@ -22,19 +23,41 @@ object ScoreExpander {
         MinecraftForge.EVENT_BUS.register(this)
     }
 
-    private val TOKENIZER = "<((?:@[praet](?:\\[?(?:[\\w.=,!-:]*)\\]?))|\\w+)\\.([^>]+)>".toRegex()
+    private val SELECTOR = "(?:@[praet](?:\\[?(?:[\\w.=,!-:]*)\\]?))"
+    private val NAME = "\\w+"
+    private val POSITION_PATTERN = "\\[\\d+\\.\\d+(?:\\.\\d+)?\\]"
+    private val TOKENIZER_PATTERN = "<($SELECTOR|$NAME|$POSITION_PATTERN)\\.([^>]+)>"
+    private val COMPRESSOR_PATTERN = "<(<(?:$SELECTOR|$NAME|$POSITION_PATTERN)\\.(?:[^>]+)>)>"
+
+    private val POSITION = POSITION_PATTERN.toRegex()
+    private val TOKENIZER = TOKENIZER_PATTERN.toRegex()
+    private val COMPRESSOR = COMPRESSOR_PATTERN.toRegex()
 
     @SubscribeEvent
     fun interceptCommand(e: CommandEvent) {
         e.parameters = e.parameters.map {
-            TOKENIZER.replace(it) {
+            COMPRESSOR.replace(TOKENIZER.replace(it) {
                 val selector = it.groupValues[1]
                 val key = it.groupValues[2]
 
                 val server = FMLCommonHandler.instance().minecraftServerInstance
 
                 try {
-                    if (TileSelector.isTileSelector(selector)) {
+                    if (selector == "world") {
+                        (ControlSaveData[e.sender.entityWorld].worldData[key] ?: 0).toString()
+                    } else if (selector == "global") {
+                        (ControlSaveData.globalWorldData.globalData[key] ?: 0).toString()
+                    } else if (POSITION.matches(selector)) {
+                        val numbers = selector.removePrefix("[").removeSuffix("]").split(".")
+                        val data = ControlSaveData[e.sender.entityWorld]
+                        if (numbers.size == 2) {
+                            val pos = Slice(numbers[0].toInt(), numbers[1].toInt())
+                            (data.sliceData[pos][key] ?: 0).toString()
+                        } else {
+                            val pos = BlockPos(numbers[0].toInt(), numbers[1].toInt(), numbers[2].toInt())
+                            (data.posData[pos][key] ?: 0).toString()
+                        }
+                    } else if (TileSelector.isTileSelector(selector)) {
                         val tile = TileSelector.matchOne(server, e.sender, selector)
                         if (tile != null) {
                             (ControlSaveData[tile.world].tileData[tile][key] ?: 0).toString()
@@ -53,6 +76,8 @@ object ScoreExpander {
                     e.isCanceled = true
                     it.value
                 }
+            }) {
+                it.groupValues[1]
             }
         }.toTypedArray()
     }

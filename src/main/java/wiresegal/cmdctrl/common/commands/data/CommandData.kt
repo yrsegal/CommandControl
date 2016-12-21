@@ -41,7 +41,7 @@ object CommandData : CommandBase() {
     }
 
     fun getData(server: MinecraftServer, sender: ICommandSender, scope: String, key: String, otherArgs: Array<String>): Int {
-        val globalData = ControlSaveData[server.worldServerForDimension(0)]
+        val globalData = ControlSaveData.globalWorldData
         val data = ControlSaveData[sender.entityWorld]
 
         var ret: Int? = null
@@ -81,7 +81,7 @@ object CommandData : CommandBase() {
     }
 
     fun setData(server: MinecraftServer, sender: ICommandSender, scope: String, key: String, otherArgs: Array<String>, setTo: Int) {
-        val globalData = ControlSaveData[server.worldServerForDimension(0)]
+        val globalData = ControlSaveData.globalWorldData
         val data = ControlSaveData[sender.entityWorld]
 
         when (scope) {
@@ -121,7 +121,7 @@ object CommandData : CommandBase() {
         if (args[0] !in validCommands)
             throw WrongUsageException("${getCommandUsage(sender)}.global")
 
-        val globalData = ControlSaveData[server.worldServerForDimension(0)]
+        val globalData = ControlSaveData.globalWorldData
         runCommands("global", server.worldServerForDimension(0), server, server, BlockPos.ORIGIN, sender, args, globalData.globalData, null)
         globalData.markDirty()
     }

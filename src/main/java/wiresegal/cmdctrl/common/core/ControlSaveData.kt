@@ -11,6 +11,7 @@ import net.minecraft.world.World
 import net.minecraft.world.WorldSavedData
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.world.WorldEvent
+import net.minecraftforge.fml.common.FMLCommonHandler
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import wiresegal.cmdctrl.common.commands.data.TileSelector
 
@@ -41,6 +42,9 @@ class ControlSaveData(name: String = key) : WorldSavedData(name) {
             data.world = world
             return data
         }
+
+        val globalWorldData: ControlSaveData
+            get() = this[FMLCommonHandler.instance().minecraftServerInstance.worldServerForDimension(0)]
 
         init {
             MinecraftForge.EVENT_BUS.register(this)
