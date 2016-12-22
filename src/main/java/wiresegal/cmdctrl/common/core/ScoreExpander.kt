@@ -69,20 +69,42 @@ object ScoreExpander : CommandBase() {
                     } else if (TileSelector.isTileSelector(selector)) {
                         val tile = TileSelector.matchOne(server, e.sender, selector)
                         if (tile != null) {
-                            if (key.startsWith("nbt.")) {
-                                val tag = tile.writeToNBT(NBTTagCompound()).getObject(key.removePrefix("nbt.")) ?: throw CommandException("commandcontrol.probenbt.notag", key.removePrefix("nbt."))
-                                if (tag is NBTPrimitive) {
-                                    if (tag.int.toDouble() == tag.double) tag.long.toString() else tag.double.toString()
-                                } else if (tag is NBTTagString) tag.string else tag.toString()
+                            if (key.startsWith("nbt.") || key.startsWith("nbtliteral.")) {
+                                val k: String
+                                val flag: Boolean
+                                if (key.startsWith("nbt.")) {
+                                    k = key.removePrefix("nbt.")
+                                    flag = true
+                                } else {
+                                    k = key.removePrefix("nbtliteral.")
+                                    flag = false
+                                }
+                                val tag = tile.writeToNBT(NBTTagCompound()).getObject(k) ?: throw CommandException("commandcontrol.probenbt.notag", k)
+                                if (flag) {
+                                    if (tag is NBTPrimitive) {
+                                        if (tag.int.toDouble() == tag.double) tag.long.toString() else tag.double.toString()
+                                    } else if (tag is NBTTagString) tag.string else tag.toString()
+                                } else tag.toString()
                             } else (ControlSaveData[tile.world].tileData[tile][key] ?: 0).toString()
                         } else throw EntityNotFoundException("commandcontrol.expander.notile")
                     } else {
                         val entity = getEntity(server, e.sender, selector)
-                        if (key.startsWith("nbt.")) {
-                            val tag = entityToNBT(entity).getObject(key.removePrefix("nbt.")) ?: throw CommandException("commandcontrol.probenbt.notag", key.removePrefix("nbt."))
-                            if (tag is NBTPrimitive) {
-                                if (tag.int.toDouble() == tag.double) tag.long.toString() else tag.double.toString()
-                            } else if (tag is NBTTagString) tag.string else tag.toString()
+                        if (key.startsWith("nbt.") || key.startsWith("nbtliteral.")) {
+                            val k: String
+                            val flag: Boolean
+                            if (key.startsWith("nbt.")) {
+                                k = key.removePrefix("nbt.")
+                                flag = true
+                            } else {
+                                k = key.removePrefix("nbtliteral.")
+                                flag = false
+                            }
+                            val tag = entityToNBT(entity).getObject(k) ?: throw CommandException("commandcontrol.probenbt.notag", k)
+                            if (flag) {
+                                if (tag is NBTPrimitive) {
+                                    if (tag.int.toDouble() == tag.double) tag.long.toString() else tag.double.toString()
+                                } else if (tag is NBTTagString) tag.string else tag.toString()
+                            } else tag.toString()
                         } else {
                             val scoreboard = server.worldServerForDimension(0).scoreboard
                             val scoreobjective = scoreboard.getObjective(key)
