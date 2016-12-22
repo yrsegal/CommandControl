@@ -112,7 +112,15 @@ commandcontrol.storedata.nomatch=NBT tag doesn't match
 
 commandcontrol.dataexecute.invalidrule=Invalid rule format
 commandcontrol.dataexecute.usage=/dataexecute <slice|pos|tile> <rules> <command>
-#todo dataexecute man
+commandcontrol.dataexecute.usage.man=/dataexecute <slice|pos|tile> <rules> <command>
+commandcontrol.dataexecute.usage.man1=/dataexecute can execute off of tiles, slices with data, or poses with data. Use rules similar to the ones for selectors to match them. Use subcommand selectors to find out more.
+commandcontrol.dataexecute.usage.sub.selectors.man=Valid selector rules:
+commandcontrol.dataexecute.usage.sub.selectors.man1=x,y,z - set the position
+commandcontrol.dataexecute.usage.sub.selectors.man2=xs,ys,zs - shift position value
+commandcontrol.dataexecute.usage.sub.selectors.man3=r,rm - maximum and minimum radius
+commandcontrol.dataexecute.usage.sub.selectors.man4=dx,dy,dz - volume the target must be within
+commandcontrol.dataexecute.usage.sub.selectors.man5=score_name - maximum score of key "name" for the pos
+commandcontrol.dataexecute.usage.sub.selectors.man6=score_name_min - minimum score of key "name" for the pos
 
 commandcontrol.tselector.invalidrule=Invalid tile selector
 
