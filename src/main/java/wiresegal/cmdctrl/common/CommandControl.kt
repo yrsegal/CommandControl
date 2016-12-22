@@ -30,7 +30,7 @@ import wiresegal.cmdctrl.common.network.PacketMotionUpdate
  * @author WireSegal
  * Created at 4:17 PM on 12/3/16.
  */
-@Mod(modid = "commandcontrol", name = "Command Control", version = "1.0", dependencies = "required-after:librarianlib")
+@Mod(modid = "commandcontrol", name = "Command Control", version = "1.1", dependencies = "required-after:librarianlib")
 class CommandControl {
     @Mod.EventHandler
     fun preInit(e: FMLPreInitializationEvent) {
