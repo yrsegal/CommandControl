@@ -2,12 +2,13 @@ package wiresegal.cmdctrl.common.commands.control
 
 import com.udojava.evalex.Expression
 import java.math.BigDecimal
+import java.math.MathContext
 
 /**
  * @author WireSegal
  * Created at 5:22 PM on 12/14/16.
  */
-class ExpressionCommand(str: String) : Expression(str) {
+class ExpressionCommand(str: String) : Expression(str, MathContext.UNLIMITED) {
     init {
         addOperator("and", 2, false) { v1, v2 -> BigDecimal(v1.toBigInteger().and(v2.toBigInteger())) }
         addOperator("or", 2, false) { v1, v2 -> BigDecimal(v1.toBigInteger().or(v2.toBigInteger())) }
