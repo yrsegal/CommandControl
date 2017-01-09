@@ -40,6 +40,7 @@ class CommandControl {
         ExtraPlayerDataStore
         PacketHandler.register(PacketBiomeUpdate::class.java, Side.CLIENT)
         PacketHandler.register(PacketMotionUpdate::class.java, Side.CLIENT)
+        //println(json { obj("package" to "wiresegal.cmdctrl.mixins", "mixins" to listOf("MixinEntitySelector"), "client" to listOf<String>(), "server" to listOf<String>()) })
     }
 
     @Mod.EventHandler
