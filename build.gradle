@@ -49,6 +49,16 @@ static def parseConfig(File config) {
     }
 }
 
+jar {
+    manifest {
+        attributes 'FMLCorePlugin': 'wiresegal.asm.CommandControlLoadingPlugin'
+        attributes 'FMLCorePluginContainsMod': 'true'
+        attributes 'TweakClass': 'org.spongepowered.asm.launch.MixinTweaker'
+        attributes 'TweakOrder': 0
+        attributes 'MixinConfigs': 'wiresegal/cmdctrl/mixins/mixins_config.json'
+    }
+}
+
 sourceSets { main.java.srcDirs += 'EvalEx/src' }
 sourceSets { main.java.srcDirs += 'src/main/kotlin' }
 idea {
