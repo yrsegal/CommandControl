@@ -71,11 +71,11 @@ object CommandSetBiome : CommandBase() {
     fun updateBiomes(world: World, xRange: IntRange, zRange: IntRange) {
         if (world !is WorldServer) return
 
-        val x1 = Math.min(xRange.first, xRange.last) - 2
-        val x2 = Math.max(xRange.first, xRange.last) + 2
+        val x1 = (Math.min(xRange.first, xRange.last) - 2) shr 4
+        val x2 = (Math.max(xRange.first, xRange.last) + 2) shr 4
 
-        val z1 = Math.min(zRange.first, zRange.last) - 2
-        val z2 = Math.max(zRange.first, zRange.last) + 2
+        val z1 = (Math.min(zRange.first, zRange.last) - 2) shr 4
+        val z2 = (Math.max(zRange.first, zRange.last) + 2) shr 4
 
         for (chunkX in x1..x2) for (chunkZ in z1..z2) {
             val entry = world.playerChunkMap.getEntry(chunkX, chunkZ)
