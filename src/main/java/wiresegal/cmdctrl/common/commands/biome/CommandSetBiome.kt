@@ -1,14 +1,14 @@
 package wiresegal.cmdctrl.common.commands.biome
 
-import com.teamwizardry.librarianlib.common.network.PacketHandler
 import net.minecraft.command.*
+import net.minecraft.network.play.server.SPacketChunkData
 import net.minecraft.server.MinecraftServer
 import net.minecraft.util.ResourceLocation
 import net.minecraft.util.math.BlockPos
+import net.minecraft.world.World
+import net.minecraft.world.WorldServer
 import net.minecraft.world.biome.Biome
 import net.minecraft.world.chunk.Chunk
-import wiresegal.cmdctrl.common.core.Slice
-import wiresegal.cmdctrl.common.network.PacketBiomeUpdate
 
 /**
  * @author WireSegal
@@ -46,9 +46,9 @@ object CommandSetBiome : CommandBase() {
     override fun execute(server: MinecraftServer, sender: ICommandSender, args: Array<out String>) {
         if (args.size > 2) {
             val senderPos = sender.position
-            val x = parseDouble(senderPos.x.toDouble(), args[0], -3000000, 3000000, false)
-            val z = parseDouble(senderPos.z.toDouble(), args[1], -3000000, 3000000, false)
-            val pos = BlockPos(x, 0.0, z)
+            val x = parseDouble(senderPos.x.toDouble(), args[0], -3000000, 3000000, false).toInt()
+            val z = parseDouble(senderPos.z.toDouble(), args[1], -3000000, 3000000, false).toInt()
+            val pos = BlockPos(x, 0, z)
 
             val biomeid = args[2]
             val biome = parseBiome(biomeid)
@@ -59,13 +59,30 @@ object CommandSetBiome : CommandBase() {
             val name = Biome.REGISTRY.getNameForObject(biome)
 
             if (world.isBlockLoaded(pos)) {
-                notifyCommandListener(sender, this, "commandcontrol.setbiome.success", x.toInt(), z.toInt(), id, name)
+                notifyCommandListener(sender, this, "commandcontrol.setbiome.success", x, z, id, name)
                 setBiome(world.getChunkFromBlockCoords(pos), pos, biome)
-                PacketHandler.NETWORK.sendToDimension(PacketBiomeUpdate(Slice(pos), id), world.provider.dimension)
+                updateBiomes(world, x..x, z..z)
             } else
-                throw CommandException("commandcontrol.setbiome.range", x.toInt(), z.toInt())
+                throw CommandException("commandcontrol.setbiome.range", x, z)
         } else
             throw WrongUsageException(getCommandUsage(sender))
+    }
+
+    fun updateBiomes(world: World, xRange: IntRange, zRange: IntRange) {
+        if (world !is WorldServer) return
+
+        val x1 = Math.min(xRange.first, xRange.last) - 2
+        val x2 = Math.max(xRange.first, xRange.last) + 2
+
+        val z1 = Math.min(zRange.first, zRange.last) - 2
+        val z2 = Math.max(zRange.first, zRange.last) + 2
+
+        for (chunkX in x1..x2) for (chunkZ in z1..z2) {
+            val entry = world.playerChunkMap.getEntry(chunkX, chunkZ)
+            val chunk = entry?.chunk
+            if (chunk != null && entry != null)
+                entry.sendPacket(SPacketChunkData(chunk, 65535))
+        }
     }
 
     override fun getTabCompletionOptions(server: MinecraftServer, sender: ICommandSender, args: Array<out String>, pos: BlockPos?): List<String> {

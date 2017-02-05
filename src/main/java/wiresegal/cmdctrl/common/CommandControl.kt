@@ -1,11 +1,11 @@
 package wiresegal.cmdctrl.common
 
-import com.teamwizardry.librarianlib.common.network.PacketHandler
 import net.minecraft.server.MinecraftServer
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import net.minecraftforge.fml.common.event.FMLServerStartedEvent
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent
+import net.minecraftforge.fml.common.network.NetworkCheckHandler
 import net.minecraftforge.fml.relauncher.Side
 import wiresegal.cmdctrl.common.commands.biome.CommandFillBiome
 import wiresegal.cmdctrl.common.commands.biome.CommandGetBiome
@@ -23,8 +23,6 @@ import wiresegal.cmdctrl.common.config.ConfigLoader
 import wiresegal.cmdctrl.common.core.ControlSaveData
 import wiresegal.cmdctrl.common.core.ExtraPlayerDataStore
 import wiresegal.cmdctrl.common.core.ScoreExpander
-import wiresegal.cmdctrl.common.network.PacketBiomeUpdate
-import wiresegal.cmdctrl.common.network.PacketMotionUpdate
 
 /**
  * @author WireSegal
@@ -38,10 +36,10 @@ class CommandControl {
         ControlSaveData
         ScoreExpander
         ExtraPlayerDataStore
-        PacketHandler.register(PacketBiomeUpdate::class.java, Side.CLIENT)
-        PacketHandler.register(PacketMotionUpdate::class.java, Side.CLIENT)
-        //println(json { obj("package" to "wiresegal.cmdctrl.mixins", "mixins" to listOf("MixinEntitySelector"), "client" to listOf<String>(), "server" to listOf<String>()) })
     }
+
+    @NetworkCheckHandler
+    fun checkVersions(presentMods: Map<String,String>, side: Side) = true
 
     @Mod.EventHandler
     fun serverStarting(e: FMLServerStartingEvent) {

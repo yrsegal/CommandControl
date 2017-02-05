@@ -1,6 +1,5 @@
 package wiresegal.cmdctrl.common.commands.biome
 
-import com.teamwizardry.librarianlib.common.network.PacketHandler
 import net.minecraft.command.CommandBase
 import net.minecraft.command.CommandException
 import net.minecraft.command.ICommandSender
@@ -9,8 +8,6 @@ import net.minecraft.server.MinecraftServer
 import net.minecraft.util.ResourceLocation
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.biome.Biome
-import wiresegal.cmdctrl.common.core.Slice
-import wiresegal.cmdctrl.common.network.PacketBiomeUpdate
 
 /**
  * @author WireSegal
@@ -25,13 +22,13 @@ object CommandFillBiome : CommandBase() {
     override fun execute(server: MinecraftServer, sender: ICommandSender, args: Array<out String>) {
         if (args.size > 4) {
             val senderPos = sender.position
-            val x1 = parseDouble(senderPos.x.toDouble(), args[0], -3000000, 3000000, false)
-            val z1 = parseDouble(senderPos.z.toDouble(), args[1], -3000000, 3000000, false)
+            val x1 = parseDouble(senderPos.x.toDouble(), args[0], -3000000, 3000000, false).toInt()
+            val z1 = parseDouble(senderPos.z.toDouble(), args[1], -3000000, 3000000, false).toInt()
 
-            val x2 = parseDouble(senderPos.x.toDouble(), args[2], -3000000, 3000000, false)
-            val z2 = parseDouble(senderPos.z.toDouble(), args[3], -3000000, 3000000, false)
-            val pos1 = BlockPos(x1, 0.0, z1)
-            val pos2 = BlockPos(x2, 0.0, z2)
+            val x2 = parseDouble(senderPos.x.toDouble(), args[2], -3000000, 3000000, false).toInt()
+            val z2 = parseDouble(senderPos.z.toDouble(), args[3], -3000000, 3000000, false).toInt()
+            val pos1 = BlockPos(x1, 0, z1)
+            val pos2 = BlockPos(x2, 0, z2)
 
             val biomeid = args[4]
             val biome = CommandSetBiome.parseBiome(biomeid)
@@ -42,13 +39,12 @@ object CommandFillBiome : CommandBase() {
             val name = Biome.REGISTRY.getNameForObject(biome)
 
             if (world.isBlockLoaded(pos1) && world.isBlockLoaded(pos2)) {
-                notifyCommandListener(sender, this, "commandcontrol.fillbiomes.success", x1.toInt(), z1.toInt(), x2.toInt(), z2.toInt(), id, name)
-                for (pos in BlockPos.getAllInBoxMutable(pos1, pos2)) {
+                notifyCommandListener(sender, this, "commandcontrol.fillbiomes.success", x1, z1, x2, z2, id, name)
+                for (pos in BlockPos.getAllInBoxMutable(pos1, pos2))
                     CommandSetBiome.setBiome(world.getChunkFromBlockCoords(pos), pos, biome)
-                    PacketHandler.NETWORK.sendToDimension(PacketBiomeUpdate(Slice(pos), id), world.provider.dimension)
-                }
+                CommandSetBiome.updateBiomes(world, x1..x2, z1..z2)
             } else
-                throw CommandException("commandcontrol.fillbiomes.range", x1.toInt(), z1.toInt(), x2.toInt(), z2.toInt())
+                throw CommandException("commandcontrol.fillbiomes.range", x1, z1, x2, z2)
         } else
             throw WrongUsageException(getCommandUsage(sender))
     }

@@ -1,10 +1,9 @@
 package wiresegal.cmdctrl.common.commands.misc
 
-import com.teamwizardry.librarianlib.common.network.PacketHandler
 import net.minecraft.command.*
 import net.minecraft.entity.player.EntityPlayerMP
+import net.minecraft.network.play.server.SPacketEntityVelocity
 import net.minecraft.server.MinecraftServer
-import wiresegal.cmdctrl.common.network.PacketMotionUpdate
 
 /**
  * @author WireSegal
@@ -27,7 +26,7 @@ object CommandMotion : CommandBase() {
         entity.motionZ = z
 
         if (entity is EntityPlayerMP)
-            PacketHandler.NETWORK.sendTo(PacketMotionUpdate(entity.motionX, entity.motionY, entity.motionZ), entity)
+            entity.connection.sendPacket(SPacketEntityVelocity(entity))
 
         notifyCommandListener(sender, this, "commandcontrol.motion.success", entity.name, entity.motionX, entity.motionY, entity.motionZ)
     }
