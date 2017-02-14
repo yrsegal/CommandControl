@@ -25,19 +25,23 @@ object CommandFlashNBT : CommandBase() {
         val math = CommandMath.evaluate(args.slice(2 until args.size).toTypedArray())
 
         if (TileSelector.isTileSelector(selector)) {
-            val tile = TileSelector.matchOne(server, sender, selector) ?: throw CTRLException("commandcontrol.probenbt.notile")
+            val tiles = TileSelector.matchTiles(server, sender, selector)
+            var toThrow: Throwable? = null
+            var throws = 0
+            for (tile in tiles) {
+                val orig = tile.writeToNBT(NBTTagCompound())
+                val toNBT = orig.copy()
 
-            val orig = tile.writeToNBT(NBTTagCompound())
-            val toNBT = orig.copy()
-
-            val k: String
-            if (key.startsWith("nbt.")) k = key.removePrefix("nbt.")
-            else k = key.removePrefix("nbtliteral.")
-            if (toNBT.setObject(k, NBTTagDouble(math.toDouble())) && toNBT != orig) {
-                tile.readFromNBT(toNBT)
-                notifyCommandListener(sender, this, "commands.blockdata.success", toNBT)
-            } else
-                throw CommandException("commands.entitydata.failed", toNBT)
+                if (toNBT.setObject(key, NBTTagDouble(math.toDouble())) && toNBT != orig) {
+                    tile.readFromNBT(toNBT)
+                    notifyCommandListener(sender, this, "commands.blockdata.success", toNBT)
+                } else {
+                    toThrow = CommandException("commands.entitydata.failed", toNBT)
+                    throws++
+                }
+            }
+            if (toThrow != null && throws == tiles.size)
+                throw toThrow
         } else {
             val entity = getEntity(server, sender, selector)
             if (entity is EntityPlayer)
@@ -46,10 +50,7 @@ object CommandFlashNBT : CommandBase() {
             val orig = entityToNBT(entity)
             val toNBT = orig.copy()
 
-            val k: String
-            if (key.startsWith("nbt.")) k = key.removePrefix("nbt.")
-            else k = key.removePrefix("nbtliteral.")
-            if (toNBT.setObject(k, NBTTagDouble(math.toDouble())) && toNBT != orig) {
+            if (toNBT.setObject(key, NBTTagDouble(math.toDouble())) && toNBT != orig) {
                 entity.readFromNBT(toNBT)
                 notifyCommandListener(sender, this, "commands.entitydata.success", toNBT)
             } else
@@ -60,4 +61,6 @@ object CommandFlashNBT : CommandBase() {
     override fun getRequiredPermissionLevel() = 2
     override fun getCommandName() = "flashnbt"
     override fun getCommandUsage(sender: ICommandSender?) = LibrarianLib.PROXY.translate("commandcontrol.flashnbt.usage")
+
+    override fun isUsernameIndex(args: Array<String>, index: Int) = index == 0
 }

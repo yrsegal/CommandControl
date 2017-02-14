@@ -46,4 +46,6 @@ object CommandProbeNBT : CommandBase() {
     override fun getRequiredPermissionLevel() = 2
     override fun getCommandName() = "probenbt"
     override fun getCommandUsage(sender: ICommandSender?) = LibrarianLib.PROXY.translate("commandcontrol.probenbt.usage")
+
+    override fun isUsernameIndex(args: Array<out String>?, index: Int) = index == 0
 }

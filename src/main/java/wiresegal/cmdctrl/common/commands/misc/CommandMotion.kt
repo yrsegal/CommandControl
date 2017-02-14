@@ -68,4 +68,6 @@ object CommandMotion : CommandBase() {
     override fun getRequiredPermissionLevel() = 2
     override fun getCommandName() = "motion"
     override fun getCommandUsage(sender: ICommandSender?) = LibrarianLib.PROXY.translate("commandcontrol.motion.usage")
+
+    override fun isUsernameIndex(args: Array<String>, index: Int) = index == 0
 }
