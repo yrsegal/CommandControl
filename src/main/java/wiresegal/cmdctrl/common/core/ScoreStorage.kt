@@ -13,9 +13,9 @@ class ScoreStorage : HashMap<String, Int>()
 /**
  * Another type alias, for easy getting.
  */
-interface IScoreMap<T> : MutableMap<T, ScoreStorage>
+interface IScoreMap<T: Any> : MutableMap<T, ScoreStorage>
 
-class ScoreMap<T> : HashMap<T, ScoreStorage>(), IScoreMap<T> {
+class ScoreMap<T: Any> : HashMap<T, ScoreStorage>(), IScoreMap<T> {
     operator override fun get(key: T): ScoreStorage {
         var gotten = super.get(key)
 
@@ -28,7 +28,7 @@ class ScoreMap<T> : HashMap<T, ScoreStorage>(), IScoreMap<T> {
     }
 }
 
-class WeakScoreMap<T> : WeakHashMap<T, ScoreStorage>(), IScoreMap<T> {
+class WeakScoreMap<T: Any> : WeakHashMap<T, ScoreStorage>(), IScoreMap<T> {
     operator override fun get(key: T): ScoreStorage {
         var gotten = super.get(key)
 

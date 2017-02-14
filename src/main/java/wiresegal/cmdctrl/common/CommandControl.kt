@@ -84,10 +84,10 @@ class CommandControl {
     }
 
     companion object {
-        @ConfigPropertyBoolean("", "general", "useCommands", "Whether to use the custom commands. (For building commands clientside for realms deployment.)", true)
+        @ConfigPropertyBoolean("commandcontrol", "general", "useCommands", "Whether to use the custom commands. (For building commands clientside for realms deployment.)", true)
         val useCommands = true
 
-        @ConfigPropertyBoolean("", "general", "useGamerules", "Whether to use the custom gamerules. (For building commands clientside for realms deployment.)", true)
+        @ConfigPropertyBoolean("commandcontrol", "general", "useGamerules", "Whether to use the custom gamerules. (For building commands clientside for realms deployment.)", true)
         val useGamerules = true
     }
 }

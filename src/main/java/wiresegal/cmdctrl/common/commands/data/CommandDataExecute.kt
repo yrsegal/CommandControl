@@ -152,7 +152,7 @@ object CommandDataExecute : CommandBase() {
         }
     }
 
-    private fun <T> getScorePredicates(dataStorage: ScoreMap<T>, params: Map<String, String>): List<(T) -> Boolean> {
+    private fun <T: Any> getScorePredicates(dataStorage: ScoreMap<T>, params: Map<String, String>): List<(T) -> Boolean> {
         val ret = mutableListOf<(T) -> Boolean>()
         for ((key, value) in params) if (key.startsWith("score_")) {
             val number = parseInt(value)
