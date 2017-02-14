@@ -1,1 +1,8 @@
-{"package":"wiresegal.cmdctrl.mixins","mixins":["MixinEntitySelector"],"client":[],"server":[]}
+{
+  "package": "wiresegal.cmdctrl.mixins",
+  "mixins": [
+    "MixinEntitySelector"
+  ],
+  "client": [],
+  "server": []
+}

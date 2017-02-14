@@ -1,17 +1,13 @@
 package wiresegal.cmdctrl.common.core
 
-import com.sun.org.apache.xalan.internal.xsltc.compiler.Constants.BOOLEAN_VALUE
-import net.minecraft.entity.EntityLiving
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.item.EntityArmorStand
-import net.minecraftforge.common.DimensionManager.getWorld
 import net.minecraft.world.GameRules
 import net.minecraft.world.World
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.world.ExplosionEvent
 import net.minecraftforge.event.world.WorldEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
-
 
 
 /**

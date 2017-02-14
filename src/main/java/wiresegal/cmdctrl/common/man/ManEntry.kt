@@ -45,5 +45,5 @@ class ManEntry(sender: ICommandSender, command: ICommand?, subcommand: String?) 
     }
 
     val asTextComponents: List<ITextComponent>
-        get() = keys.map { TextComponentString(" | ").appendSibling(TextComponentTranslation(it))}
+        get() = keys.map { TextComponentString(" | ").appendSibling(TextComponentTranslation(it)) }
 }

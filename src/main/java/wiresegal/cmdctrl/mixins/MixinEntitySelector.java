@@ -14,7 +14,7 @@ import java.util.List;
 @Mixin(EntitySelector.class)
 public abstract class MixinEntitySelector {
     @Inject(method = "matchEntities", at = @At("HEAD"), cancellable = true)
-    private static <T extends Entity> void checkForCustom(ICommandSender sender, String token, Class <? extends T > targetClass, CallbackInfoReturnable<List<T>> cb) {
+    private static <T extends Entity> void checkForCustom(ICommandSender sender, String token, Class<? extends T> targetClass, CallbackInfoReturnable<List<T>> cb) {
         List<T> custom = CustomSelector.handleCustomSelector(sender, token, targetClass);
         if (custom != null) cb.setReturnValue(custom);
     }

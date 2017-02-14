@@ -130,8 +130,10 @@ object ScoreExpander : CommandBase() {
 
     override fun execute(server: MinecraftServer?, sender: ICommandSender?, args: Array<out String>?)
             = throw UnsupportedOperationException()
+
     override fun getCommandName()
             = throw UnsupportedOperationException()
+
     override fun getCommandUsage(sender: ICommandSender?)
             = throw UnsupportedOperationException()
 }

@@ -2,7 +2,6 @@ package wiresegal.cmdctrl.common.commands.misc
 
 import com.teamwizardry.librarianlib.LibrarianLib
 import net.minecraft.command.CommandBase
-import net.minecraft.command.CommandException
 import net.minecraft.command.ICommandSender
 import net.minecraft.command.PlayerNotFoundException
 import net.minecraft.entity.player.EntityPlayerMP

@@ -3,7 +3,6 @@ package wiresegal.cmdctrl.common.commands.data
 import com.teamwizardry.librarianlib.common.util.ImmutableStaticFieldDelegate
 import com.teamwizardry.librarianlib.common.util.MethodHandleHelper
 import net.minecraft.command.CommandBase
-import net.minecraft.command.CommandException
 import net.minecraft.command.ICommandSender
 import net.minecraft.server.MinecraftServer
 import net.minecraft.tileentity.TileEntity
@@ -63,7 +62,7 @@ object TileSelector {
             = matchTiles(server, sender, token).singleOrNull()
 
     fun isTileSelector(token: String) =
-        token.startsWith("@t") && TOKEN_PATTERN.matchEntire(token) != null
+            token.startsWith("@t") && TOKEN_PATTERN.matchEntire(token) != null
 
     fun matchTiles(server: MinecraftServer, sender: ICommandSender, token: String): List<TileEntity> {
         val matcher = TOKEN_PATTERN.matchEntire(token)

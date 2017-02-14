@@ -12,6 +12,7 @@ public class CommandControlLoadingPlugin implements IFMLLoadingPlugin {
         MixinBootstrap.init();
         Mixins.addConfiguration("wiresegal/cmdctrl/mixins/mixins_config.json");
     }
+
     /**
      * Return a list of classes that implements the IClassTransformer interface
      *
@@ -19,7 +20,7 @@ public class CommandControlLoadingPlugin implements IFMLLoadingPlugin {
      */
     @Override
     public String[] getASMTransformerClass() {
-        return new String[] {
+        return new String[]{
         };
     }
 

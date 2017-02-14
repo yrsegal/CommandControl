@@ -1,14 +1,16 @@
 package wiresegal.cmdctrl.common.commands.control
 
 import com.teamwizardry.librarianlib.LibrarianLib
-import net.minecraft.command.*
+import net.minecraft.command.CommandBase
+import net.minecraft.command.CommandException
+import net.minecraft.command.ICommandSender
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.entity.player.EntityPlayerMP
-import net.minecraft.nbt.*
+import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.nbt.NBTTagDouble
 import net.minecraft.server.MinecraftServer
-import net.minecraft.util.text.TextComponentTranslation
 import wiresegal.cmdctrl.common.commands.data.TileSelector
-import wiresegal.cmdctrl.common.core.*
+import wiresegal.cmdctrl.common.core.CTRLUsageException
+import wiresegal.cmdctrl.common.core.setObject
 
 /**
  * @author WireSegal

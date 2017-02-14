@@ -46,7 +46,7 @@ class CommandControl {
     }
 
     @NetworkCheckHandler
-    fun checkVersions(presentMods: Map<String,String>, side: Side) = true
+    fun checkVersions(presentMods: Map<String, String>, side: Side) = true
 
     @Mod.EventHandler
     fun serverStarting(e: FMLServerStartingEvent) {
