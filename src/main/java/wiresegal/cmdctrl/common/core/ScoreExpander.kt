@@ -32,7 +32,6 @@ object ScoreExpander : CommandBase() {
     private const val NAME = "\\w+"
     private const val POSITION_PATTERN = "\\[\\d+\\.\\d+(?:\\.\\d+)?\\]"
     private const val TOKENIZER_PATTERN = "<($SELECTOR|$NAME|$POSITION_PATTERN)\\.([^>]+)>"
-    private const val SIMPLE_TOKENIZER_PATTERN = "($SELECTOR|$NAME)\\.([^>]+)"
     private const val COMPRESSOR_PATTERN = "<<((?:$SELECTOR|$NAME|$POSITION_PATTERN)\\.(?:[^>]+))>>"
     private const val DECOMPRESSOR_PATTERN = "  ((?:$SELECTOR|$NAME|$POSITION_PATTERN)\\.(?:[^ >]+))  "
 
@@ -40,7 +39,6 @@ object ScoreExpander : CommandBase() {
     val TOKENIZER = TOKENIZER_PATTERN.toRegex()
     val COMPRESSOR = COMPRESSOR_PATTERN.toRegex()
     val DECOMPRESSOR = DECOMPRESSOR_PATTERN.toRegex()
-    val NON_POSITION = SIMPLE_TOKENIZER_PATTERN.toRegex()
 
     @SubscribeEvent
     fun interceptCommand(e: CommandEvent) {

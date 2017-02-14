@@ -17,14 +17,12 @@ import wiresegal.cmdctrl.common.core.*
 object CommandFlashNBT : CommandBase() {
     @Throws(CommandException::class)
     override fun execute(server: MinecraftServer, sender: ICommandSender, args: Array<out String>) {
-        if (args.size < 2)
+        if (args.size < 3)
             throw CTRLUsageException(getCommandUsage(sender))
 
-        val math = CommandMath.evaluate(args.slice(1 until args.size).toTypedArray())
-
-        val match = ScoreExpander.NON_POSITION.matchEntire(args[0]) ?: throw CTRLUsageException(getCommandUsage(sender))
-        val selector = match.groupValues[1]
-        val key = match.groupValues[2]
+        val selector = args[0]
+        val key = args[1]
+        val math = CommandMath.evaluate(args.slice(2 until args.size).toTypedArray())
 
         if (TileSelector.isTileSelector(selector)) {
             val tile = TileSelector.matchOne(server, sender, selector) ?: throw CTRLException("commandcontrol.probenbt.notile")
@@ -32,20 +30,14 @@ object CommandFlashNBT : CommandBase() {
             val orig = tile.writeToNBT(NBTTagCompound())
             val toNBT = orig.copy()
 
-            if (key.startsWith("nbt.") || key.startsWith("nbtliteral.")) {
-                val k: String
-                if (key.startsWith("nbt.")) k = key.removePrefix("nbt.")
-                else k = key.removePrefix("nbtliteral.")
-                if (toNBT.setObject(k, NBTTagDouble(math.toDouble())) && toNBT != orig) {
-                    tile.readFromNBT(toNBT)
-                    notifyCommandListener(sender, this, "commands.blockdata.success", toNBT)
-                } else
-                    throw CommandException("commands.entitydata.failed", toNBT)
-            } else {
-                val score = math.toInt()
-                ControlSaveData[tile.world].tileData[tile][key] = score
-                notifyCTRLListener(sender, this, "commandcontrol.storedata.set", key, score)
-            }
+            val k: String
+            if (key.startsWith("nbt.")) k = key.removePrefix("nbt.")
+            else k = key.removePrefix("nbtliteral.")
+            if (toNBT.setObject(k, NBTTagDouble(math.toDouble())) && toNBT != orig) {
+                tile.readFromNBT(toNBT)
+                notifyCommandListener(sender, this, "commands.blockdata.success", toNBT)
+            } else
+                throw CommandException("commands.entitydata.failed", toNBT)
         } else {
             val entity = getEntity(server, sender, selector)
             if (entity is EntityPlayer)
@@ -53,26 +45,15 @@ object CommandFlashNBT : CommandBase() {
 
             val orig = entityToNBT(entity)
             val toNBT = orig.copy()
-            if (key.startsWith("nbt.") || key.startsWith("nbtliteral.")) {
-                val k: String
-                if (key.startsWith("nbt.")) k = key.removePrefix("nbt.")
-                else k = key.removePrefix("nbtliteral.")
-                if (toNBT.setObject(k, NBTTagDouble(math.toDouble())) && toNBT != orig) {
-                    entity.readFromNBT(toNBT)
-                    notifyCommandListener(sender, this, "commands.entitydata.success", toNBT)
-                } else
-                    throw CommandException("commands.entitydata.failed", toNBT)
-            } else {
-                val scoreboard = server.worldServerForDimension(0).scoreboard
-                val scoreobjective = scoreboard.getObjective(key)
-                if (scoreobjective != null) {
-                    val name = if (entity is EntityPlayerMP) entity.getName() else entity.cachedUniqueIdString
-                    val score = math.toInt()
-                    scoreboard.getOrCreateScore(name, scoreobjective).scorePoints = score
-                    notifyCommandListener(sender, this, "commands.scoreboard.players.set.success", scoreobjective.name, score, name)
 
-                } else throw CommandException("commands.scoreboard.objectiveNotFound", key)
-            }
+            val k: String
+            if (key.startsWith("nbt.")) k = key.removePrefix("nbt.")
+            else k = key.removePrefix("nbtliteral.")
+            if (toNBT.setObject(k, NBTTagDouble(math.toDouble())) && toNBT != orig) {
+                entity.readFromNBT(toNBT)
+                notifyCommandListener(sender, this, "commands.entitydata.success", toNBT)
+            } else
+                throw CommandException("commands.entitydata.failed", toNBT)
         }
     }
 
