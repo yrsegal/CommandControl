@@ -1,6 +1,5 @@
 package wiresegal.cmdctrl.common.commands.misc
 
-import com.teamwizardry.librarianlib.LibrarianLib
 import net.minecraft.command.CommandBase
 import net.minecraft.command.CommandException
 import net.minecraft.command.ICommandSender
@@ -8,6 +7,7 @@ import net.minecraft.command.NumberInvalidException
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.network.play.server.SPacketEntityVelocity
 import net.minecraft.server.MinecraftServer
+import wiresegal.cmdctrl.common.CommandControl
 import wiresegal.cmdctrl.common.core.CTRLUsageException
 import wiresegal.cmdctrl.common.core.notifyCTRLListener
 
@@ -70,7 +70,7 @@ object CommandMotion : CommandBase() {
 
     override fun getRequiredPermissionLevel() = 2
     override fun getCommandName() = "motion"
-    override fun getCommandUsage(sender: ICommandSender?) = LibrarianLib.PROXY.translate("commandcontrol.motion.usage")
+    override fun getCommandUsage(sender: ICommandSender?) = CommandControl.translate("commandcontrol.motion.usage")
 
     override fun isUsernameIndex(args: Array<String>, index: Int) = index == 0
 }

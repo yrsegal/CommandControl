@@ -1,6 +1,5 @@
 package wiresegal.cmdctrl.common.commands.data
 
-import com.teamwizardry.librarianlib.LibrarianLib
 import net.minecraft.command.CommandBase
 import net.minecraft.command.CommandException
 import net.minecraft.command.CommandResultStats
@@ -12,6 +11,7 @@ import net.minecraft.server.MinecraftServer
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
+import wiresegal.cmdctrl.common.CommandControl
 import wiresegal.cmdctrl.common.core.*
 
 /**
@@ -414,5 +414,5 @@ object CommandData : CommandBase() {
     override fun getRequiredPermissionLevel() = 2
     override fun getCommandName() = "storedata"
     override fun getCommandAliases() = listOf("worlddata", "savedata", "datasave", "datastore")
-    override fun getCommandUsage(sender: ICommandSender?) = LibrarianLib.PROXY.translate("commandcontrol.storedata.usage")
+    override fun getCommandUsage(sender: ICommandSender?) = CommandControl.translate("commandcontrol.storedata.usage")
 }

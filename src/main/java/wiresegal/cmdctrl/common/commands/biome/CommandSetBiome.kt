@@ -1,6 +1,5 @@
 package wiresegal.cmdctrl.common.commands.biome
 
-import com.teamwizardry.librarianlib.LibrarianLib
 import net.minecraft.command.CommandBase
 import net.minecraft.command.CommandException
 import net.minecraft.command.ICommandSender
@@ -13,6 +12,7 @@ import net.minecraft.world.World
 import net.minecraft.world.WorldServer
 import net.minecraft.world.biome.Biome
 import net.minecraft.world.chunk.Chunk
+import wiresegal.cmdctrl.common.CommandControl
 import wiresegal.cmdctrl.common.core.CTRLException
 import wiresegal.cmdctrl.common.core.CTRLUsageException
 import wiresegal.cmdctrl.common.core.notifyCTRLListener
@@ -104,5 +104,5 @@ object CommandSetBiome : CommandBase() {
     override fun getRequiredPermissionLevel() = 2
     override fun getCommandName() = "setbiome"
     override fun getCommandAliases() = mutableListOf("biomeset")
-    override fun getCommandUsage(sender: ICommandSender?) = LibrarianLib.PROXY.translate("commandcontrol.setbiome.usage")
+    override fun getCommandUsage(sender: ICommandSender?) = CommandControl.translate("commandcontrol.setbiome.usage")
 }

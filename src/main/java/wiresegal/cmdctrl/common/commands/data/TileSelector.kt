@@ -1,7 +1,5 @@
 package wiresegal.cmdctrl.common.commands.data
 
-import com.teamwizardry.librarianlib.common.util.ImmutableStaticFieldDelegate
-import com.teamwizardry.librarianlib.common.util.MethodHandleHelper
 import net.minecraft.command.CommandBase
 import net.minecraft.command.ICommandSender
 import net.minecraft.server.MinecraftServer
@@ -10,6 +8,8 @@ import net.minecraft.util.math.Vec3d
 import wiresegal.cmdctrl.common.core.CTRLException
 import wiresegal.cmdctrl.common.core.ControlSaveData
 import wiresegal.cmdctrl.common.core.WeakScoreMap
+import wiresegal.cmdctrl.common.core.shade.ImmutableStaticFieldDelegate
+import wiresegal.cmdctrl.common.core.shade.MethodHandleHelper
 
 /**
  * @author WireSegal
@@ -43,9 +43,9 @@ object TileSelector {
      */
 
     val nameToClassMap by ImmutableStaticFieldDelegate<TileSelector, Map<String, Class<out TileEntity>>>(
-            MethodHandleHelper.wrapperForStaticGetter(TileEntity::class.java, "f", "field_145855_i", "nameToClassMap"))
+            MethodHandleHelper.wrapperForStaticGetter(TileEntity::class.java, "f", "field_145855_i", "nameToClassMap"), true)
     val classToNameMap by ImmutableStaticFieldDelegate<TileSelector, Map<Class<out TileEntity>, String>>(
-            MethodHandleHelper.wrapperForStaticGetter(TileEntity::class.java, "g", "field_145853_j", "classToNameMap"))
+            MethodHandleHelper.wrapperForStaticGetter(TileEntity::class.java, "g", "field_145853_j", "classToNameMap"), true)
 
     private fun hasArgument(params: Map<String, String>) = WORLD_BINDING_ARGS.any { params.containsKey(it) }
 

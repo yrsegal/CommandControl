@@ -1,6 +1,5 @@
 package wiresegal.cmdctrl.common.commands.biome
 
-import com.teamwizardry.librarianlib.LibrarianLib
 import net.minecraft.command.CommandBase
 import net.minecraft.command.CommandException
 import net.minecraft.command.CommandResultStats
@@ -8,6 +7,7 @@ import net.minecraft.command.ICommandSender
 import net.minecraft.server.MinecraftServer
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.biome.Biome
+import wiresegal.cmdctrl.common.CommandControl
 import wiresegal.cmdctrl.common.core.CTRLException
 import wiresegal.cmdctrl.common.core.CTRLUsageException
 import wiresegal.cmdctrl.common.core.notifyCTRLListener
@@ -63,5 +63,5 @@ object CommandMatchBiome : CommandBase() {
 
     override fun getRequiredPermissionLevel() = 2
     override fun getCommandName() = "testforbiomes"
-    override fun getCommandUsage(sender: ICommandSender?) = LibrarianLib.PROXY.translate("commandcontrol.testforbiomes.usage")
+    override fun getCommandUsage(sender: ICommandSender?) = CommandControl.translate("commandcontrol.testforbiomes.usage")
 }

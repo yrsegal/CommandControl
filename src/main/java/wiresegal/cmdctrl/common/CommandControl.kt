@@ -1,14 +1,18 @@
+@file:Suppress("DEPRECATION")
+
 package wiresegal.cmdctrl.common
 
-import com.teamwizardry.librarianlib.common.util.ConfigPropertyBoolean
-import com.teamwizardry.librarianlib.common.util.EasyConfigHandler
 import net.minecraft.server.MinecraftServer
+import net.minecraft.util.text.translation.I18n
+import net.minecraftforge.common.config.Configuration
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import net.minecraftforge.fml.common.event.FMLServerStartedEvent
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent
 import net.minecraftforge.fml.common.network.NetworkCheckHandler
 import net.minecraftforge.fml.relauncher.Side
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
 import wiresegal.cmdctrl.common.commands.biome.CommandFillBiome
 import wiresegal.cmdctrl.common.commands.biome.CommandGetBiome
 import wiresegal.cmdctrl.common.commands.biome.CommandMatchBiome
@@ -32,7 +36,7 @@ import wiresegal.cmdctrl.common.core.ScoreExpander
  * @author WireSegal
  * Created at 4:17 PM on 12/3/16.
  */
-@Mod(modid = "commandcontrol", name = "Command Control", version = "1.1", dependencies = "required-after:librarianlib")
+@Mod(modid = "commandcontrol", name = "Command Control", version = "1.1")
 class CommandControl {
     @Mod.EventHandler
     fun preInit(e: FMLPreInitializationEvent) {
@@ -42,7 +46,13 @@ class CommandControl {
         ExtraPlayerDataStore
         if (useGamerules)
             GameruleDisableExplosions
-        EasyConfigHandler.init()
+
+        val config = Configuration(e.suggestedConfigurationFile)
+        config.load()
+        useCommands = config["general", "useCommands", true, "Whether to use the custom commands. (For building commands clientside for realms deployment.)"].boolean
+        useGamerules = config["general", "useGamerules", true, "Whether to use the custom gamerules. (For building commands clientside for realms deployment.)"].boolean
+        config.save()
+
     }
 
     @NetworkCheckHandler
@@ -84,10 +94,15 @@ class CommandControl {
     }
 
     companion object {
-        @ConfigPropertyBoolean("commandcontrol", "general", "useCommands", "Whether to use the custom commands. (For building commands clientside for realms deployment.)", true)
-        val useCommands = true
+        fun translate(key: String, vararg args: Any?): String = I18n.translateToLocalFormatted(key, args)
+        fun canTranslate(key: String): Boolean = I18n.canTranslate(key)
 
-        @ConfigPropertyBoolean("commandcontrol", "general", "useGamerules", "Whether to use the custom gamerules. (For building commands clientside for realms deployment.)", true)
-        val useGamerules = true
+        var useCommands = true
+            private set
+
+        var useGamerules = true
+            private set
+
+        val LOGGER: Logger = LogManager.getLogger("commandcontrol")
     }
 }

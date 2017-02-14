@@ -8,6 +8,7 @@ import net.minecraft.util.text.ITextComponent
 import net.minecraft.util.text.TextComponentString
 import net.minecraft.util.text.TextComponentTranslation
 import net.minecraft.util.text.translation.I18n
+import wiresegal.cmdctrl.common.CommandControl
 import java.util.*
 
 /**
@@ -45,5 +46,5 @@ class ManEntry(sender: ICommandSender, command: ICommand?, subcommand: String?) 
     }
 
     val asTextComponents: List<ITextComponent>
-        get() = keys.map { TextComponentString(" | ").appendSibling(TextComponentTranslation(it)) }
+        get() = keys.map { TextComponentString(" | ").appendSibling(TextComponentString(CommandControl.translate(it))) }
 }

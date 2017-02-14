@@ -1,12 +1,12 @@
 package wiresegal.cmdctrl.common.commands.control
 
-import com.teamwizardry.librarianlib.LibrarianLib
 import com.udojava.evalex.Expression.ExpressionException
 import net.minecraft.command.CommandBase
 import net.minecraft.command.CommandException
 import net.minecraft.command.CommandResultStats
 import net.minecraft.command.ICommandSender
 import net.minecraft.server.MinecraftServer
+import wiresegal.cmdctrl.common.CommandControl
 import wiresegal.cmdctrl.common.core.CTRLException
 import wiresegal.cmdctrl.common.core.CTRLUsageException
 import wiresegal.cmdctrl.common.core.notifyCTRLListener
@@ -44,5 +44,5 @@ object CommandMath : CommandBase() {
 
     override fun getRequiredPermissionLevel() = 0
     override fun getCommandName() = "math"
-    override fun getCommandUsage(sender: ICommandSender?) = LibrarianLib.PROXY.translate("commandcontrol.math.usage")
+    override fun getCommandUsage(sender: ICommandSender?) = CommandControl.translate("commandcontrol.math.usage")
 }

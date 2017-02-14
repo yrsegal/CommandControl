@@ -1,6 +1,5 @@
 package wiresegal.cmdctrl.common.commands.control
 
-import com.teamwizardry.librarianlib.LibrarianLib
 import net.minecraft.command.CommandBase
 import net.minecraft.command.CommandException
 import net.minecraft.command.CommandResultStats
@@ -9,6 +8,7 @@ import net.minecraft.nbt.NBTPrimitive
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.server.MinecraftServer
 import net.minecraft.util.text.TextComponentTranslation
+import wiresegal.cmdctrl.common.CommandControl
 import wiresegal.cmdctrl.common.commands.data.TileSelector
 import wiresegal.cmdctrl.common.core.CTRLException
 import wiresegal.cmdctrl.common.core.CTRLUsageException
@@ -48,7 +48,7 @@ object CommandProbeNBT : CommandBase() {
 
     override fun getRequiredPermissionLevel() = 2
     override fun getCommandName() = "probenbt"
-    override fun getCommandUsage(sender: ICommandSender?) = LibrarianLib.PROXY.translate("commandcontrol.probenbt.usage")
+    override fun getCommandUsage(sender: ICommandSender?) = CommandControl.translate("commandcontrol.probenbt.usage")
 
     override fun isUsernameIndex(args: Array<out String>?, index: Int) = index == 0
 }

@@ -1,10 +1,6 @@
 package wiresegal.cmdctrl.common.config
 
 import com.google.gson.JsonParser
-import com.teamwizardry.librarianlib.LibrarianLog
-import com.teamwizardry.librarianlib.common.util.builders.json
-import com.teamwizardry.librarianlib.common.util.builders.serialize
-import com.teamwizardry.librarianlib.common.util.get
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.server.MinecraftServer
 import net.minecraft.tileentity.TileEntity
@@ -15,7 +11,10 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 import net.minecraftforge.fml.relauncher.Side
+import wiresegal.cmdctrl.common.CommandControl
 import wiresegal.cmdctrl.common.commands.data.TileSelector
+import wiresegal.cmdctrl.common.core.shade.json
+import wiresegal.cmdctrl.common.core.shade.serialize
 import java.io.File
 import java.util.*
 
@@ -82,7 +81,7 @@ object ConfigLoader {
             try {
                 module += ScriptModule.fromObject(JsonParser().parse(qualified.reader()).asJsonObject)
             } catch (e: Exception) {
-                LibrarianLog.error("Failed to parse script $file")
+                CommandControl.LOGGER.error("Failed to parse script $file")
             }
         }
 
@@ -107,7 +106,7 @@ object ConfigLoader {
                             .filter { it in (toWatch[id] ?: mutableListOf()) }
                             .forEach { key ->
                                 val prev = tileMap[tile]!!.getOrElse(key) { null } ?: return@forEach
-                                val newHash = dump[key].hashCode()
+                                val newHash = dump.getTag(key).hashCode()
                                 if (prev != newHash)
                                     module.tileChanges
                                             .filter { it.id == id && key in it.watch && it !in ranModules }
@@ -120,7 +119,7 @@ object ConfigLoader {
 
                 dump.keySet
                         .filter { it in (toWatch[id] ?: mutableListOf()) }
-                        .forEach { tileMap.getOrPut(tile) { hashMapOf() }.put(it, dump[it].hashCode()) }
+                        .forEach { tileMap.getOrPut(tile) { hashMapOf() }.put(it, dump.getTag(it).hashCode()) }
 
             }
             module.onTick.forEach { it.run(server, e.world) }

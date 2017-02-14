@@ -1,6 +1,5 @@
 package wiresegal.cmdctrl.common.commands.control
 
-import com.teamwizardry.librarianlib.LibrarianLib
 import net.minecraft.command.CommandBase
 import net.minecraft.command.CommandException
 import net.minecraft.command.ICommandSender
@@ -8,6 +7,7 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.nbt.NBTTagDouble
 import net.minecraft.server.MinecraftServer
+import wiresegal.cmdctrl.common.CommandControl
 import wiresegal.cmdctrl.common.commands.data.TileSelector
 import wiresegal.cmdctrl.common.core.CTRLUsageException
 import wiresegal.cmdctrl.common.core.setObject
@@ -62,7 +62,7 @@ object CommandFlashNBT : CommandBase() {
 
     override fun getRequiredPermissionLevel() = 2
     override fun getCommandName() = "flashnbt"
-    override fun getCommandUsage(sender: ICommandSender?) = LibrarianLib.PROXY.translate("commandcontrol.flashnbt.usage")
+    override fun getCommandUsage(sender: ICommandSender?) = CommandControl.translate("commandcontrol.flashnbt.usage")
 
     override fun isUsernameIndex(args: Array<String>, index: Int) = index == 0
 }

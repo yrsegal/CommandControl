@@ -1,6 +1,5 @@
 package wiresegal.cmdctrl.common.commands.misc
 
-import com.teamwizardry.librarianlib.LibrarianLib
 import net.minecraft.command.CommandBase
 import net.minecraft.command.ICommandSender
 import net.minecraft.command.PlayerNotFoundException
@@ -8,6 +7,7 @@ import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.server.MinecraftServer
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.text.TextComponentTranslation
+import wiresegal.cmdctrl.common.CommandControl
 import wiresegal.cmdctrl.common.core.CTRLException
 import wiresegal.cmdctrl.common.man.ManEntry
 
@@ -51,5 +51,5 @@ object CommandMan : CommandBase() {
     override fun getRequiredPermissionLevel() = 0
     override fun getCommandName() = "man"
     override fun getCommandAliases() = listOf("documentation", "manual")
-    override fun getCommandUsage(sender: ICommandSender?) = LibrarianLib.PROXY.translate("commandcontrol.man.usage")
+    override fun getCommandUsage(sender: ICommandSender?) = CommandControl.translate("commandcontrol.man.usage")
 }

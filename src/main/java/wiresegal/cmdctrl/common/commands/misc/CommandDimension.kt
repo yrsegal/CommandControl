@@ -1,10 +1,10 @@
 package wiresegal.cmdctrl.common.commands.misc
 
-import com.teamwizardry.librarianlib.LibrarianLib
 import net.minecraft.command.CommandBase
 import net.minecraft.command.CommandResultStats
 import net.minecraft.command.ICommandSender
 import net.minecraft.server.MinecraftServer
+import wiresegal.cmdctrl.common.CommandControl
 import wiresegal.cmdctrl.common.core.notifyCTRLListener
 
 /**
@@ -20,5 +20,5 @@ object CommandDimension : CommandBase() {
 
     override fun getRequiredPermissionLevel() = 2
     override fun getCommandName() = "dimension"
-    override fun getCommandUsage(sender: ICommandSender?) = LibrarianLib.PROXY.translate("commandcontrol.dimension.usage")
+    override fun getCommandUsage(sender: ICommandSender?) = CommandControl.translate("commandcontrol.dimension.usage")
 }

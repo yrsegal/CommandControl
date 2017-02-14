@@ -1,12 +1,12 @@
 package wiresegal.cmdctrl.common.commands.data
 
-import com.teamwizardry.librarianlib.LibrarianLib
 import net.minecraft.command.CommandBase
 import net.minecraft.command.CommandException
 import net.minecraft.command.ICommandSender
 import net.minecraft.server.MinecraftServer
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
+import wiresegal.cmdctrl.common.CommandControl
 import wiresegal.cmdctrl.common.core.*
 
 /**
@@ -226,5 +226,5 @@ object CommandDataExecute : CommandBase() {
     override fun getRequiredPermissionLevel() = 2
     override fun getCommandName() = "dataexecute"
     override fun getCommandAliases() = mutableListOf("executedata")
-    override fun getCommandUsage(sender: ICommandSender?) = LibrarianLib.PROXY.translate("commandcontrol.dataexecute.usage")
+    override fun getCommandUsage(sender: ICommandSender?) = CommandControl.translate("commandcontrol.dataexecute.usage")
 }

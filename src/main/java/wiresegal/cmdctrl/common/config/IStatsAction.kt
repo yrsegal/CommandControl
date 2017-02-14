@@ -1,7 +1,7 @@
 package wiresegal.cmdctrl.common.config
 
 import com.google.gson.JsonObject
-import com.teamwizardry.librarianlib.common.util.builders.nbt
+import wiresegal.cmdctrl.common.core.shade.nbt
 import net.minecraft.command.CommandResultStats
 import net.minecraft.command.ICommandSender
 import net.minecraft.nbt.NBTTagCompound

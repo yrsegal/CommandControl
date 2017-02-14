@@ -1,8 +1,6 @@
 package wiresegal.cmdctrl.common.config
 
 import com.google.gson.JsonElement
-import com.teamwizardry.librarianlib.common.util.MethodHandleHelper
-import com.teamwizardry.librarianlib.common.util.MutableStaticFieldDelegate
 import net.minecraft.command.CommandBase
 import net.minecraft.command.CommandResultStats
 import net.minecraft.command.ICommandListener
@@ -10,6 +8,8 @@ import net.minecraft.server.MinecraftServer
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import wiresegal.cmdctrl.common.core.BlankCommandListener
+import wiresegal.cmdctrl.common.core.shade.MethodHandleHelper
+import wiresegal.cmdctrl.common.core.shade.MutableStaticFieldDelegate
 
 /**
  * @author WireSegal
@@ -35,6 +35,8 @@ data class CommandModule(val command: String, val stats: Map<CommandResultStats.
         var commandListener: ICommandListener by MutableStaticFieldDelegate(
                 MethodHandleHelper.wrapperForStaticGetter(CommandBase::class.java, "a", "field_71533_a", "commandListener"),
                 MethodHandleHelper.wrapperForStaticSetter(CommandBase::class.java, "a", "field_71533_a", "commandListener"))
+
+
 
         @JvmStatic
         fun fromElement(el: JsonElement, debug: Boolean = false): CommandModule {

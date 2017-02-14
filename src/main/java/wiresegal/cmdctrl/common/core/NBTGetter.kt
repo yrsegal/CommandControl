@@ -1,9 +1,7 @@
 package wiresegal.cmdctrl.common.core
 
-import com.teamwizardry.librarianlib.common.util.NBTTypes
-import com.teamwizardry.librarianlib.common.util.get
-import com.teamwizardry.librarianlib.common.util.safeCast
 import net.minecraft.nbt.*
+import net.minecraftforge.common.util.Constants
 
 /**
  * @author WireSegal
@@ -36,7 +34,7 @@ fun NBTTagCompound.getObject(key: String): NBTBase? {
             } else return null
         } else if (currentElement is NBTTagCompound) {
             if (!currentElement.hasKey(m)) return null
-            currentElement = currentElement[m]
+            currentElement = currentElement.getTag(m)
         } else return null
     }
     return currentElement
@@ -71,9 +69,9 @@ fun NBTTagCompound.setObject(key: String, tag: NBTBase): Boolean {
             val ind = m.removePrefix("[").removeSuffix("]").toInt()
             if (currentElement is NBTTagList) {
                 if (currentElement.tagCount() < ind + 1 && !done) {
-                    val new = if ((currentElement.tagType == 0 || currentElement.tagType == NBTTypes.LIST)
+                    val new = if ((currentElement.tagType == 0 || currentElement.tagType == Constants.NBT.TAG_LIST)
                             && matched[index + 1].groupValues[1].startsWith("[")) NBTTagList()
-                    else if ((currentElement.tagType == 0 || currentElement.tagType == NBTTypes.COMPOUND))
+                    else if ((currentElement.tagType == 0 || currentElement.tagType == Constants.NBT.TAG_COMPOUND))
                         NBTTagCompound()
                     else return false
                     currentElement.appendTag(new)
@@ -82,7 +80,7 @@ fun NBTTagCompound.setObject(key: String, tag: NBTBase): Boolean {
                     if (!done) currentElement = currentElement[ind]
                     else {
                         var type = currentElement.tagType
-                        if (type == 0) type = NBTTypes.DOUBLE
+                        if (type == 0) type = Constants.NBT.TAG_DOUBLE
                         val transformedTag = tag.safeCast(CLASSES[type])
                         if (ind >= currentElement.tagCount()) currentElement.appendTag(transformedTag)
                         else currentElement.set(ind, transformedTag)
@@ -101,10 +99,32 @@ fun NBTTagCompound.setObject(key: String, tag: NBTBase): Boolean {
                 currentElement.setTag(m, new)
                 currentElement = new
             } else {
-                if (!done) currentElement = currentElement[m]
+                if (!done) currentElement = currentElement.getTag(m)
                 else currentElement.setTag(m, tag)
             }
         } else return false
     }
     return true
+}
+
+@Suppress("UNCHECKED_CAST")
+fun <T : NBTBase> NBTBase.safeCast(clazz: Class<T>): T {
+    return (
+            if (clazz.isAssignableFrom(this.javaClass))
+                this
+            else if (clazz == NBTPrimitive::class.java)
+                NBTTagByte(0)
+            else if (clazz == NBTTagByteArray::class.java)
+                NBTTagByteArray(ByteArray(0))
+            else if (clazz == NBTTagString::class.java)
+                NBTTagString("")
+            else if (clazz == NBTTagList::class.java)
+                NBTTagList()
+            else if (clazz == NBTTagCompound::class.java)
+                NBTTagCompound()
+            else if (clazz == NBTTagIntArray::class.java)
+                NBTTagIntArray(IntArray(0))
+            else
+                throw IllegalArgumentException("Unknown NBT type to cast to: $clazz")
+            ) as T
 }

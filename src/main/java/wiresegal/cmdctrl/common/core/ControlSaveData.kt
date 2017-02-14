@@ -1,8 +1,5 @@
 package wiresegal.cmdctrl.common.core
 
-import com.teamwizardry.librarianlib.common.util.NBTTypes
-import com.teamwizardry.librarianlib.common.util.builders.nbt
-import com.teamwizardry.librarianlib.common.util.indices
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.nbt.NBTTagList
 import net.minecraft.tileentity.TileEntity
@@ -10,10 +7,12 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import net.minecraft.world.WorldSavedData
 import net.minecraftforge.common.MinecraftForge
+import net.minecraftforge.common.util.Constants
 import net.minecraftforge.event.world.WorldEvent
 import net.minecraftforge.fml.common.FMLCommonHandler
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import wiresegal.cmdctrl.common.commands.data.TileSelector
+import wiresegal.cmdctrl.common.core.shade.nbt
 
 /**
  * @author WireSegal
@@ -72,41 +71,41 @@ class ControlSaveData(name: String = key) : WorldSavedData(name) {
         posData.clear()
         tileData.clear()
 
-        if (tag.hasKey(globalKey, NBTTypes.LIST)) {
-            val list = tag.getTagList(globalKey, NBTTypes.COMPOUND)
-            list.indices
+        if (tag.hasKey(globalKey, Constants.NBT.TAG_LIST)) {
+            val list = tag.getTagList(globalKey, Constants.NBT.TAG_COMPOUND)
+            (0 until list.tagCount())
                     .map { list[it] }
                     .filterIsInstance<NBTTagCompound>()
                     .forEach { globalData.put(it.getString("key"), it.getInteger("value")) }
         }
 
-        if (tag.hasKey(worldKey, NBTTypes.LIST)) {
-            val list = tag.getTagList(worldKey, NBTTypes.COMPOUND)
-            list.indices
+        if (tag.hasKey(worldKey, Constants.NBT.TAG_LIST)) {
+            val list = tag.getTagList(worldKey, Constants.NBT.TAG_COMPOUND)
+            (0 until list.tagCount())
                     .map { list[it] }
                     .filterIsInstance<NBTTagCompound>()
                     .forEach { globalData.put(it.getString("key"), it.getInteger("value")) }
         }
 
-        if (tag.hasKey(sliceKey, NBTTypes.LIST)) {
-            val list = tag.getTagList(sliceKey, NBTTypes.COMPOUND)
-            list.indices
+        if (tag.hasKey(sliceKey, Constants.NBT.TAG_LIST)) {
+            val list = tag.getTagList(sliceKey, Constants.NBT.TAG_COMPOUND)
+            (0 until list.tagCount())
                     .map { list[it] }
                     .filterIsInstance<NBTTagCompound>()
                     .forEach { sliceData[Slice(it.getLong("pos"))].put(it.getString("key"), it.getInteger("value")) }
         }
 
-        if (tag.hasKey(posKey, NBTTypes.LIST)) {
-            val list = tag.getTagList(posKey, NBTTypes.COMPOUND)
-            list.indices
+        if (tag.hasKey(posKey, Constants.NBT.TAG_LIST)) {
+            val list = tag.getTagList(posKey, Constants.NBT.TAG_COMPOUND)
+            (0 until list.tagCount())
                     .map { list[it] }
                     .filterIsInstance<NBTTagCompound>()
                     .forEach { posData[BlockPos.fromLong(it.getLong("pos"))].put(it.getString("key"), it.getInteger("value")) }
         }
 
-        if (tag.hasKey(tileKey, NBTTypes.LIST)) {
-            val list = tag.getTagList(tileKey, NBTTypes.COMPOUND)
-            list.indices
+        if (tag.hasKey(tileKey, Constants.NBT.TAG_LIST)) {
+            val list = tag.getTagList(tileKey, Constants.NBT.TAG_COMPOUND)
+            (0 until list.tagCount())
                     .map { list[it] }
                     .filterIsInstance<NBTTagCompound>()
                     .forEach {
