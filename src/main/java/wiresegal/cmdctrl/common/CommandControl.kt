@@ -25,6 +25,7 @@ import wiresegal.cmdctrl.common.commands.misc.CommandReloadScripts
 import wiresegal.cmdctrl.common.config.ConfigLoader
 import wiresegal.cmdctrl.common.core.ControlSaveData
 import wiresegal.cmdctrl.common.core.ExtraPlayerDataStore
+import wiresegal.cmdctrl.common.core.GameruleDisableExplosions
 import wiresegal.cmdctrl.common.core.ScoreExpander
 
 /**
@@ -39,6 +40,8 @@ class CommandControl {
         ControlSaveData
         ScoreExpander
         ExtraPlayerDataStore
+        if (useGamerules)
+            GameruleDisableExplosions
         EasyConfigHandler.init()
     }
 
@@ -83,5 +86,8 @@ class CommandControl {
     companion object {
         @ConfigPropertyBoolean("", "general", "useCommands", "Whether to use the custom commands. (For building commands clientside for realms deployment.)", true)
         val useCommands = true
+
+        @ConfigPropertyBoolean("", "general", "useGamerules", "Whether to use the custom gamerules. (For building commands clientside for realms deployment.)", true)
+        val useGamerules = true
     }
 }
