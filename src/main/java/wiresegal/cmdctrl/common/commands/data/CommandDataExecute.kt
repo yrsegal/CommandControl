@@ -1,15 +1,13 @@
 package wiresegal.cmdctrl.common.commands.data
 
+import com.teamwizardry.librarianlib.LibrarianLib
 import net.minecraft.command.CommandBase
 import net.minecraft.command.CommandException
 import net.minecraft.command.ICommandSender
-import net.minecraft.command.WrongUsageException
 import net.minecraft.server.MinecraftServer
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
-import wiresegal.cmdctrl.common.core.ControlSaveData
-import wiresegal.cmdctrl.common.core.ScoreMap
-import wiresegal.cmdctrl.common.core.Slice
+import wiresegal.cmdctrl.common.core.*
 
 /**
  * @author WireSegal
@@ -22,12 +20,12 @@ object CommandDataExecute : CommandBase() {
     @Throws(CommandException::class)
     override fun execute(server: MinecraftServer, sender: ICommandSender, args: Array<out String>) {
         if (args.size < 3)
-            throw WrongUsageException(getCommandUsage(sender))
+            throw CTRLUsageException(getCommandUsage(sender))
         val scope = args[0]
         val rules = args[1]
         val command = buildString(args, 2)
         if (scope !in positionals)
-            throw WrongUsageException(getCommandUsage(sender))
+            throw CTRLUsageException(getCommandUsage(sender))
 
         val manager = server.getCommandManager()
 
@@ -110,7 +108,7 @@ object CommandDataExecute : CommandBase() {
     val SINGLE_RULE = "\\G(\\w+)=([-!]?[\\w.-]*)(?:$|,)".toRegex()
 
     fun createSlicePredicate(sender: ICommandSender, rules: String, dataStorage: ScoreMap<Slice>): (Slice) -> Boolean {
-        if (!RULE_FORMAT.matches(rules)) throw CommandException("commandcontrol.dataexecute.invalidrule")
+        if (!RULE_FORMAT.matches(rules)) throw CTRLException("commandcontrol.dataexecute.invalidrule")
         val predicates = mutableListOf<(Slice) -> Boolean>()
         val matches = SINGLE_RULE.findAll(rules.removePrefix("[").removeSuffix("]"))
         val map = mapOf(*matches.map { it.groupValues[1] to it.groupValues[2] }.toList().toTypedArray())
@@ -133,7 +131,7 @@ object CommandDataExecute : CommandBase() {
     }
 
     fun createPosPredicate(sender: ICommandSender, rules: String, dataStorage: ScoreMap<BlockPos>): (BlockPos) -> Boolean {
-        if (!RULE_FORMAT.matches(rules)) throw CommandException("commandcontrol.dataexecute.invalidrule")
+        if (!RULE_FORMAT.matches(rules)) throw CTRLException("commandcontrol.dataexecute.invalidrule")
         val predicates = mutableListOf<(BlockPos) -> Boolean>()
         val matches = SINGLE_RULE.findAll(rules.removePrefix("[").removeSuffix("]"))
         val map = mapOf(*matches.map { it.groupValues[1] to it.groupValues[2] }.toList().toTypedArray())
@@ -228,5 +226,5 @@ object CommandDataExecute : CommandBase() {
     override fun getRequiredPermissionLevel() = 2
     override fun getCommandName() = "dataexecute"
     override fun getCommandAliases() = mutableListOf("executedata")
-    override fun getCommandUsage(sender: ICommandSender?) = "commandcontrol.dataexecute.usage"
+    override fun getCommandUsage(sender: ICommandSender?) = LibrarianLib.PROXY.translate("commandcontrol.dataexecute.usage")
 }

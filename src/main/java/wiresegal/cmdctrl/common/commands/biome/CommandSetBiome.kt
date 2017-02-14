@@ -1,5 +1,6 @@
 package wiresegal.cmdctrl.common.commands.biome
 
+import com.teamwizardry.librarianlib.LibrarianLib
 import net.minecraft.command.*
 import net.minecraft.network.play.server.SPacketChunkData
 import net.minecraft.server.MinecraftServer
@@ -9,6 +10,8 @@ import net.minecraft.world.World
 import net.minecraft.world.WorldServer
 import net.minecraft.world.biome.Biome
 import net.minecraft.world.chunk.Chunk
+import wiresegal.cmdctrl.common.core.CTRLException
+import wiresegal.cmdctrl.common.core.CTRLUsageException
 
 /**
  * @author WireSegal
@@ -37,7 +40,7 @@ object CommandSetBiome : CommandBase() {
             biome = Biome.REGISTRY.getObject(rl)
         }
 
-        if (biome == null) throw CommandException("commandcontrol.setbiome.invalid", string)
+        if (biome == null) throw CTRLException("commandcontrol.setbiome.invalid", string)
 
         return biome
     }
@@ -63,9 +66,9 @@ object CommandSetBiome : CommandBase() {
                 setBiome(world.getChunkFromBlockCoords(pos), pos, biome)
                 updateBiomes(world, x..x, z..z)
             } else
-                throw CommandException("commandcontrol.setbiome.range", x, z)
+                throw CTRLException("commandcontrol.setbiome.range", x, z)
         } else
-            throw WrongUsageException(getCommandUsage(sender))
+            throw CTRLUsageException(getCommandUsage(sender))
     }
 
     fun updateBiomes(world: World, xRange: IntRange, zRange: IntRange) {
@@ -97,5 +100,5 @@ object CommandSetBiome : CommandBase() {
     override fun getRequiredPermissionLevel() = 2
     override fun getCommandName() = "setbiome"
     override fun getCommandAliases() = mutableListOf("biomeset")
-    override fun getCommandUsage(sender: ICommandSender?) = "commandcontrol.setbiome.usage"
+    override fun getCommandUsage(sender: ICommandSender?) = LibrarianLib.PROXY.translate("commandcontrol.setbiome.usage")
 }

@@ -44,7 +44,6 @@ public class CommandControlLoadingPlugin implements IFMLLoadingPlugin {
      * run <strong>prior</strong> to Minecraft starting, so it CANNOT operate on minecraft
      * itself. The game will deliberately crash if this code is detected to trigger a
      * minecraft class loading
-     * TODO: implement crash ;)
      */
     @Override
     public String getSetupClass() {
@@ -57,8 +56,6 @@ public class CommandControlLoadingPlugin implements IFMLLoadingPlugin {
      * "mcLocation" : the location of the minecraft directory,
      * "coremodList" : the list of coremods
      * "coremodLocation" : the file this coremod loaded from,
-     *
-     * @param data
      */
     @Override
     public void injectData(Map<String, Object> data) {

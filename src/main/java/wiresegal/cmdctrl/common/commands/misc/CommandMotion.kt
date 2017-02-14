@@ -1,9 +1,11 @@
 package wiresegal.cmdctrl.common.commands.misc
 
+import com.teamwizardry.librarianlib.LibrarianLib
 import net.minecraft.command.*
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.network.play.server.SPacketEntityVelocity
 import net.minecraft.server.MinecraftServer
+import wiresegal.cmdctrl.common.core.CTRLUsageException
 
 /**
  * @author WireSegal
@@ -13,7 +15,7 @@ object CommandMotion : CommandBase() {
 
     @Throws(CommandException::class)
     override fun execute(server: MinecraftServer, sender: ICommandSender, args: Array<out String>) {
-        if (args.size < 3) throw WrongUsageException(getCommandUsage(sender))
+        if (args.size < 3) throw CTRLUsageException(getCommandUsage(sender))
 
         val entity = if (args.size > 3) getEntity(server, sender, args[3]) else getCommandSenderAsPlayer(sender)
 
@@ -64,5 +66,5 @@ object CommandMotion : CommandBase() {
 
     override fun getRequiredPermissionLevel() = 2
     override fun getCommandName() = "motion"
-    override fun getCommandUsage(sender: ICommandSender?) = "commandcontrol.motion.usage"
+    override fun getCommandUsage(sender: ICommandSender?) = LibrarianLib.PROXY.translate("commandcontrol.motion.usage")
 }

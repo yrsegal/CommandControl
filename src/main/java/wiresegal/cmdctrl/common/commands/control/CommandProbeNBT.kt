@@ -1,11 +1,14 @@
 package wiresegal.cmdctrl.common.commands.control
 
+import com.teamwizardry.librarianlib.LibrarianLib
 import net.minecraft.command.*
 import net.minecraft.nbt.NBTPrimitive
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.server.MinecraftServer
 import net.minecraft.util.text.TextComponentTranslation
 import wiresegal.cmdctrl.common.commands.data.TileSelector
+import wiresegal.cmdctrl.common.core.CTRLException
+import wiresegal.cmdctrl.common.core.CTRLUsageException
 import wiresegal.cmdctrl.common.core.getObject
 
 /**
@@ -16,7 +19,7 @@ object CommandProbeNBT : CommandBase() {
     @Throws(CommandException::class)
     override fun execute(server: MinecraftServer, sender: ICommandSender, args: Array<out String>) {
         if (args.isEmpty())
-            throw WrongUsageException(getCommandUsage(sender))
+            throw CTRLUsageException(getCommandUsage(sender))
         val selector = args[0]
         val key = if (args.size > 1) args[1] else ""
         val displayKey = if (key.isBlank()) "commandcontrol.probenbt.blank" else key
@@ -24,15 +27,15 @@ object CommandProbeNBT : CommandBase() {
         val compound: NBTTagCompound
 
         if (TileSelector.isTileSelector(selector)) {
-            val tile = TileSelector.matchOne(server, sender, selector) ?: throw CommandException("commandcontrol.probenbt.notile")
+            val tile = TileSelector.matchOne(server, sender, selector) ?: throw CTRLException("commandcontrol.probenbt.notile")
             compound = tile.writeToNBT(NBTTagCompound())
         } else {
-            val entity = getEntity(server, sender, selector) ?: throw CommandException("commandcontrol.probenbt.noentity")
+            val entity = getEntity(server, sender, selector) ?: throw CTRLException("commandcontrol.probenbt.noentity")
             compound = entityToNBT(entity)
         }
 
         val obj = if (key.isNotBlank())
-            compound.getObject(key) ?: throw CommandException("commandcontrol.probenbt.notag", key)
+            compound.getObject(key) ?: throw CTRLException("commandcontrol.probenbt.notag", key)
         else compound
 
         if (obj is NBTPrimitive) sender.setCommandStat(CommandResultStats.Type.QUERY_RESULT, obj.int)
@@ -41,5 +44,5 @@ object CommandProbeNBT : CommandBase() {
 
     override fun getRequiredPermissionLevel() = 2
     override fun getCommandName() = "probenbt"
-    override fun getCommandUsage(sender: ICommandSender?) = "commandcontrol.probenbt.usage"
+    override fun getCommandUsage(sender: ICommandSender?) = LibrarianLib.PROXY.translate("commandcontrol.probenbt.usage")
 }

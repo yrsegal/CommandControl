@@ -1,6 +1,7 @@
 package wiresegal.cmdctrl.common.core
 
 import com.teamwizardry.librarianlib.common.util.get
+import com.teamwizardry.librarianlib.common.util.safeCast
 import net.minecraft.nbt.*
 
 /**
@@ -38,4 +39,56 @@ fun NBTTagCompound.getObject(key: String): NBTBase? {
         } else return null
     }
     return currentElement
+}
+
+private val CLASSES = arrayOf(
+        NBTTagEnd::class.java,
+        NBTTagByte::class.java,
+        NBTTagShort::class.java,
+        NBTTagInt::class.java,
+        NBTTagLong::class.java,
+        NBTTagFloat::class.java,
+        NBTTagDouble::class.java,
+        NBTTagByteArray::class.java,
+        NBTTagString::class.java,
+        NBTTagList::class.java,
+        NBTTagCompound::class.java,
+        NBTTagIntArray::class.java
+)
+
+fun NBTTagCompound.setObject(key: String, tag: NBTBase): Boolean {
+    if (!MATCHER.matches(key)) return false
+
+    var currentElement: NBTBase = this
+
+    val matched = TOKENIZER.findAll(key)
+    val max = matched.toList().size - 1
+    for ((index, match) in matched.withIndex()) {
+        val m = match.groupValues[1]
+        val done = index == max
+        if (m.startsWith("[")) {
+            val ind = m.removePrefix("[").removeSuffix("]").toInt()
+            if (currentElement is NBTTagList) {
+                if (currentElement.tagCount() < ind + 1 && !done) return false
+
+                if (!done) currentElement = currentElement[ind]
+                else {
+                    val transformedTag = tag.safeCast(CLASSES[currentElement.tagType])
+                    if (ind >= currentElement.tagCount()) currentElement.appendTag(transformedTag)
+                    else currentElement.set(ind, transformedTag)
+                }
+            } else if (currentElement is NBTTagByteArray) {
+                if (currentElement.byteArray.size < ind + 1 || !done || tag !is NBTPrimitive) return false
+                currentElement.byteArray[ind] = tag.byte
+            } else if (currentElement is NBTTagIntArray) {
+                if (currentElement.intArray.size < ind + 1 || !done || tag !is NBTPrimitive) return false
+                currentElement.intArray[ind] = tag.int
+            } else return false
+        } else if (currentElement is NBTTagCompound) {
+            if (!currentElement.hasKey(m) && !done) return false
+            if (!done) currentElement = currentElement[m]
+            else currentElement.setTag(m, tag)
+        } else return false
+    }
+    return true
 }

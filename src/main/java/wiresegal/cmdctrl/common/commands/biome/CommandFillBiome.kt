@@ -1,13 +1,15 @@
 package wiresegal.cmdctrl.common.commands.biome
 
+import com.teamwizardry.librarianlib.LibrarianLib
 import net.minecraft.command.CommandBase
 import net.minecraft.command.CommandException
 import net.minecraft.command.ICommandSender
-import net.minecraft.command.WrongUsageException
 import net.minecraft.server.MinecraftServer
 import net.minecraft.util.ResourceLocation
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.biome.Biome
+import wiresegal.cmdctrl.common.core.CTRLException
+import wiresegal.cmdctrl.common.core.CTRLUsageException
 
 /**
  * @author WireSegal
@@ -44,9 +46,9 @@ object CommandFillBiome : CommandBase() {
                     CommandSetBiome.setBiome(world.getChunkFromBlockCoords(pos), pos, biome)
                 CommandSetBiome.updateBiomes(world, x1..x2, z1..z2)
             } else
-                throw CommandException("commandcontrol.fillbiomes.range", x1, z1, x2, z2)
+                throw CTRLException("commandcontrol.fillbiomes.range", x1, z1, x2, z2)
         } else
-            throw WrongUsageException(getCommandUsage(sender))
+            throw CTRLUsageException(getCommandUsage(sender))
     }
 
     override fun getTabCompletionOptions(server: MinecraftServer, sender: ICommandSender, args: Array<out String>, pos: BlockPos?): List<String> {
@@ -63,5 +65,5 @@ object CommandFillBiome : CommandBase() {
     override fun getRequiredPermissionLevel() = 2
     override fun getCommandName() = "fillbiomes"
     override fun getCommandAliases() = mutableListOf("biomefill")
-    override fun getCommandUsage(sender: ICommandSender?) = "commandcontrol.fillbiomes.usage"
+    override fun getCommandUsage(sender: ICommandSender?) = LibrarianLib.PROXY.translate("commandcontrol.fillbiomes.usage")
 }

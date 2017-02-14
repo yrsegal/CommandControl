@@ -1,9 +1,12 @@
 package wiresegal.cmdctrl.common.commands.biome
 
+import com.teamwizardry.librarianlib.LibrarianLib
 import net.minecraft.command.*
 import net.minecraft.server.MinecraftServer
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.biome.Biome
+import wiresegal.cmdctrl.common.core.CTRLException
+import wiresegal.cmdctrl.common.core.CTRLUsageException
 
 /**
  * @author WireSegal
@@ -36,7 +39,7 @@ object CommandGetBiome : CommandBase() {
                     } else {
                         val realId = Biome.getIdForBiome(realBiome).toByte()
                         val realName = Biome.REGISTRY.getNameForObject(realBiome)
-                        throw CommandException("commandcontrol.testforbiome.nomatch", x.toInt(), z.toInt(), realId, realName, id, name)
+                        throw CTRLException("commandcontrol.testforbiome.nomatch", x.toInt(), z.toInt(), realId, realName, id, name)
                     }
                 } else {
                     val biome = world.getBiome(pos)
@@ -49,9 +52,9 @@ object CommandGetBiome : CommandBase() {
                     sender.setCommandStat(CommandResultStats.Type.QUERY_RESULT, Biome.getIdForBiome(biome))
                 }
             } else
-                throw CommandException("commandcontrol.testforbiome.range", x.toInt(), z.toInt())
+                throw CTRLException("commandcontrol.testforbiome.range", x.toInt(), z.toInt())
         } else
-            throw WrongUsageException(getCommandUsage(sender))
+            throw CTRLUsageException(getCommandUsage(sender))
     }
 
     override fun getTabCompletionOptions(server: MinecraftServer, sender: ICommandSender, args: Array<out String>, pos: BlockPos?): List<String> {
@@ -65,5 +68,5 @@ object CommandGetBiome : CommandBase() {
 
     override fun getRequiredPermissionLevel() = 2
     override fun getCommandName() = "testforbiome"
-    override fun getCommandUsage(sender: ICommandSender?) = "commandcontrol.testforbiome.usage"
+    override fun getCommandUsage(sender: ICommandSender?) = LibrarianLib.PROXY.translate("commandcontrol.testforbiome.usage")
 }

@@ -159,6 +159,11 @@ commandcontrol.probenbt.blank=of the target
 commandcontrol.probenbt.usage.man=/probenbt <selector> <nbt hierarchy>
 commandcontrol.probenbt.usage.man1=/probenbt allows you to get an nbt tag from a tile or an entity, saving it to the query result if it's a number.
 
+commandcontrol.flashnbt.usage=/flashnbt <expansion> <math expression>
+commandcontrol.flashnbt.usage.man=/flashnbt <expansion> <math expression>
+commandcontrol.flashnbt.usage.man1=/flash allows you to set an nbt tag from a tile or an entity to the result of a math expression, allowing transmission of doubles.
+
+
 commandcontrol.expander.notile=Selector didn't match exactly one tile
 commandcontrol.expander.plainnbt=No tag key provided
 

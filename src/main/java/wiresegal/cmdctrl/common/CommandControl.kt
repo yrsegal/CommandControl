@@ -11,6 +11,7 @@ import wiresegal.cmdctrl.common.commands.biome.CommandFillBiome
 import wiresegal.cmdctrl.common.commands.biome.CommandGetBiome
 import wiresegal.cmdctrl.common.commands.biome.CommandMatchBiome
 import wiresegal.cmdctrl.common.commands.biome.CommandSetBiome
+import wiresegal.cmdctrl.common.commands.control.CommandFlashNBT
 import wiresegal.cmdctrl.common.commands.control.CommandMath
 import wiresegal.cmdctrl.common.commands.control.CommandProbeNBT
 import wiresegal.cmdctrl.common.commands.data.CommandData
@@ -56,6 +57,7 @@ class CommandControl {
         // Control
         e.registerServerCommand(CommandProbeNBT)
         e.registerServerCommand(CommandMath)
+        e.registerServerCommand(CommandFlashNBT)
 
         // Misc
         e.registerServerCommand(CommandDimension)

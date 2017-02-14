@@ -1,5 +1,6 @@
 package wiresegal.cmdctrl.common.commands.misc
 
+import com.teamwizardry.librarianlib.LibrarianLib
 import net.minecraft.command.CommandBase
 import net.minecraft.command.CommandException
 import net.minecraft.command.ICommandSender
@@ -8,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.server.MinecraftServer
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.text.TextComponentTranslation
+import wiresegal.cmdctrl.common.core.CTRLException
 import wiresegal.cmdctrl.common.man.ManEntry
 
 /**
@@ -21,14 +23,14 @@ object CommandMan : CommandBase() {
             val key = if (args.isEmpty()) "man" else args[0]
             val command = server.commandManager.commands[key]
             if (command !in server.commandManager.commands.values)
-                throw CommandException("commandcontrol.man.wtfisthis", key)
+                throw CTRLException("commandcontrol.man.wtfisthis", key)
             if (command !in getSortedPossibleCommands(sender, server))
-                throw CommandException("commandcontrol.man.youaintking", key)
+                throw CTRLException("commandcontrol.man.youaintking", key)
 
             val manEntry = ManEntry(sender, command, if (args.size > 1) args[1] else null)
             val components = manEntry.asTextComponents
             if (components.isEmpty())
-                throw CommandException("commandcontrol.man.nodocs", key)
+                throw CTRLException("commandcontrol.man.nodocs", key)
             if (sender.sendCommandFeedback()) {
                 if (manEntry.hasSub)
                     sender.addChatMessage(TextComponentTranslation("commandcontrol.man.headersub", key, manEntry.subcom))
@@ -50,5 +52,5 @@ object CommandMan : CommandBase() {
     override fun getRequiredPermissionLevel() = 0
     override fun getCommandName() = "man"
     override fun getCommandAliases() = listOf("documentation", "manual")
-    override fun getCommandUsage(sender: ICommandSender?) = "commandcontrol.man.usage"
+    override fun getCommandUsage(sender: ICommandSender?) = LibrarianLib.PROXY.translate("commandcontrol.man.usage")
 }

@@ -1,5 +1,6 @@
 package wiresegal.cmdctrl.common.commands.misc
 
+import com.teamwizardry.librarianlib.LibrarianLib
 import net.minecraft.command.CommandBase
 import net.minecraft.command.ICommandSender
 import net.minecraft.command.PlayerNotFoundException
@@ -23,5 +24,5 @@ object CommandReloadScripts : CommandBase() {
 
     override fun getRequiredPermissionLevel() = 2
     override fun getCommandName() = "reloadcommandscripts"
-    override fun getCommandUsage(sender: ICommandSender?) = "commandcontrol.reload.usage"
+    override fun getCommandUsage(sender: ICommandSender?) = LibrarianLib.PROXY.translate("commandcontrol.reload.usage")
 }

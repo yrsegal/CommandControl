@@ -8,6 +8,7 @@ import net.minecraft.command.ICommandSender
 import net.minecraft.server.MinecraftServer
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.math.Vec3d
+import wiresegal.cmdctrl.common.core.CTRLException
 import wiresegal.cmdctrl.common.core.ControlSaveData
 import wiresegal.cmdctrl.common.core.WeakScoreMap
 
@@ -93,7 +94,7 @@ object TileSelector {
                             .sortedBy { (if (c < 0) -1 else 1) * sender.positionVector.distanceTo(Vec3d(it.pos).addVector(0.5, 0.5, 0.5)) }
                 }
             }
-        } else throw CommandException("commandcontrol.tselector.invalidrule")
+        } else throw CTRLException("commandcontrol.tselector.invalidrule")
     }
 
     fun isTileTypeValid(type: String?) = type == null || nameToClassMap.containsKey(type)

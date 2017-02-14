@@ -1,9 +1,12 @@
 package wiresegal.cmdctrl.common.commands.biome
 
+import com.teamwizardry.librarianlib.LibrarianLib
 import net.minecraft.command.*
 import net.minecraft.server.MinecraftServer
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.biome.Biome
+import wiresegal.cmdctrl.common.core.CTRLException
+import wiresegal.cmdctrl.common.core.CTRLUsageException
 
 /**
  * @author WireSegal
@@ -36,11 +39,11 @@ object CommandMatchBiome : CommandBase() {
                     notifyCommandListener(sender, this, "commandcontrol.testforbiomes.output", matches, x1.toInt(), z1.toInt(), x2.toInt(), z2.toInt(), id, name)
                     sender.setCommandStat(CommandResultStats.Type.AFFECTED_BLOCKS, matches)
                 } else
-                    throw CommandException("commandcontrol.testforbiomes.output", matches, x1.toInt(), z1.toInt(), x2.toInt(), z2.toInt(), id, name)
+                    throw CTRLException("commandcontrol.testforbiomes.output", matches, x1.toInt(), z1.toInt(), x2.toInt(), z2.toInt(), id, name)
             } else
-                throw CommandException("commandcontrol.testforbiomes.range", x1.toInt(), z1.toInt(), x2.toInt(), z2.toInt())
+                throw CTRLException("commandcontrol.testforbiomes.range", x1.toInt(), z1.toInt(), x2.toInt(), z2.toInt())
         } else
-            throw WrongUsageException(getCommandUsage(sender))
+            throw CTRLUsageException(getCommandUsage(sender))
     }
 
     override fun getTabCompletionOptions(server: MinecraftServer, sender: ICommandSender, args: Array<out String>, pos: BlockPos?): List<String> {
@@ -56,5 +59,5 @@ object CommandMatchBiome : CommandBase() {
 
     override fun getRequiredPermissionLevel() = 2
     override fun getCommandName() = "testforbiomes"
-    override fun getCommandUsage(sender: ICommandSender?) = "commandcontrol.testforbiomes.usage"
+    override fun getCommandUsage(sender: ICommandSender?) = LibrarianLib.PROXY.translate("commandcontrol.testforbiomes.usage")
 }

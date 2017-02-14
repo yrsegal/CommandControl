@@ -1,5 +1,6 @@
 package wiresegal.cmdctrl.common.commands.data
 
+import com.teamwizardry.librarianlib.LibrarianLib
 import net.minecraft.command.*
 import net.minecraft.nbt.JsonToNBT
 import net.minecraft.nbt.NBTTagCompound
@@ -8,10 +9,7 @@ import net.minecraft.server.MinecraftServer
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
-import wiresegal.cmdctrl.common.core.ControlSaveData
-import wiresegal.cmdctrl.common.core.IScoreMap
-import wiresegal.cmdctrl.common.core.ScoreStorage
-import wiresegal.cmdctrl.common.core.Slice
+import wiresegal.cmdctrl.common.core.*
 
 /**
  * @author WireSegal
@@ -28,8 +26,8 @@ object CommandData : CommandBase() {
     @Throws(CommandException::class)
     override fun execute(server: MinecraftServer, sender: ICommandSender, args: Array<out String>) {
         when (args.size) {
-            0 -> throw WrongUsageException(getCommandUsage(sender))
-            1 -> throw WrongUsageException(getCommandUsage(sender) + if (args[0] in validScopes) ".${args[0]}" else "")
+            0 -> throw CTRLUsageException(getCommandUsage(sender))
+            1 -> throw CTRLUsageException(getCommandUsage(sender) + if (args[0] in validScopes) ".${args[0]}" else "")
             else -> when (args[0]) {
                 "global" -> runGlobal(server, sender, args.drop(1).toTypedArray())
                 "world" -> runWorld(server, sender, args.drop(1).toTypedArray())
@@ -50,7 +48,7 @@ object CommandData : CommandBase() {
             "world" -> ret = data.worldData[key] ?: 0
             "slice" -> {
                 if (otherArgs.size < 2)
-                    throw CommandException("commandcontrol.storedata.autoget.slice")
+                    throw CTRLException("commandcontrol.storedata.autoget.slice")
                 val pos = sender.position
                 val x = parseDouble(pos.x.toDouble(), otherArgs[0], -3000000, 3000000, false)
                 val z = parseDouble(pos.z.toDouble(), otherArgs[1], -3000000, 3000000, false)
@@ -59,7 +57,7 @@ object CommandData : CommandBase() {
             }
             "pos" -> {
                 if (otherArgs.size < 3)
-                    throw CommandException("commandcontrol.storedata.autoget.pos")
+                    throw CTRLException("commandcontrol.storedata.autoget.pos")
                 val senderPos = sender.position
                 val x = parseDouble(senderPos.x.toDouble(), otherArgs[0], -3000000, 3000000, false)
                 val y = parseDouble(senderPos.x.toDouble(), otherArgs[1], -3000000, 3000000, false)
@@ -69,13 +67,13 @@ object CommandData : CommandBase() {
             }
             "tile" -> {
                 if (otherArgs.isEmpty())
-                    throw CommandException("commandcontrol.storedata.autoget.tile")
+                    throw CTRLException("commandcontrol.storedata.autoget.tile")
                 val tile = TileSelector.matchOne(server, sender, otherArgs[0]) ?:
-                        throw CommandException("commandcontrol.storedata.autoget.nottile")
+                        throw CTRLException("commandcontrol.storedata.autoget.nottile")
                 ret = data.tileData[tile][key] ?: 0
             }
         }
-        if (ret == null) throw CommandException("commandcontrol.storedata.autoget.scope.invalid")
+        if (ret == null) throw CTRLException("commandcontrol.storedata.autoget.scope.invalid")
 
         return ret
     }
@@ -89,7 +87,7 @@ object CommandData : CommandBase() {
             "world" -> data.worldData[key] = setTo
             "slice" -> {
                 if (otherArgs.size < 2)
-                    throw CommandException("commandcontrol.storedata.autoget.slice")
+                    throw CTRLException("commandcontrol.storedata.autoget.slice")
                 val pos = sender.position
                 val x = parseDouble(pos.x.toDouble(), otherArgs[0], -3000000, 3000000, false)
                 val z = parseDouble(pos.z.toDouble(), otherArgs[1], -3000000, 3000000, false)
@@ -98,7 +96,7 @@ object CommandData : CommandBase() {
             }
             "pos" -> {
                 if (otherArgs.size < 3)
-                    throw CommandException("commandcontrol.storedata.autoget.pos")
+                    throw CTRLException("commandcontrol.storedata.autoget.pos")
                 val senderPos = sender.position
                 val x = parseDouble(senderPos.x.toDouble(), otherArgs[0], -3000000, 3000000, false)
                 val y = parseDouble(senderPos.x.toDouble(), otherArgs[1], -3000000, 3000000, false)
@@ -108,18 +106,18 @@ object CommandData : CommandBase() {
             }
             "tile" -> {
                 if (otherArgs.isEmpty())
-                    throw CommandException("commandcontrol.storedata.autoget.tile")
+                    throw CTRLException("commandcontrol.storedata.autoget.tile")
                 val tile = TileSelector.matchOne(server, sender, otherArgs[0]) ?:
-                        throw CommandException("commandcontrol.storedata.autoget.nottile")
+                        throw CTRLException("commandcontrol.storedata.autoget.nottile")
                 data.tileData[tile][key] = setTo
             }
-            else -> throw CommandException("commandcontrol.storedata.autoget.scope.invalid")
+            else -> throw CTRLException("commandcontrol.storedata.autoget.scope.invalid")
         }
     }
 
     fun runGlobal(server: MinecraftServer, sender: ICommandSender, args: Array<out String>) {
         if (args[0] !in validCommands)
-            throw WrongUsageException("${getCommandUsage(sender)}.global")
+            throw CTRLUsageException("${getCommandUsage(sender)}.global")
 
         val globalData = ControlSaveData.globalWorldData
         runCommands("global", server.worldServerForDimension(0), server, server, BlockPos.ORIGIN, sender, args, globalData.globalData, null)
@@ -128,7 +126,7 @@ object CommandData : CommandBase() {
 
     fun runWorld(server: MinecraftServer, sender: ICommandSender, args: Array<out String>) {
         if (args[0] !in validCommands)
-            throw WrongUsageException("${getCommandUsage(sender)}.world")
+            throw CTRLUsageException("${getCommandUsage(sender)}.world")
 
         val data = ControlSaveData[sender.entityWorld]
         runCommands("world", sender.entityWorld, sender.entityWorld, server, BlockPos.ORIGIN, sender, args, data.worldData, null)
@@ -137,7 +135,7 @@ object CommandData : CommandBase() {
 
     fun runSlice(server: MinecraftServer, sender: ICommandSender, originalArgs: Array<out String>) {
         if (originalArgs.size < 3 || originalArgs[2] !in validPositionals)
-            throw WrongUsageException("${getCommandUsage(sender)}.slice")
+            throw CTRLUsageException("${getCommandUsage(sender)}.slice")
 
         val pos = sender.position
         val x = parseDouble(pos.x.toDouble(), originalArgs[0], -3000000, 3000000, false)
@@ -153,7 +151,7 @@ object CommandData : CommandBase() {
 
     fun runPos(server: MinecraftServer, sender: ICommandSender, originalArgs: Array<out String>) {
         if (originalArgs.size < 4 || originalArgs[3] !in validPositionals)
-            throw WrongUsageException("${getCommandUsage(sender)}.pos")
+            throw CTRLUsageException("${getCommandUsage(sender)}.pos")
 
         val senderPos = sender.position
         val x = parseDouble(senderPos.x.toDouble(), originalArgs[0], -3000000, 3000000, false)
@@ -170,7 +168,7 @@ object CommandData : CommandBase() {
 
     fun runTile(server: MinecraftServer, sender: ICommandSender, originalArgs: Array<out String>) {
         if (originalArgs.size < 2 || originalArgs[1] !in validPositionals)
-            throw WrongUsageException("${getCommandUsage(sender)}.tile")
+            throw CTRLUsageException("${getCommandUsage(sender)}.tile")
 
         val tiles = TileSelector.matchTiles(server, sender, originalArgs[0])
 
@@ -199,13 +197,13 @@ object CommandData : CommandBase() {
         when (command) {
             "set" -> {
                 if (args.size < 2)
-                    throw WrongUsageException("${getCommandUsage(sender)}.$scope.set")
+                    throw CTRLUsageException("${getCommandUsage(sender)}.$scope.set")
                 if (scope == "tile" && args.size > 2) {
                     val comp = CommandBase.getChatComponentFromNthArg(sender, args, 2).unformattedText
                     val tag = JsonToNBT.getTagFromJson(comp)
                     val tiletag = (input as TileEntity).writeToNBT(NBTTagCompound())
                     if (!NBTUtil.areNBTEquals(tag, tiletag, true))
-                        throw CommandException("commandcontrol.storedata.nomatch")
+                        throw CTRLException("commandcontrol.storedata.nomatch")
                 }
 
                 val setTo = parseInt(args[1])
@@ -214,13 +212,13 @@ object CommandData : CommandBase() {
             }
             "add" -> {
                 if (args.size < 2)
-                    throw WrongUsageException("${getCommandUsage(sender)}.$scope.add")
+                    throw CTRLUsageException("${getCommandUsage(sender)}.$scope.add")
                 if (scope == "tile" && args.size > 2) {
                     val comp = CommandBase.getChatComponentFromNthArg(sender, args, 2).unformattedText
                     val tag = JsonToNBT.getTagFromJson(comp)
                     val tiletag = (input as TileEntity).writeToNBT(NBTTagCompound())
                     if (!NBTUtil.areNBTEquals(tag, tiletag, true))
-                        throw CommandException("commandcontrol.storedata.nomatch")
+                        throw CTRLException("commandcontrol.storedata.nomatch")
                 }
 
                 val setTo = parseInt(args[1]) + (scoreStorage[args[0]] ?: 0)
@@ -229,7 +227,7 @@ object CommandData : CommandBase() {
             }
             "remove" -> {
                 if (args.isEmpty())
-                    throw WrongUsageException("${getCommandUsage(sender)}.$scope.remove")
+                    throw CTRLUsageException("${getCommandUsage(sender)}.$scope.remove")
                 scoreStorage.remove(args[0])
                 notifyCommandListener(sender, this, "commandcontrol.storedata.removed", args[0])
             }
@@ -240,20 +238,20 @@ object CommandData : CommandBase() {
             }
             "test" -> {
                 if (args.isEmpty())
-                    throw WrongUsageException(getCommandUsage(sender) + ".$scope.test")
+                    throw CTRLUsageException(getCommandUsage(sender) + ".$scope.test")
                 val value = scoreStorage[args[0]]
                 if (value != null) {
                     if (args.size > 1 && value < parseInt(args[0]))
-                        throw CommandException("commandcontrol.storedata.toosmall")
+                        throw CTRLException("commandcontrol.storedata.toosmall")
                     else if (args.size > 2 && value > parseInt(args[1]))
-                        throw CommandException("commandcontrol.storedata.toolarge")
-                } else throw CommandException("commandcontrol.storedata.notfound")
+                        throw CTRLException("commandcontrol.storedata.toolarge")
+                } else throw CTRLException("commandcontrol.storedata.notfound")
                 notifyCommandListener(sender, this, "commandcontrol.storedata.exists", args[0])
                 sender.setCommandStat(CommandResultStats.Type.QUERY_RESULT, value)
             }
             "operation" -> {
                 if (args.size < 4)
-                    throw WrongUsageException("${getCommandUsage(sender)}.global.operation")
+                    throw CTRLUsageException("${getCommandUsage(sender)}.global.operation")
                 val key = args[0]
                 val value = scoreStorage[key] ?: 0
 
@@ -413,5 +411,5 @@ object CommandData : CommandBase() {
     override fun getRequiredPermissionLevel() = 2
     override fun getCommandName() = "storedata"
     override fun getCommandAliases() = listOf("worlddata", "savedata", "datasave", "datastore")
-    override fun getCommandUsage(sender: ICommandSender?) = "commandcontrol.storedata.usage"
+    override fun getCommandUsage(sender: ICommandSender?) = LibrarianLib.PROXY.translate("commandcontrol.storedata.usage")
 }

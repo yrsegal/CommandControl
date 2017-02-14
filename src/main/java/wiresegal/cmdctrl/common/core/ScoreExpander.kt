@@ -32,13 +32,15 @@ object ScoreExpander : CommandBase() {
     private const val NAME = "\\w+"
     private const val POSITION_PATTERN = "\\[\\d+\\.\\d+(?:\\.\\d+)?\\]"
     private const val TOKENIZER_PATTERN = "<($SELECTOR|$NAME|$POSITION_PATTERN)\\.([^>]+)>"
+    private const val SIMPLE_TOKENIZER_PATTERN = "($SELECTOR|$NAME)\\.([^>]+)"
     private const val COMPRESSOR_PATTERN = "<<((?:$SELECTOR|$NAME|$POSITION_PATTERN)\\.(?:[^>]+))>>"
     private const val DECOMPRESSOR_PATTERN = "  ((?:$SELECTOR|$NAME|$POSITION_PATTERN)\\.(?:[^ >]+))  "
 
-    private val POSITION = POSITION_PATTERN.toRegex()
-    private val TOKENIZER = TOKENIZER_PATTERN.toRegex()
-    private val COMPRESSOR = COMPRESSOR_PATTERN.toRegex()
-    private val DECOMPRESSOR = DECOMPRESSOR_PATTERN.toRegex()
+    val POSITION = POSITION_PATTERN.toRegex()
+    val TOKENIZER = TOKENIZER_PATTERN.toRegex()
+    val COMPRESSOR = COMPRESSOR_PATTERN.toRegex()
+    val DECOMPRESSOR = DECOMPRESSOR_PATTERN.toRegex()
+    val NON_POSITION = SIMPLE_TOKENIZER_PATTERN.toRegex()
 
     @SubscribeEvent
     fun interceptCommand(e: CommandEvent) {
@@ -79,7 +81,7 @@ object ScoreExpander : CommandBase() {
                                     k = key.removePrefix("nbtliteral.")
                                     flag = false
                                 }
-                                val tag = tile.writeToNBT(NBTTagCompound()).getObject(k) ?: throw CommandException("commandcontrol.probenbt.notag", k)
+                                val tag = tile.writeToNBT(NBTTagCompound()).getObject(k) ?: throw CTRLException("commandcontrol.probenbt.notag", k)
                                 if (flag) {
                                     if (tag is NBTPrimitive) {
                                         if (tag.int.toDouble() == tag.double) tag.long.toString() else tag.double.toString()
@@ -99,7 +101,7 @@ object ScoreExpander : CommandBase() {
                                 k = key.removePrefix("nbtliteral.")
                                 flag = false
                             }
-                            val tag = entityToNBT(entity).getObject(k) ?: throw CommandException("commandcontrol.probenbt.notag", k)
+                            val tag = entityToNBT(entity).getObject(k) ?: throw CTRLException("commandcontrol.probenbt.notag", k)
                             if (flag) {
                                 if (tag is NBTPrimitive) {
                                     if (tag.int.toDouble() == tag.double) tag.long.toString() else tag.double.toString()
