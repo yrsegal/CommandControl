@@ -1,5 +1,6 @@
 package wiresegal.cmdctrl.common.core
 
+import com.teamwizardry.librarianlib.common.util.NBTTypes
 import com.teamwizardry.librarianlib.common.util.get
 import com.teamwizardry.librarianlib.common.util.safeCast
 import net.minecraft.nbt.*
@@ -61,21 +62,31 @@ fun NBTTagCompound.setObject(key: String, tag: NBTBase): Boolean {
 
     var currentElement: NBTBase = this
 
-    val matched = TOKENIZER.findAll(key)
-    val max = matched.toList().size - 1
+    val matched = TOKENIZER.findAll(key).toList()
+    val max = matched.size - 1
     for ((index, match) in matched.withIndex()) {
         val m = match.groupValues[1]
         val done = index == max
         if (m.startsWith("[")) {
             val ind = m.removePrefix("[").removeSuffix("]").toInt()
             if (currentElement is NBTTagList) {
-                if (currentElement.tagCount() < ind + 1 && !done) return false
-
-                if (!done) currentElement = currentElement[ind]
-                else {
-                    val transformedTag = tag.safeCast(CLASSES[currentElement.tagType])
-                    if (ind >= currentElement.tagCount()) currentElement.appendTag(transformedTag)
-                    else currentElement.set(ind, transformedTag)
+                if (currentElement.tagCount() < ind + 1 && !done) {
+                    val new = if ((currentElement.tagType == 0 || currentElement.tagType == NBTTypes.LIST)
+                            && matched[index + 1].groupValues[1].startsWith("[")) NBTTagList()
+                    else if ((currentElement.tagType == 0 || currentElement.tagType == NBTTypes.COMPOUND))
+                        NBTTagCompound()
+                    else return false
+                    currentElement.appendTag(new)
+                    currentElement = new
+                } else {
+                    if (!done) currentElement = currentElement[ind]
+                    else {
+                        var type = currentElement.tagType
+                        if (type == 0) type = NBTTypes.DOUBLE
+                        val transformedTag = tag.safeCast(CLASSES[type])
+                        if (ind >= currentElement.tagCount()) currentElement.appendTag(transformedTag)
+                        else currentElement.set(ind, transformedTag)
+                    }
                 }
             } else if (currentElement is NBTTagByteArray) {
                 if (currentElement.byteArray.size < ind + 1 || !done || tag !is NBTPrimitive) return false
@@ -85,9 +96,14 @@ fun NBTTagCompound.setObject(key: String, tag: NBTBase): Boolean {
                 currentElement.intArray[ind] = tag.int
             } else return false
         } else if (currentElement is NBTTagCompound) {
-            if (!currentElement.hasKey(m) && !done) return false
-            if (!done) currentElement = currentElement[m]
-            else currentElement.setTag(m, tag)
+            if (!currentElement.hasKey(m) && !done) {
+                val new = if (matched[index + 1].groupValues[1].startsWith("[")) NBTTagList() else NBTTagCompound()
+                currentElement.setTag(m, new)
+                currentElement = new
+            } else {
+                if (!done) currentElement = currentElement[m]
+                else currentElement.setTag(m, tag)
+            }
         } else return false
     }
     return true
