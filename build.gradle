@@ -43,6 +43,16 @@ minecraft {
     replaceIn 'LibMisc.kt'
 }
 
+repositories {
+    maven {
+        url "http://mvn.rx14.co.uk/shadowfacts/"
+    }
+}
+
+dependencies {
+    compile "net.shadowfacts:Forgelin:1.2.0"
+}
+
 static def parseConfig(File config) {
     config.withReader {
         def prop = new Properties()
