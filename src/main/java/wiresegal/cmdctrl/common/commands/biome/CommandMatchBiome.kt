@@ -7,6 +7,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.world.biome.Biome
 import wiresegal.cmdctrl.common.core.CTRLException
 import wiresegal.cmdctrl.common.core.CTRLUsageException
+import wiresegal.cmdctrl.common.core.notifyCTRLListener
 
 /**
  * @author WireSegal
@@ -36,7 +37,7 @@ object CommandMatchBiome : CommandBase() {
             if (world.isBlockLoaded(pos1) && world.isBlockLoaded(pos2)) {
                 val matches = BlockPos.getAllInBoxMutable(pos1, pos2).count { world.getBiome(it) == target }
                 if (matches > 0) {
-                    notifyCommandListener(sender, this, "commandcontrol.testforbiomes.output", matches, x1.toInt(), z1.toInt(), x2.toInt(), z2.toInt(), id, name)
+                    notifyCTRLListener(sender, this, "commandcontrol.testforbiomes.output", matches, x1.toInt(), z1.toInt(), x2.toInt(), z2.toInt(), id, name)
                     sender.setCommandStat(CommandResultStats.Type.AFFECTED_BLOCKS, matches)
                 } else
                     throw CTRLException("commandcontrol.testforbiomes.output", matches, x1.toInt(), z1.toInt(), x2.toInt(), z2.toInt(), id, name)

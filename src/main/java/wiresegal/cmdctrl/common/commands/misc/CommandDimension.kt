@@ -5,6 +5,7 @@ import net.minecraft.command.CommandBase
 import net.minecraft.command.CommandResultStats
 import net.minecraft.command.ICommandSender
 import net.minecraft.server.MinecraftServer
+import wiresegal.cmdctrl.common.core.notifyCTRLListener
 
 /**
  * @author WireSegal
@@ -13,7 +14,7 @@ import net.minecraft.server.MinecraftServer
 object CommandDimension : CommandBase() {
 
     override fun execute(server: MinecraftServer, sender: ICommandSender, args: Array<out String>) {
-        notifyCommandListener(sender, this, "commandcontrol.dimension.id", sender.entityWorld.provider.dimension, sender.entityWorld.provider.dimensionType.getName())
+        notifyCTRLListener(sender, this, "commandcontrol.dimension.id", sender.entityWorld.provider.dimension, sender.entityWorld.provider.dimensionType.getName())
         sender.setCommandStat(CommandResultStats.Type.QUERY_RESULT, sender.entityWorld.provider.dimension)
     }
 

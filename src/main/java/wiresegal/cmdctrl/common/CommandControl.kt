@@ -1,5 +1,7 @@
 package wiresegal.cmdctrl.common
 
+import com.teamwizardry.librarianlib.common.util.ConfigPropertyBoolean
+import com.teamwizardry.librarianlib.common.util.EasyConfigHandler
 import net.minecraft.server.MinecraftServer
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
@@ -37,6 +39,7 @@ class CommandControl {
         ControlSaveData
         ScoreExpander
         ExtraPlayerDataStore
+        EasyConfigHandler.init()
     }
 
     @NetworkCheckHandler
@@ -44,26 +47,28 @@ class CommandControl {
 
     @Mod.EventHandler
     fun serverStarting(e: FMLServerStartingEvent) {
-        // Biome Control
-        e.registerServerCommand(CommandSetBiome)
-        e.registerServerCommand(CommandFillBiome)
-        e.registerServerCommand(CommandGetBiome)
-        e.registerServerCommand(CommandMatchBiome)
+        if (useCommands) {
+            // Biome Control
+            e.registerServerCommand(CommandSetBiome)
+            e.registerServerCommand(CommandFillBiome)
+            e.registerServerCommand(CommandGetBiome)
+            e.registerServerCommand(CommandMatchBiome)
 
-        // Logic
-        e.registerServerCommand(CommandData)
-        e.registerServerCommand(CommandDataExecute)
+            // Logic
+            e.registerServerCommand(CommandData)
+            e.registerServerCommand(CommandDataExecute)
 
-        // Control
-        e.registerServerCommand(CommandProbeNBT)
-        e.registerServerCommand(CommandMath)
-        e.registerServerCommand(CommandFlashNBT)
+            // Control
+            e.registerServerCommand(CommandProbeNBT)
+            e.registerServerCommand(CommandMath)
+            e.registerServerCommand(CommandFlashNBT)
 
-        // Misc
-        e.registerServerCommand(CommandDimension)
-        e.registerServerCommand(CommandReloadScripts)
-        e.registerServerCommand(CommandMan)
-        e.registerServerCommand(CommandMotion)
+            // Misc
+            e.registerServerCommand(CommandDimension)
+            e.registerServerCommand(CommandReloadScripts)
+            e.registerServerCommand(CommandMan)
+            e.registerServerCommand(CommandMotion)
+        }
 
         server = e.server
     }
@@ -73,5 +78,10 @@ class CommandControl {
     @Mod.EventHandler
     fun serverStarted(e: FMLServerStartedEvent) {
         ConfigLoader.loadScripts(server)
+    }
+
+    companion object {
+        @ConfigPropertyBoolean("", "general", "useCommands", "Whether to use the custom commands. (For building commands clientside for realms deployment.)", true)
+        val useCommands = true
     }
 }

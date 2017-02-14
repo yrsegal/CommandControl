@@ -10,6 +10,7 @@ import wiresegal.cmdctrl.common.commands.data.TileSelector
 import wiresegal.cmdctrl.common.core.CTRLException
 import wiresegal.cmdctrl.common.core.CTRLUsageException
 import wiresegal.cmdctrl.common.core.getObject
+import wiresegal.cmdctrl.common.core.notifyCTRLListener
 
 /**
  * @author WireSegal
@@ -39,7 +40,7 @@ object CommandProbeNBT : CommandBase() {
         else compound
 
         if (obj is NBTPrimitive) sender.setCommandStat(CommandResultStats.Type.QUERY_RESULT, obj.int)
-        notifyCommandListener(sender, this, "commandcontrol.probenbt.success", TextComponentTranslation(displayKey), obj)
+        notifyCTRLListener(sender, this, "commandcontrol.probenbt.success", TextComponentTranslation(displayKey), obj)
     }
 
     override fun getRequiredPermissionLevel() = 2

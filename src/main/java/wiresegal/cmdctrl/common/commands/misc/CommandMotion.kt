@@ -6,6 +6,7 @@ import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.network.play.server.SPacketEntityVelocity
 import net.minecraft.server.MinecraftServer
 import wiresegal.cmdctrl.common.core.CTRLUsageException
+import wiresegal.cmdctrl.common.core.notifyCTRLListener
 
 /**
  * @author WireSegal
@@ -30,7 +31,7 @@ object CommandMotion : CommandBase() {
         if (entity is EntityPlayerMP)
             entity.connection.sendPacket(SPacketEntityVelocity(entity))
 
-        notifyCommandListener(sender, this, "commandcontrol.motion.success", entity.name, entity.motionX, entity.motionY, entity.motionZ)
+        notifyCTRLListener(sender, this, "commandcontrol.motion.success", entity.name, entity.motionX, entity.motionY, entity.motionZ)
     }
 
     fun parseExpandedRelative(current: Double, token: String): Double {

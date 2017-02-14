@@ -12,6 +12,7 @@ import net.minecraft.world.biome.Biome
 import net.minecraft.world.chunk.Chunk
 import wiresegal.cmdctrl.common.core.CTRLException
 import wiresegal.cmdctrl.common.core.CTRLUsageException
+import wiresegal.cmdctrl.common.core.notifyCTRLListener
 
 /**
  * @author WireSegal
@@ -62,7 +63,7 @@ object CommandSetBiome : CommandBase() {
             val name = Biome.REGISTRY.getNameForObject(biome)
 
             if (world.isBlockLoaded(pos)) {
-                notifyCommandListener(sender, this, "commandcontrol.setbiome.success", x, z, id, name)
+                notifyCTRLListener(sender, this, "commandcontrol.setbiome.success", x, z, id, name)
                 setBiome(world.getChunkFromBlockCoords(pos), pos, biome)
                 updateBiomes(world, x..x, z..z)
             } else

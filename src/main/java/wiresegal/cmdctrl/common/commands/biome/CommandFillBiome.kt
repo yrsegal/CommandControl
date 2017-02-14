@@ -10,6 +10,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.world.biome.Biome
 import wiresegal.cmdctrl.common.core.CTRLException
 import wiresegal.cmdctrl.common.core.CTRLUsageException
+import wiresegal.cmdctrl.common.core.notifyCTRLListener
 
 /**
  * @author WireSegal
@@ -41,7 +42,7 @@ object CommandFillBiome : CommandBase() {
             val name = Biome.REGISTRY.getNameForObject(biome)
 
             if (world.isBlockLoaded(pos1) && world.isBlockLoaded(pos2)) {
-                notifyCommandListener(sender, this, "commandcontrol.fillbiomes.success", x1, z1, x2, z2, id, name)
+                notifyCTRLListener(sender, this, "commandcontrol.fillbiomes.success", x1, z1, x2, z2, id, name)
                 for (pos in BlockPos.getAllInBoxMutable(pos1, pos2))
                     CommandSetBiome.setBiome(world.getChunkFromBlockCoords(pos), pos, biome)
                 CommandSetBiome.updateBiomes(world, x1..x2, z1..z2)

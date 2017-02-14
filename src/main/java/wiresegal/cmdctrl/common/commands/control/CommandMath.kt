@@ -6,6 +6,7 @@ import net.minecraft.command.*
 import net.minecraft.server.MinecraftServer
 import wiresegal.cmdctrl.common.core.CTRLException
 import wiresegal.cmdctrl.common.core.CTRLUsageException
+import wiresegal.cmdctrl.common.core.notifyCTRLListener
 import java.math.BigDecimal
 
 /**
@@ -20,9 +21,9 @@ object CommandMath : CommandBase() {
         val expression = args.joinToString(" ")
         val x = evaluate(args)
 
-        notifyCommandListener(sender, this, "commandcontrol.math.expr", expression)
+        notifyCTRLListener(sender, this, "commandcontrol.math.expr", expression)
         val formattedX: Number = if (x.toLong().toDouble() == x.toDouble()) x.toLong() else x.toDouble()
-        notifyCommandListener(sender, this, "commandcontrol.math.answer", formattedX)
+        notifyCTRLListener(sender, this, "commandcontrol.math.answer", formattedX)
         sender.setCommandStat(CommandResultStats.Type.QUERY_RESULT, x.toInt())
     }
 

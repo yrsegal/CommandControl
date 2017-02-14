@@ -208,7 +208,7 @@ object CommandData : CommandBase() {
 
                 val setTo = parseInt(args[1])
                 scoreStorage[args[0]] = setTo
-                notifyCommandListener(sender, this, "commandcontrol.storedata.set", args[0], setTo)
+                notifyCTRLListener(sender, this, "commandcontrol.storedata.set", args[0], setTo)
             }
             "add" -> {
                 if (args.size < 2)
@@ -223,18 +223,18 @@ object CommandData : CommandBase() {
 
                 val setTo = parseInt(args[1]) + (scoreStorage[args[0]] ?: 0)
                 scoreStorage[args[0]] = setTo
-                notifyCommandListener(sender, this, "commandcontrol.storedata.set", args[0], setTo)
+                notifyCTRLListener(sender, this, "commandcontrol.storedata.set", args[0], setTo)
             }
             "remove" -> {
                 if (args.isEmpty())
                     throw CTRLUsageException("${getCommandUsage(sender)}.$scope.remove")
                 scoreStorage.remove(args[0])
-                notifyCommandListener(sender, this, "commandcontrol.storedata.removed", args[0])
+                notifyCTRLListener(sender, this, "commandcontrol.storedata.removed", args[0])
             }
             "list" -> {
-                notifyCommandListener(sender, this, "commandcontrol.storedata.list.$scope", blockPos.x, blockPos.y, blockPos.z, sender.entityWorld.provider.dimension, sender.entityWorld.provider.dimensionType.getName())
+                notifyCTRLListener(sender, this, "commandcontrol.storedata.list.$scope", blockPos.x, blockPos.y, blockPos.z, sender.entityWorld.provider.dimension, sender.entityWorld.provider.dimensionType.getName())
                 for ((key, value) in scoreStorage)
-                    notifyCommandListener(sender, this, "commandcontrol.storedata.list.entry", key, value)
+                    notifyCTRLListener(sender, this, "commandcontrol.storedata.list.entry", key, value)
             }
             "test" -> {
                 if (args.isEmpty())
@@ -246,7 +246,7 @@ object CommandData : CommandBase() {
                     else if (args.size > 2 && value > parseInt(args[1]))
                         throw CTRLException("commandcontrol.storedata.toolarge")
                 } else throw CTRLException("commandcontrol.storedata.notfound")
-                notifyCommandListener(sender, this, "commandcontrol.storedata.exists", args[0])
+                notifyCTRLListener(sender, this, "commandcontrol.storedata.exists", args[0])
                 sender.setCommandStat(CommandResultStats.Type.QUERY_RESULT, value)
             }
             "operation" -> {
@@ -295,33 +295,33 @@ object CommandData : CommandBase() {
                             .filterIsInstance<Slice>()
                             .filter { map[it]?.isNotEmpty() ?: false }
                             .forEach {
-                                notifyCommandListener(sender, this, "commandcontrol.storedata.list.$scope", it.x, 0, it.z, world.provider.dimension, world.provider.dimensionType.getName())
+                                notifyCTRLListener(sender, this, "commandcontrol.storedata.list.$scope", it.x, 0, it.z, world.provider.dimension, world.provider.dimensionType.getName())
                                 map[it]?.forEach { s, i ->
-                                    notifyCommandListener(sender, this, "commandcontrol.storedata.list.entry", s, i)
+                                    notifyCTRLListener(sender, this, "commandcontrol.storedata.list.entry", s, i)
                                 }
                             }
                     else if (scope == "pos") map.keys
                             .filterIsInstance<BlockPos>()
                             .filter { map[it]?.isNotEmpty() ?: false }
                             .forEach {
-                                notifyCommandListener(sender, this, "commandcontrol.storedata.list.$scope", it.x, it.y, it.z, world.provider.dimension, world.provider.dimensionType.getName())
+                                notifyCTRLListener(sender, this, "commandcontrol.storedata.list.$scope", it.x, it.y, it.z, world.provider.dimension, world.provider.dimensionType.getName())
                                 map[it]?.forEach { s, i ->
-                                    notifyCommandListener(sender, this, "commandcontrol.storedata.list.entry", s, i)
+                                    notifyCTRLListener(sender, this, "commandcontrol.storedata.list.entry", s, i)
                                 }
                             }
                     else if (scope == "tile") map.keys
                             .filterIsInstance<TileEntity>()
                             .filter { map[it]?.isNotEmpty() ?: false }
                             .forEach {
-                                notifyCommandListener(sender, this, "commandcontrol.storedata.list.$scope", it.pos.x, it.pos.y, it.pos.z, world.provider.dimension, world.provider.dimensionType.getName())
+                                notifyCTRLListener(sender, this, "commandcontrol.storedata.list.$scope", it.pos.x, it.pos.y, it.pos.z, world.provider.dimension, world.provider.dimensionType.getName())
                                 map[it]?.forEach { s, i ->
-                                    notifyCommandListener(sender, this, "commandcontrol.storedata.list.entry", s, i)
+                                    notifyCTRLListener(sender, this, "commandcontrol.storedata.list.entry", s, i)
                                 }
                             }
                 } else {
-                    notifyCommandListener(sender, this, "commandcontrol.storedata.list.$scope", blockPos.x, blockPos.y, blockPos.z, world.provider.dimension, world.provider.dimensionType.getName())
+                    notifyCTRLListener(sender, this, "commandcontrol.storedata.list.$scope", blockPos.x, blockPos.y, blockPos.z, world.provider.dimension, world.provider.dimensionType.getName())
                     for ((key, value) in scoreStorage)
-                        notifyCommandListener(sender, this, "commandcontrol.storedata.list.entry", key, value)
+                        notifyCTRLListener(sender, this, "commandcontrol.storedata.list.entry", key, value)
                 }
 
             }

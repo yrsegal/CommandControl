@@ -7,6 +7,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.world.biome.Biome
 import wiresegal.cmdctrl.common.core.CTRLException
 import wiresegal.cmdctrl.common.core.CTRLUsageException
+import wiresegal.cmdctrl.common.core.notifyCTRLListener
 
 /**
  * @author WireSegal
@@ -34,7 +35,7 @@ object CommandGetBiome : CommandBase() {
                     val realBiome = world.getBiome(pos)
 
                     if (biome == realBiome) {
-                        notifyCommandListener(sender, this, "commandcontrol.testforbiome.match", x.toInt(), z.toInt(), id, name)
+                        notifyCTRLListener(sender, this, "commandcontrol.testforbiome.match", x.toInt(), z.toInt(), id, name)
                         sender.setCommandStat(CommandResultStats.Type.AFFECTED_BLOCKS, 1)
                     } else {
                         val realId = Biome.getIdForBiome(realBiome).toByte()
@@ -47,7 +48,7 @@ object CommandGetBiome : CommandBase() {
                     val id = Biome.getIdForBiome(biome).toByte()
                     val name = Biome.REGISTRY.getNameForObject(biome)
 
-                    notifyCommandListener(sender, this, "commandcontrol.testforbiome.success", x.toInt(), z.toInt(), id, name)
+                    notifyCTRLListener(sender, this, "commandcontrol.testforbiome.success", x.toInt(), z.toInt(), id, name)
                     sender.setCommandStat(CommandResultStats.Type.AFFECTED_BLOCKS, 1)
                     sender.setCommandStat(CommandResultStats.Type.QUERY_RESULT, Biome.getIdForBiome(biome))
                 }
