@@ -37,7 +37,6 @@ data class CommandModule(val command: String, val stats: Map<CommandResultStats.
                 MethodHandleHelper.wrapperForStaticSetter(CommandBase::class.java, "a", "field_71533_a", "commandListener"))
 
 
-
         @JvmStatic
         fun fromElement(el: JsonElement, debug: Boolean = false): CommandModule {
             if (el.isJsonPrimitive)

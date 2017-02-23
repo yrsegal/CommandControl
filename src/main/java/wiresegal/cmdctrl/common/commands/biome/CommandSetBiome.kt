@@ -92,9 +92,7 @@ object CommandSetBiome : CommandBase() {
         val z1 = (Math.min(zRange.first, zRange.last) - 2) shr 4
         val z2 = (Math.max(zRange.first, zRange.last) + 2) shr 4
 
-        for (chunkX in x1..x2) for (chunkZ in z1..z2) {
-            forceChunk(world, chunkX, chunkZ)
-        }
+        for (chunkX in x1..x2) for (chunkZ in z1..z2) forceChunk(world, chunkX, chunkZ)
     }
 
     fun forceChunk(world: WorldServer, chunkX: Int, chunkZ: Int) {

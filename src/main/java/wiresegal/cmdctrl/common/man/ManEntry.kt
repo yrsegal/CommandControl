@@ -6,7 +6,6 @@ import net.minecraft.command.ICommand
 import net.minecraft.command.ICommandSender
 import net.minecraft.util.text.ITextComponent
 import net.minecraft.util.text.TextComponentString
-import net.minecraft.util.text.TextComponentTranslation
 import net.minecraft.util.text.translation.I18n
 import wiresegal.cmdctrl.common.CommandControl
 import java.util.*

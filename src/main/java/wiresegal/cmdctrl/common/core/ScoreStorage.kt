@@ -1,6 +1,5 @@
 package wiresegal.cmdctrl.common.core
 
-import net.minecraft.util.IntHashMap
 import java.util.*
 
 /**
@@ -16,11 +15,11 @@ class ScoreStorage : MutableMap<String, Int> by HashMap() {
 /**
  * Another type alias, for easy getting.
  */
-interface IScoreMap<T: Any> : MutableMap<T, ScoreStorage> {
+interface IScoreMap<T : Any> : MutableMap<T, ScoreStorage> {
     fun forEach(call: (T, ScoreStorage) -> Unit) = forEach { call(it.key, it.value) }
 }
 
-class ScoreMap<T: Any>(val map: MutableMap<T, ScoreStorage> = HashMap()) : MutableMap<T, ScoreStorage> by map, IScoreMap<T> {
+class ScoreMap<T : Any>(val map: MutableMap<T, ScoreStorage> = HashMap()) : MutableMap<T, ScoreStorage> by map, IScoreMap<T> {
     operator override fun get(key: T): ScoreStorage {
         var gotten = map[key]
 
@@ -33,9 +32,9 @@ class ScoreMap<T: Any>(val map: MutableMap<T, ScoreStorage> = HashMap()) : Mutab
     }
 }
 
-class WeakScoreMap<T: Any>(val map: MutableMap<T, ScoreStorage> = WeakHashMap()) : MutableMap<T, ScoreStorage> by map, IScoreMap<T> {
+class WeakScoreMap<T : Any>(val map: MutableMap<T, ScoreStorage> = WeakHashMap()) : MutableMap<T, ScoreStorage> by map, IScoreMap<T> {
     operator override fun get(key: T): ScoreStorage {
-        var gotten = map.get(key)
+        var gotten = map[key]
 
         if (gotten == null) {
             gotten = ScoreStorage()

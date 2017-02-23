@@ -1,4 +1,3 @@
-
 @file:JvmName("JsonMaker")
 
 package wiresegal.cmdctrl.common.core.shade
