@@ -18,25 +18,25 @@ import wiresegal.cmdctrl.common.core.shade.nbt
  * @author WireSegal
  * Created at 4:24 PM on 12/3/16.
  */
-class ControlSaveData(name: String = key) : WorldSavedData(name) {
+class ControlSaveData(name: String = KEY) : WorldSavedData(name) {
 
     private var world: World? = null
 
     companion object {
-        const val id = "commandcontrol"
+        const val ID = "commandcontrol"
 
-        const val key = "$id:savedata"
-        const val globalKey = "$id:global"
-        const val worldKey = "$id:world"
-        const val sliceKey = "$id:slice"
-        const val posKey = "$id:pos"
-        const val tileKey = "$id:tile"
+        const val KEY = "$ID:savedata"
+        const val GLOBAL_KEY = "$ID:global"
+        const val WORLD_KEY = "$ID:world"
+        const val SLICE_KEY = "$ID:slice"
+        const val POS_KEY = "$ID:pos"
+        const val TILE_KEY = "$ID:tile"
 
         operator fun get(world: World): ControlSaveData {
-            var data = world.loadItemData(ControlSaveData::class.java, key) as? ControlSaveData
+            var data = world.loadItemData(ControlSaveData::class.java, KEY) as? ControlSaveData
             if (data == null) {
                 data = ControlSaveData()
-                world.setItemData(key, data)
+                world.setItemData(KEY, data)
             }
             data.world = world
             return data
@@ -71,40 +71,40 @@ class ControlSaveData(name: String = key) : WorldSavedData(name) {
         posData.clear()
         tileData.clear()
 
-        if (tag.hasKey(globalKey, Constants.NBT.TAG_LIST)) {
-            val list = tag.getTagList(globalKey, Constants.NBT.TAG_COMPOUND)
+        if (tag.hasKey(GLOBAL_KEY, Constants.NBT.TAG_LIST)) {
+            val list = tag.getTagList(GLOBAL_KEY, Constants.NBT.TAG_COMPOUND)
             (0 until list.tagCount())
                     .map { list[it] }
                     .filterIsInstance<NBTTagCompound>()
                     .forEach { globalData.put(it.getString("key"), it.getInteger("value")) }
         }
 
-        if (tag.hasKey(worldKey, Constants.NBT.TAG_LIST)) {
-            val list = tag.getTagList(worldKey, Constants.NBT.TAG_COMPOUND)
+        if (tag.hasKey(WORLD_KEY, Constants.NBT.TAG_LIST)) {
+            val list = tag.getTagList(WORLD_KEY, Constants.NBT.TAG_COMPOUND)
             (0 until list.tagCount())
                     .map { list[it] }
                     .filterIsInstance<NBTTagCompound>()
                     .forEach { globalData.put(it.getString("key"), it.getInteger("value")) }
         }
 
-        if (tag.hasKey(sliceKey, Constants.NBT.TAG_LIST)) {
-            val list = tag.getTagList(sliceKey, Constants.NBT.TAG_COMPOUND)
+        if (tag.hasKey(SLICE_KEY, Constants.NBT.TAG_LIST)) {
+            val list = tag.getTagList(SLICE_KEY, Constants.NBT.TAG_COMPOUND)
             (0 until list.tagCount())
                     .map { list[it] }
                     .filterIsInstance<NBTTagCompound>()
                     .forEach { sliceData[Slice(it.getLong("pos"))].put(it.getString("key"), it.getInteger("value")) }
         }
 
-        if (tag.hasKey(posKey, Constants.NBT.TAG_LIST)) {
-            val list = tag.getTagList(posKey, Constants.NBT.TAG_COMPOUND)
+        if (tag.hasKey(POS_KEY, Constants.NBT.TAG_LIST)) {
+            val list = tag.getTagList(POS_KEY, Constants.NBT.TAG_COMPOUND)
             (0 until list.tagCount())
                     .map { list[it] }
                     .filterIsInstance<NBTTagCompound>()
                     .forEach { posData[BlockPos.fromLong(it.getLong("pos"))].put(it.getString("key"), it.getInteger("value")) }
         }
 
-        if (tag.hasKey(tileKey, Constants.NBT.TAG_LIST)) {
-            val list = tag.getTagList(tileKey, Constants.NBT.TAG_COMPOUND)
+        if (tag.hasKey(TILE_KEY, Constants.NBT.TAG_LIST)) {
+            val list = tag.getTagList(TILE_KEY, Constants.NBT.TAG_COMPOUND)
             (0 until list.tagCount())
                     .map { list[it] }
                     .filterIsInstance<NBTTagCompound>()
@@ -131,7 +131,7 @@ class ControlSaveData(name: String = key) : WorldSavedData(name) {
                     )
                 })
             }
-            tag.setTag(globalKey, l)
+            tag.setTag(GLOBAL_KEY, l)
         }
 
         if (worldData.isNotEmpty()) {
@@ -144,7 +144,7 @@ class ControlSaveData(name: String = key) : WorldSavedData(name) {
                     )
                 })
             }
-            tag.setTag(worldKey, l)
+            tag.setTag(WORLD_KEY, l)
         }
 
         if (sliceData.isNotEmpty()) {
@@ -160,7 +160,7 @@ class ControlSaveData(name: String = key) : WorldSavedData(name) {
                     })
                 }
             }
-            tag.setTag(sliceKey, l)
+            tag.setTag(SLICE_KEY, l)
         }
 
         if (posData.isNotEmpty()) {
@@ -176,7 +176,7 @@ class ControlSaveData(name: String = key) : WorldSavedData(name) {
                     })
                 }
             }
-            tag.setTag(posKey, l)
+            tag.setTag(POS_KEY, l)
         }
 
         if (tileData.isNotEmpty()) {
@@ -193,7 +193,7 @@ class ControlSaveData(name: String = key) : WorldSavedData(name) {
                     })
                 }
             }
-            tag.setTag(tileKey, l)
+            tag.setTag(TILE_KEY, l)
         }
 
         return tag
