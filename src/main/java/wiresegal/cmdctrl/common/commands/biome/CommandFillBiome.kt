@@ -10,6 +10,7 @@ import net.minecraft.world.biome.Biome
 import wiresegal.cmdctrl.common.CommandControl
 import wiresegal.cmdctrl.common.core.CTRLException
 import wiresegal.cmdctrl.common.core.CTRLUsageException
+import wiresegal.cmdctrl.common.core.Slice
 import wiresegal.cmdctrl.common.core.notifyCTRLListener
 
 /**
@@ -43,9 +44,10 @@ object CommandFillBiome : CommandBase() {
 
             if (world.isBlockLoaded(pos1) && world.isBlockLoaded(pos2)) {
                 notifyCTRLListener(sender, this, "commandcontrol.fillbiomes.success", x1, z1, x2, z2, id, name)
-                for (pos in BlockPos.getAllInBoxMutable(pos1, pos2))
-                    CommandSetBiome.setBiome(world.getChunkFromBlockCoords(pos), pos, biome)
-                CommandSetBiome.updateBiomes(world, x1..x2, z1..z2)
+                val slices = BlockPos.getAllInBoxMutable(pos1, pos2)
+                        .filter { CommandSetBiome.setBiome(world.getChunkFromBlockCoords(it), it, biome) }
+                        .map(::Slice)
+                CommandSetBiome.updateBiomes(world, slices)
             } else
                 throw CTRLException("commandcontrol.fillbiomes.range", x1, z1, x2, z2)
         } else

@@ -15,6 +15,7 @@ import net.minecraft.world.chunk.Chunk
 import wiresegal.cmdctrl.common.CommandControl
 import wiresegal.cmdctrl.common.core.CTRLException
 import wiresegal.cmdctrl.common.core.CTRLUsageException
+import wiresegal.cmdctrl.common.core.Slice
 import wiresegal.cmdctrl.common.core.notifyCTRLListener
 
 /**
@@ -24,15 +25,6 @@ import wiresegal.cmdctrl.common.core.notifyCTRLListener
 object CommandSetBiome : CommandBase() {
 
     val biomes by lazy { Biome.REGISTRY.map { Biome.REGISTRY.getNameForObject(it as Biome) } }
-
-    fun setBiome(chunk: Chunk, pos: BlockPos, biome: Biome) {
-        val i = pos.x and 15
-        val j = pos.z and 15
-
-        val id = Biome.REGISTRY.getIDForObject(biome)
-
-        chunk.biomeArray[j shl 4 or i] = (id and 255).toByte()
-    }
 
     fun parseBiome(string: String): Biome {
         var biome: Biome?
@@ -67,12 +59,28 @@ object CommandSetBiome : CommandBase() {
 
             if (world.isBlockLoaded(pos)) {
                 notifyCTRLListener(sender, this, "commandcontrol.setbiome.success", x, z, id, name)
-                setBiome(world.getChunkFromBlockCoords(pos), pos, biome)
-                updateBiomes(world, x..x, z..z)
+                if (setBiome(world.getChunkFromBlockCoords(pos), pos, biome))
+                    updateBiomes(world, x..x, z..z)
             } else
                 throw CTRLException("commandcontrol.setbiome.range", x, z)
         } else
             throw CTRLUsageException(getCommandUsage(sender))
+    }
+
+    fun updateBiomes(world: World, slices: List<Slice>) {
+        if (world !is WorldServer) return
+
+        val validSlices = slices
+                .flatMap {
+                    Array(25) { i ->
+                        val x = (i % 5) - 2 + it.x
+                        val z = (i / 5) - 2 + it.z
+                        Slice(x, z)
+                    }.toList()
+                }
+                .map { (it.x shr 4) to (it.z shr 4) }
+                .toSet()
+        for ((chunkX, chunkZ) in validSlices) forceChunk(world, chunkX, chunkZ)
     }
 
     fun updateBiomes(world: World, xRange: IntRange, zRange: IntRange) {
@@ -85,11 +93,27 @@ object CommandSetBiome : CommandBase() {
         val z2 = (Math.max(zRange.first, zRange.last) + 2) shr 4
 
         for (chunkX in x1..x2) for (chunkZ in z1..z2) {
-            val entry = world.playerChunkMap.getEntry(chunkX, chunkZ)
-            val chunk = entry?.chunk
-            if (chunk != null && entry != null)
-                entry.sendPacket(SPacketChunkData(chunk, 65535))
+            forceChunk(world, chunkX, chunkZ)
         }
+    }
+
+    fun forceChunk(world: WorldServer, chunkX: Int, chunkZ: Int) {
+        val entry = world.playerChunkMap.getEntry(chunkX, chunkZ)
+        val chunk = entry?.chunk
+        if (chunk != null && entry != null)
+            entry.sendPacket(SPacketChunkData(chunk, 65535))
+    }
+
+    fun setBiome(chunk: Chunk, pos: BlockPos, biome: Biome): Boolean {
+        val i = pos.x and 15
+        val j = pos.z and 15
+
+        val id = Biome.REGISTRY.getIDForObject(biome)
+
+        val prev = chunk.biomeArray[j shl 4 or i]
+        if (prev.toInt() == id) return false
+        chunk.biomeArray[j shl 4 or i] = (id and 255).toByte()
+        return true
     }
 
     override fun getTabCompletionOptions(server: MinecraftServer, sender: ICommandSender, args: Array<out String>, pos: BlockPos?): List<String> {
