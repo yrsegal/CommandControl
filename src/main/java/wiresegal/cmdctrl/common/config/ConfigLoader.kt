@@ -13,6 +13,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent
 import net.minecraftforge.fml.relauncher.Side
 import wiresegal.cmdctrl.common.CommandControl
 import wiresegal.cmdctrl.common.commands.data.TileSelector
+import wiresegal.cmdctrl.common.core.getObject
 import wiresegal.cmdctrl.common.core.shade.json
 import wiresegal.cmdctrl.common.core.shade.serialize
 import java.io.File
@@ -100,26 +101,29 @@ object ConfigLoader {
             for (tile in e.world.loadedTileEntityList) {
                 val dump = tile.writeToNBT(NBTTagCompound())
                 val id = TileSelector.classToNameMap[tile.javaClass]
-                if (tile in tileMap) {
-                    val ranModules = mutableSetOf<ChangeWatcher>()
-                    dump.keySet
-                            .filter { it in (toWatch[id] ?: mutableListOf()) }
-                            .forEach { key ->
-                                val prev = tileMap[tile]!!.getOrElse(key) { null } ?: return@forEach
-                                val newHash = dump.getTag(key).hashCode()
-                                if (prev != newHash)
-                                    module.tileChanges
-                                            .filter { it.id == id && key in it.watch && it !in ranModules }
-                                            .forEach {
-                                                ranModules.add(it)
-                                                it.commands.forEach { it.run(server, tile.pos, e.world) }
-                                            }
-                            }
+
+                val keys = toWatch[id]?.mapNotNull {
+                    val obj = dump.getObject(it)
+                    if (obj == null) null else it to obj
                 }
 
-                dump.keySet
-                        .filter { it in (toWatch[id] ?: mutableListOf()) }
-                        .forEach { tileMap.getOrPut(tile) { hashMapOf() }.put(it, dump.getTag(it).hashCode()) }
+                if (tile in tileMap) {
+                    val ranModules = mutableSetOf<ChangeWatcher>()
+                    keys?.forEach {
+                        val (key, tag) = it
+                        val prev = tileMap[tile]!!.getOrElse(key) { null } ?: return@forEach
+                        val newHash = tag.hashCode()
+                        if (prev != newHash)
+                            module.tileChanges
+                                    .filter { it.id == id && key in it.watch && it !in ranModules }
+                                    .forEach {
+                                        ranModules.add(it)
+                                        it.commands.forEach { it.run(server, tile.pos, e.world) }
+                                    }
+                    }
+                }
+
+                keys?.forEach { tileMap.getOrPut(tile) { hashMapOf() }.put(it.first, it.second.hashCode()) }
 
             }
             module.onTick.forEach { it.run(server, e.world) }
